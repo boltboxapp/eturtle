@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.contrib.auth.models import User
 # Create your models here.
 class ETModelBase(models.Model):
     date_created = models.DateTimeField(auto_now_add = True)
@@ -7,7 +7,7 @@ class ETModelBase(models.Model):
     class Meta:
         abstract = True
 
-class Courier(ETModelBase):
+class Courier(ETModelBase, User):
     STATE_ENUM = [
         ('IDLE', 1),
         ('STANDING_BY', 2),
@@ -15,7 +15,6 @@ class Courier(ETModelBase):
         ('SHIPPING', 4), 
     ]
     state = models.IntegerField(choices = STATE_ENUM)
-    name = models.CharField()
 
 class Package(ETModelBase):
     STATE_ENUM = [
@@ -25,9 +24,9 @@ class Package(ETModelBase):
         ('SHIPPED', 4),
         ('FAILED', 5),   
     ]
-    name = models.CharField()
-    source = models.CharField()
-    destination = models.CharField()
+    name = models.CharField(max_length=100)
+    source = models.CharField(max_length=100)
+    destination = models.CharField(max_length=100)
 
 class Dispatch(ETModelBase):
     STATE_ENUM = [
