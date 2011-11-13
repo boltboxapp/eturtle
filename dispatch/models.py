@@ -14,7 +14,7 @@ class Courier(ETModelBase, User):
         ('PENDING', 3),
         ('SHIPPING', 4), 
     ]
-    state = models.IntegerField(choices = STATE_ENUM)
+    state = models.IntegerField(choices = STATE_ENUM, null=True, blank=True)
 
 class Package(ETModelBase):
     STATE_ENUM = [
