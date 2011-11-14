@@ -48,9 +48,9 @@ class PackageListView(LoginRequiredMixin, ListView):
     model = Package
 
     def get_queryset(self):
-        queryset = Package.objects.filter(client = self.request.user)
+        queryset = super(PackageListView,self).get_queryset()
 
-        if self.request.user.has_perm('dispatch.eturtle_admin'):
-            queryset = Package.objects.all()
+        if not self.request.user.has_perm('dispatch.eturtle_admin'):
+            queryset = queryset.filter(client = self.request.user)
 
         return queryset
