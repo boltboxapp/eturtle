@@ -8,35 +8,37 @@ class ETModelBase(models.Model):
         abstract = True
 
 class Courier(ETModelBase, User):
-    STATE_ENUM = [
-        ('IDLE', 1),
-        ('STANDING_BY', 2),
-        ('PENDING', 3),
-        ('SHIPPING', 4), 
-    ]
-    state = models.IntegerField(choices = STATE_ENUM, null=True, blank=True)
+    STATE_ENUM = (
+        (1, 'IDLE'),
+        (2, 'STANDING_BY'),
+        (3, 'PENDING'),
+        (4, 'SHIPPING'),
+    )
+    state = models.IntegerField(choices = STATE_ENUM, default = 1)
 
 class Package(ETModelBase):
     STATE_ENUM = [
-        ('NEW', 1),
-        ('PENDING', 2),
-        ('SHIPPING', 3),
-        ('SHIPPED', 4),
-        ('FAILED', 5),   
+        (1, 'NEW'),
+        (2, 'PENDING'),
+        (3, 'SHIPPING'),
+        (4, 'SHIPPED'),
+        (5, 'FAILED'),
     ]
     name = models.CharField(max_length=100)
     source = models.CharField(max_length=100)
     destination = models.CharField(max_length=100)
 
+    state = models.IntegerField(choices = STATE_ENUM, default = 1)    
+
 class Dispatch(ETModelBase):
     STATE_ENUM = [
-        ('PENDING', 1),
-        ('REJECTED', 2),
-        ('SHIPPING', 3),
-        ('SHIPPED', 4),
-        ('FAILED', 5),   
+        (1, 'PENDING'),
+        (2, 'REJECTED'),
+        (3, 'SHIPPING'),
+        (4, 'SHIPPED'),
+        (5, 'FAILED'),
     ]
-    state = models.IntegerField(choices = STATE_ENUM)
+    state = models.IntegerField(choices = STATE_ENUM, default = 1)
     courier = models.ForeignKey('Courier')
     package = models.ForeignKey('Package')
 
