@@ -28,10 +28,10 @@
         <nav>
             {% if user.is_authenticated %}
                 {% if perms.dispatch.eturtle_admin %}
-                <a href="{% url client_list %}">Ügyfelek</a>
-                <a href="{% url courier_list %}">Futárok</a>
+                    <a href="{% url client_list %}">Ügyfelek</a>
+                    <a href="{% url courier_list %}">Futárok</a>
+                    <a href="{% url package_list %}">Csomagok</a>
                 {% endif %}
-                <a href="{% url package_list %}">Csomagok</a>
                 <span id="user_crumb">Helló {{ user }}! <a href="{% url auth_logout %}">logout</a></span>
             {% endif %}
         </nav>

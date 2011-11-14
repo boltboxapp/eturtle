@@ -1,0 +1,10 @@
+Helló,
+
+tudomásunk szerint regisztráltál a {{site}} oldalra.
+A felhasználói fiók aktiválásához kattintson az alábbi hivatkozásra:
+http://{{site}}{% url registration_activate activation_key %}
+
+Az aktivációra {{expiration_days}} napig van lehetőség.
+
+Üdv:
+{{site}}

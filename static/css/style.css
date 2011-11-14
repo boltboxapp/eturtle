@@ -102,10 +102,14 @@ footer a{
 table.form {
 	border-width: 1px;
 	border-spacing: 5px;
-	border-style: none;
-	border-color: gray;
+	border-style: solid;
+	border-color: #dddddd;
 	border-collapse: separate;
 	background-color: white;
+
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
 }
 table.form th,
 table.form td {
@@ -114,7 +118,7 @@ table.form td {
 	border-style: none;
 	border-color: gray;
 	background-color: #FFF9DA;
-	-moz-border-radius: ;
+    text-align: left;
 }
 
 
