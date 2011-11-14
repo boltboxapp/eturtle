@@ -16,6 +16,9 @@ class Courier(ETModelBase, User):
     )
     state = models.IntegerField(choices = STATE_ENUM, default = 1)
 
+    def __unicode__(self):
+        return u'%s' % self.username
+
 class Package(ETModelBase):
     STATE_ENUM = [
         (1, 'NEW'),
@@ -24,11 +27,16 @@ class Package(ETModelBase):
         (4, 'SHIPPED'),
         (5, 'FAILED'),
     ]
+    client = models.ForeignKey(User)
+
     name = models.CharField(max_length=100)
     source = models.CharField(max_length=100)
     destination = models.CharField(max_length=100)
 
-    state = models.IntegerField(choices = STATE_ENUM, default = 1)    
+    state = models.IntegerField(choices = STATE_ENUM, default = 1)
+
+    def __unicode__(self):
+        return u'%s' % self.name
 
 class Dispatch(ETModelBase):
     STATE_ENUM = [
@@ -41,4 +49,7 @@ class Dispatch(ETModelBase):
     state = models.IntegerField(choices = STATE_ENUM, default = 1)
     courier = models.ForeignKey('Courier')
     package = models.ForeignKey('Package')
+
+    def __unicode__(self):
+        return u'%s -> %s' % (self.package, self.courier)
 
