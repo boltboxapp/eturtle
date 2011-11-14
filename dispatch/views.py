@@ -2,6 +2,9 @@
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponse, HttpResponseServerError, HttpResponseForbidden, HttpResponseNotFound
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
+from django.views.generic import ListView
+from dispatch.models import Package
+from utils import LoginRequiredMixin
 
 @csrf_exempt
 def loginview(request):
@@ -40,3 +43,14 @@ def index(request):
 
 
 	""")
+
+class PackageListView(LoginRequiredMixin, ListView):
+    model = Package
+
+    def get_queryset(self):
+        queryset = Package.objects.filter(client = self.request.user)
+
+        if self.request.user.has_perm('dispatch.eturtle_admin'):
+            queryset = Package.objects.all()
+
+        return queryset
