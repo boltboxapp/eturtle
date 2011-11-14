@@ -24,7 +24,16 @@
 
   <div id="container">
     <header>
-        <a href="/"><img src="/static/img/logo_text.png" alt="Turtle logo" /></a><hr/>
+        <a href="/"><img src="/static/img/logo_text.png" alt="Turtle logo" /></a>
+        <nav>
+            {% if user.is_authenticated %}
+                <a href="#">Ügyfelek</a> |
+                <a href="#">Csomagok</a> |
+                <a href="#">Futárok</a> |
+                <a href="{% url auth_logout %}">logout</a>
+            {% endif %}
+        </nav>
+        <hr/>
     </header>
     <div id="main" role="main">
         {% block content %}{% endblock %}
