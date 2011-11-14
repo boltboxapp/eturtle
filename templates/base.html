@@ -32,7 +32,8 @@
                     <a href="{% url courier_list %}">Futárok</a>
                     <a href="{% url package_list %}">Csomagok</a>
                 {% endif %}
-                <span id="user_crumb">Helló {{ user }}! <a href="{% url auth_logout %}">logout</a></span>
+                <span>&nbsp;</span><!-- LOL -->
+                <span id="user_crumb">Helló {{ user }}! <a href="{% url auth_logout %}">Kilépés</a></span>
             {% endif %}
         </nav>
         <hr/>
