@@ -81,6 +81,7 @@ body > #container{
     padding: 20px;
 }
 
+/* nav bar */
 nav a{
     background-color: #FFF9DA;
     display: inline-block;
@@ -90,13 +91,31 @@ nav #user_crumb{
     float:right;
 }
 
+/* footer */
 footer p,
 footer a{
     color: #cccccc !important;
     font-style: italic;
 }
 
-
+/* form table */
+table.form {
+	border-width: 1px;
+	border-spacing: 5px;
+	border-style: none;
+	border-color: gray;
+	border-collapse: separate;
+	background-color: white;
+}
+table.form th,
+table.form td {
+	border-width: 1px;
+	padding: 10px;
+	border-style: none;
+	border-color: gray;
+	background-color: #FFF9DA;
+	-moz-border-radius: ;
+}
 
 
 

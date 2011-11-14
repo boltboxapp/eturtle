@@ -3,8 +3,13 @@
 {% block content %}
 <div id="loginbox">
     <form method="post">{% csrf_token %}
-        {{ form.as_p }}
-        <button>Login</button>
+        <table class="form">
+            {{ form.as_table }}
+
+            <tr>
+                <td colspan="2"><button>Login</button></td>
+            </tr>
+        </table>
     </form>
 </div>
 {% endblock %}
