@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <p>Futárok</p>
+
+    {% if object_list %}
+        <table>
+            {% for package in object_list %}
+                <tr>
+                    <td>{{ package }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        Nincs futár.
+    {% endif %}
+    
+{% endblock %}

@@ -3,8 +3,8 @@ from django.contrib.auth import authenticate, login
 from django.http import HttpResponse, HttpResponseServerError, HttpResponseForbidden, HttpResponseNotFound
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from django.views.generic import ListView
-from dispatch.models import Package
-from utils import LoginRequiredMixin
+from dispatch.models import Package, Courier, Client
+from utils import LoginRequiredMixin, AdminOr404Mixin
 
 @csrf_exempt
 def loginview(request):
@@ -54,3 +54,9 @@ class PackageListView(LoginRequiredMixin, ListView):
             queryset = queryset.filter(client = self.request.user)
 
         return queryset
+
+class CourierListView(AdminOr404Mixin, ListView):
+    model = Courier
+
+class ClientListView(AdminOr404Mixin, ListView):
+    model = Client

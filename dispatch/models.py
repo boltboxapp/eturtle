@@ -19,6 +19,10 @@ class Courier(ETModelBase, User):
     def __unicode__(self):
         return u'%s' % self.username
 
+class Client(User):
+    class Meta:
+        proxy = True
+
 class Package(ETModelBase):
     STATE_ENUM = [
         (1, 'NEW'),
