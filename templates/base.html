@@ -14,7 +14,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
 
   <!-- CSS concatenated and minified via ant build script-->
-  <link rel="stylesheet" href="/static/css/style.css">
+  <link rel="stylesheet" href="/static/css/style.css?v=2">
   <!-- end CSS-->
 
   <script src="/static/js/libs/modernizr-2.0.6.min.js"></script>
@@ -27,10 +27,12 @@
         <a href="/"><img src="/static/img/logo_text.png" alt="Turtle logo" /></a>
         <nav>
             {% if user.is_authenticated %}
-                <a href="{% url client_list %}">Ügyfelek</a> |
-                <a href="{% url package_list %}">Csomagok</a> |
-                <a href="{% url courier_list %}">Futárok</a> |
-                <a href="{% url auth_logout %}">logout</a>
+                {% if perms.dispatch.eturtle_admin %}
+                <a href="{% url client_list %}">Ügyfelek</a>
+                <a href="{% url courier_list %}">Futárok</a>
+                {% endif %}
+                <a href="{% url package_list %}">Csomagok</a>
+                <span id="user_crumb">Helló {{ user }}! <a href="{% url auth_logout %}">logout</a></span>
             {% endif %}
         </nav>
         <hr/>
@@ -39,7 +41,13 @@
         {% block content %}{% endblock %}
     </div>
     <footer>
-        <hr/><p>footer</p>
+        <hr/>
+            <p>
+                <a href="https://www.aut.bme.hu/">BME AAIT</a> -
+                <a href="https://www.aut.bme.hu/Course/VIAUM105">Szoftverarchitektúrák (VIAUM105)</a> -
+                <a href="mailto::galacziendre kukac gmail.com">Galaczi Endre</a> -
+                <a href="mailto::galacziendre kukac gmail.com">Leposa Tamás</a>
+            </p>
     </footer>
   </div> <!--! end of #container -->
 

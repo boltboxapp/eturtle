@@ -63,13 +63,38 @@ td { vertical-align: top; }
 
 
 /* ==|== primary styles =====================================================
-   Author: 
+   Author: Lepi
    ========================================================================== */
+a{
+    text-decoration: none;
+}
 
+body{
+    background-color: #eeeeee;
+}
 
+body > #container{
+    background-color: #ffffff;
+    width: 900px;
+    margin: auto;
+    margin-top: 20px;
+    padding: 20px;
+}
 
+nav a{
+    background-color: #FFF9DA;
+    display: inline-block;
+    padding: 5px;
+}
+nav #user_crumb{
+    float:right;
+}
 
-
+footer p,
+footer a{
+    color: #cccccc !important;
+    font-style: italic;
+}
 
 
 
