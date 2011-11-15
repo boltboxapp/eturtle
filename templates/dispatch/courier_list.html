@@ -2,6 +2,12 @@
 
 {% block courier_tab_class %}selected{% endblock %}
 
+{% block middle_bar %}
+    <div id="middle_bar">
+        <a href="{% url courier_add %}" class="nav-button selected">Új futár felvitele</a>
+    </div>
+{% endblock %}
+
 {% block content %}
 
     {% if object_list %}

@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 
-{% block nav %}<strong>Kijelentkezve</strong>{% endblock %}
+{% block nav %}<span class="nav-button">Kijelentkezve</span>{% endblock %}
 
 {% block content %}
 <p>Sikeresen kijelentkezett...</p>
-<a href="{% url auth_login %}">Bejelentkezés újból</a>
+<a class="nav-button" href="{% url auth_login %}">Bejelentkezés újból</a>
 {% endblock %}

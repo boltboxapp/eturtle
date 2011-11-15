@@ -65,8 +65,14 @@ td { vertical-align: top; }
 /* ==|== primary styles =====================================================
    Author: Lepi
    ========================================================================== */
-a{
+a,
+a:active,
+a:visited{
     text-decoration: none;
+    color: black;
+}
+a:hover,a.selected:hover{
+    color: #00dd00;
 }
 
 body{
@@ -95,13 +101,19 @@ body > #container{
 nav{
     border-bottom: 1px solid #cccccc;
     padding: 10px;
+    height: 30px;
 }
-nav a{
+.nav-button{
     display: inline-block;
     padding: 5px 10px 5px 10px;
+
+    border: 1px solid #dddddd;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
 }
 
-nav a.selected{
+.nav-button.selected{
     background-color: #FFF9DA;
 }
 
@@ -152,7 +164,20 @@ table.form td {
     text-align: left;
 }
 
+#middle_bar{
+    padding: 10px;
+}
 
+a.middle_button{
+    display: inline-block;
+    border: 1px solid #dddddd;
+    padding: 5px 10px 5px 10px;
+    background-color: #FFF9DA;
+
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
 
 
 
