@@ -54,6 +54,9 @@ class Dispatch(ETModelBase):
     courier = models.ForeignKey('Courier')
     package = models.ForeignKey('Package')
 
+    class Meta:
+        ordering = ('-date_created',)
+
     def __unicode__(self):
         return u'%s -> %s' % (self.package, self.courier)
 

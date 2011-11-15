@@ -1,15 +1,24 @@
 {% extends "base.html" %}
 
+{% block courier_tab_class %}selected{% endblock %}
+
 {% block content %}
 
-    <p>Futárok</p>
-
     {% if object_list %}
-        <table>
-            {% for package in object_list %}
-                <tr>
-                    <td>{{ package }}</td>
-                </tr>
+        <table class="datagrid">
+            <tr>
+                <th>Név</th>
+                <th>Állapot</th>
+                <th>Pozíció</th>
+                <th>Utolsó frissítés</th>
+            </tr>
+            {% for courier in object_list %}
+            <tr>
+                <td>{{ courier.username }}</td>
+                <td>{{ courier.state }}</td>
+                <td>{{ courier.position|default:"-" }}</td>
+                <td>{{ courier.last_update|default:"-" }}</td>
+            </tr>
             {% endfor %}
         </table>
     {% else %}

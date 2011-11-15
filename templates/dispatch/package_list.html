@@ -1,15 +1,24 @@
 {% extends "base.html" %}
 
+{% block package_tab_class %}selected{% endblock %}
+
 {% block content %}
 
-    <p>Csomagok</p>
-
     {% if object_list %}
-        <table>
+        <table class="datagrid">
+            <tr>
+                <th>Ügyfél</th>
+                <th>Állapot</th>
+                <th>Futár</th>
+                <th>Eltelt idő</th>
+            </tr>
             {% for package in object_list %}
-                <tr>
-                    <td>{{ package }}</td>
-                </tr>
+            <tr>
+                <td>{{ package.client }}</td>
+                <td>{{ package.get_state_display }}</td>
+                <td>{{ package.dispatch_set.all.0.courier|default:"-" }}</td>
+                <td>{{ package.date_created|timesince }}</td>
+            </tr>
             {% endfor %}
         </table>
     {% else %}

@@ -1,15 +1,22 @@
 {% extends "base.html" %}
 
+{% block client_tab_class %}selected{% endblock %}
+
 {% block content %}
 
-    <p>Ügyfelek</p>
-
     {% if object_list %}
-        <table>
-            {% for package in object_list %}
-                <tr>
-                    <td>{{ package }}</td>
-                </tr>
+        <table class="datagrid">
+            <tr>
+                <th>Név</th>
+                <th>Email</th>
+                <th>Eddig rendelt</th>
+            </tr>
+            {% for client in object_list %}
+            <tr>
+                <td>{{ client.username }}</td>
+                <td>{{ client.email }}</td>
+                <td>{{ client.package_set.count|default:"-" }}</td>
+            </tr>
             {% endfor %}
         </table>
     {% else %}

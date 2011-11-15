@@ -25,31 +25,30 @@
   <div id="container">
     <header>
         <a href="/"><img src="/static/img/logo_text.png" alt="Turtle logo" /></a>
-        <nav>
-            {% if user.is_authenticated %}
-                {% if perms.dispatch.eturtle_admin %}
-                    <a href="{% url client_list %}">Ügyfelek</a>
-                    <a href="{% url courier_list %}">Futárok</a>
-                    <a href="{% url package_list %}">Csomagok</a>
-                {% endif %}
-                <span>&nbsp;</span><!-- LOL -->
-                <span id="user_crumb">Helló {{ user }}! <a href="{% url auth_logout %}">Kilépés</a></span>
-            {% endif %}
-        </nav>
-        <hr/>
     </header>
-    <div id="main" role="main">
-        {% block content %}{% endblock %}
+    <div id="inner-container">
+        <header>
+            <nav>
+            {% block nav %}
+                {% if user.is_authenticated %}
+                    {% if perms.dispatch.eturtle_admin %}
+                        <a href="{% url client_list %}" class="{% block client_tab_class %}{% endblock %}">Ügyfelek</a>
+                        <a href="{% url courier_list %}" class="{% block courier_tab_class %}{% endblock %}">Futárok</a>
+                    {% endif %}
+                    <a href="{% url package_list %}" class="{% block package_tab_class %}{% endblock %}">Csomagok</a>
+                    <span id="user_crumb">Helló {{ user }}! <a href="{% url auth_logout %}">Kilépés</a></span>
+                {% endif %}
+            {% endblock %}
+            </nav>
+        </header>
+        <div id="main" role="main">{% block content %}{% endblock %}</div>
+        <footer>
+            <a href="https://www.aut.bme.hu/">BME AAIT</a> -
+            <a href="https://www.aut.bme.hu/Course/VIAUM105">Szoftverarchitektúrák (VIAUM105)</a> -
+            <a href="mailto::galacziendre kukac gmail.com">Galaczi Endre</a> -
+            <a href="mailto::galacziendre kukac gmail.com">Leposa Tamás</a>
+        </footer>
     </div>
-    <footer>
-        <hr/>
-            <p>
-                <a href="https://www.aut.bme.hu/">BME AAIT</a> -
-                <a href="https://www.aut.bme.hu/Course/VIAUM105">Szoftverarchitektúrák (VIAUM105)</a> -
-                <a href="mailto::galacziendre kukac gmail.com">Galaczi Endre</a> -
-                <a href="mailto::galacziendre kukac gmail.com">Leposa Tamás</a>
-            </p>
-    </footer>
   </div> <!--! end of #container -->
 
 
