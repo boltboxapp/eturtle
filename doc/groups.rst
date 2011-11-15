@@ -22,7 +22,7 @@ It uses 3 hard-coded group names:
 - GROUP_COURIER = 'courier'
 - GROUP_CLIENT = 'client'
 
-A class has 3 classmethods:
+And the class has 3 classmethods:
 
 - ETurtleGroup.admin()
 - ETurtleGroup.courier()
