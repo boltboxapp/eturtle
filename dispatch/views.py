@@ -7,7 +7,10 @@ from django.views.generic import ListView
 from django.views.generic.edit import CreateView
 from dispatch.forms import PackageForm, CourierForm
 from dispatch.models import Package, Courier, Client
+from dispatch.models import ETurtleGroup as Group
 from utils import LoginRequiredMixin, AdminOr404Mixin
+from registration.signals import user_registered
+from django.dispatch import receiver
 
 @csrf_exempt
 def loginview(request):
@@ -47,6 +50,13 @@ def index(request):
 
 	""")
 
+
+#signal catch for user registration
+@receiver(user_registered)
+def set_group_of_registered_user(sender, **kwargs):
+    user = kwargs.get('user')
+    user.groups.add(Group.client())
+
 class PackageListView(LoginRequiredMixin, ListView):
     model = Package
 
@@ -82,6 +92,7 @@ class CourierCreateView(LoginRequiredMixin, CreateView):
         self.courier = form.save(commit=False)
         self.courier.set_password(form.cleaned_data.get('pw1'))
         self.courier.save()
+        self.courier.groups.add(Group.courier())
         return super(CourierCreateView, self).form_valid(form)
 
     def get_success_url(self):

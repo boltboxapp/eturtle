@@ -1,5 +1,6 @@
 #!/usr/local/bin/python
 # -*- coding: utf-8 -*-
+from django.contrib.auth.models import User
 
 from dispatch.models import Package, Courier
 from django import forms
@@ -19,10 +20,16 @@ class CourierForm(forms.ModelForm):
         pw2 = cleaned_data.get("pw2")
 
         if not pw1==pw2:
-                raise forms.ValidationError(u"A két jelszónak meg kell egyeznie!")
+            raise forms.ValidationError(u"A két jelszónak meg kell egyeznie!")
 
-        # Always return the full collection of cleaned data.
         return cleaned_data
+
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+
+        if User.objects.filter(username=username).count():
+            raise forms.ValidationError(u"Már van ilyen nevű felhasználó!")
+
 
     class Meta:
         model = Courier

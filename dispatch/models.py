@@ -1,6 +1,34 @@
+from django.core.exceptions import ImproperlyConfigured
 from django.db import models
-from django.contrib.auth.models import User
-# Create your models here.
+from django.contrib.auth.models import User, Group
+
+class ETurtleGroup(Group):
+    GROUP_ADMIN = 'admin'
+    GROUP_COURIER = 'courier'
+    GROUP_CLIENT = 'client'
+
+    @classmethod
+    def get_group_or_raise(cls,group_name):
+        try:
+            return cls.objects.get(name=group_name)
+        except cls.DoesNotExist:
+            raise ImproperlyConfigured('You must create the base user groups:(%s,%s,%s)' % (cls.GROUP_ADMIN, cls.GROUP_COURIER, cls.GROUP_CLIENT))
+
+    @classmethod
+    def admin(cls):
+        return cls.get_group_or_raise(cls.GROUP_ADMIN)
+
+    @classmethod
+    def courier(cls):
+        return cls.get_group_or_raise(cls.GROUP_COURIER)
+
+    @classmethod
+    def client(cls):
+        return cls.get_group_or_raise(cls.GROUP_CLIENT)
+
+    class Meta:
+        proxy = True
+
 class ETModelBase(models.Model):
     date_created = models.DateTimeField(auto_now_add = True)
     date_modified = models.DateTimeField(auto_now = True)
