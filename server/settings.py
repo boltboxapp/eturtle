@@ -85,7 +85,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
 )
 
-ROOT_URLCONF = 'eturtle.urls'
+ROOT_URLCONF = 'server.urls'
 
 TEMPLATE_DIRS = (
     os.path.join(PROJECT_DIR, 'templates'),
