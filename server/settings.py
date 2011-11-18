@@ -141,3 +141,8 @@ EMAIL_HOST_PASSWORD = 'riprop'
 
 #debug email
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+try:
+    from settings_local import *
+except Exception:
+    pass
