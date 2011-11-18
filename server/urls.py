@@ -8,8 +8,8 @@ from django.utils.functional import lazy
 reverse_lazy = lazy(reverse, unicode)
 admin.autodiscover()
 
-from dispatch.api import PackageResource
-package_resource = PackageResource()
+#from dispatch.api import PackageResource
+#package_resource = PackageResource()
    
 
 urlpatterns = patterns('',
@@ -22,7 +22,7 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
 
     #api urls
-    url(r'^api/', include(package_resource.urls)),
+    url(r'^api/', include('api.urls')),
 
     #registration+auth app urls
     url(r'^accounts/', include('registration.backends.default.urls')),

@@ -8,47 +8,9 @@ from django.views.generic.edit import CreateView
 from dispatch.forms import PackageForm, CourierForm
 from dispatch.models import Package, Courier, Client
 from dispatch.models import ETurtleGroup as Group
-from utils import LoginRequiredMixin, AdminOr404Mixin
+from utils import AdminOr404Mixin, WebLoginRequiredMixin
 from registration.signals import user_registered
 from django.dispatch import receiver
-
-@csrf_exempt
-def loginview(request):
-    username = request.POST['username']
-    password = request.POST['password']
-    print 'alma'
-    print username, password
-    user = authenticate(username=username, password=password)
-    if user is not None:
-        if user.is_active:
-            login(request, user)
-            return HttpResponse("Logged in")
-        else:
-            return HttpResponseForbidden('Account disabled')
-    else:
-        return HttpResponseForbidden('Invalid login')
-
-def index(request):
-	
-    if request.user.is_authenticated():
-        print 'auth'
-
-    return HttpResponse("""
-	<html>
-	<body>
-
-	<form method="POST" action="/dispatch/login/">
-<input type="text" name="username">
-<input type="text" name="password"> 
-<input type="submit" > 
-</form>
-
-	</body>
-	</html>
-
-
-
-	""")
 
 
 #signal catch for user registration
@@ -57,7 +19,7 @@ def set_group_of_registered_user(sender, **kwargs):
     user = kwargs.get('user')
     user.groups.add(Group.client())
 
-class PackageListView(LoginRequiredMixin, ListView):
+class PackageListView(WebLoginRequiredMixin, ListView):
     model = Package
 
     def get_queryset(self):
@@ -68,7 +30,7 @@ class PackageListView(LoginRequiredMixin, ListView):
 
         return queryset
 
-class PackageCreateView(LoginRequiredMixin, CreateView):
+class PackageCreateView(WebLoginRequiredMixin, CreateView):
     form_class = PackageForm
     template_name = 'dispatch/package_create.html'
 
@@ -84,7 +46,7 @@ class PackageCreateView(LoginRequiredMixin, CreateView):
 class CourierListView(AdminOr404Mixin, ListView):
     model = Courier
 
-class CourierCreateView(LoginRequiredMixin, CreateView):
+class CourierCreateView(WebLoginRequiredMixin, CreateView):
     form_class = CourierForm
     template_name = 'dispatch/courier_create.html'
 

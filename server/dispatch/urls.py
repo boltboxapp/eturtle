@@ -3,7 +3,6 @@ from dispatch.views import PackageListView, ClientListView, CourierListView, Pac
 
 urlpatterns = patterns('',
    
-    url(r'^login/', 'dispatch.views.loginview'),
     url(r'^clients/', ClientListView.as_view(), name="client_list"),
 
     url(r'^packages/new/', PackageCreateView.as_view(), name="package_add"),

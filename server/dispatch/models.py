@@ -47,6 +47,12 @@ class Courier(ETModelBase, User):
     def __unicode__(self):
         return u'%s' % self.username
 
+    class Meta:
+        permissions = (
+            ("api_access", "Can login via api and access api functions."),
+            ("web_access", "Can login via browser and access the web application."),
+        )
+
 class Client(User):
     class Meta:
         proxy = True
