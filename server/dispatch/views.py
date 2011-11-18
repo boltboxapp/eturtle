@@ -65,6 +65,7 @@ class CourierCreateView(WebLoginRequiredMixin, CreateView):
 
 class ClientListView(AdminOr404Mixin, ListView):
     model = Client
+    queryset = Client.objects.filter(groups=Group.client)
 
 class ClientToggleView(AdminOr404Mixin, DeleteView):
     model = Client
