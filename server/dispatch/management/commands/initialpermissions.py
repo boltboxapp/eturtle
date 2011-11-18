@@ -7,6 +7,6 @@ class Command(BaseCommand):
     help = 'Creates initial data for permissions'
 
     def handle(self, *args, **options):
-        Group.admin().permissions.add(Permission.objects.get(codename='web_access'))
+        Group.client().permissions.add(Permission.objects.get(codename='web_access'))
         Group.courier().permissions.add(Permission.objects.get(codename='api_access'))
         self.stdout.write('OK\n')
