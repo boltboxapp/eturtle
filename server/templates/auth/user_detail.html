@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block profile_tab_class %}selected{% endblock %}
+
+{% block content %}
+
+    <table class="datagrid">
+    <tr>
+        <td>Név:</td>
+        <td>{{ object.get_full_name }}</td>
+    </tr>
+    <tr>
+        <td>Felhasználónév:</td>
+        <td>{{ object.username }}</td>
+    </tr>
+    <tr>
+        <td>Email:</td>
+        <td>{{ object.email}}</td>
+    </tr>
+    <tr>
+        <td>Csatlakozás dátuma:</td>
+        <td>{{ object.date_joined }}</td>
+    </tr>
+    <tr>
+        <td>Utolsó bejelentkezés:</td>
+        <td>{{ object.last_login }}</td>
+    </tr>
+    </table>
+
+    <p>
+        <a class="nav-button" href="{% url auth_password_change %}">Jelszó megváltoztatása</a>
+    </p>
+
+{% endblock %}

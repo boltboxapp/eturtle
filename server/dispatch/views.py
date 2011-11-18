@@ -1,9 +1,11 @@
 # Create your views here.
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseServerError, HttpResponseForbidden, HttpResponseNotFound
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from django.views.generic import ListView
+from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView
 from dispatch.forms import PackageForm, CourierForm
 from dispatch.models import Package, Courier, Client
@@ -62,3 +64,7 @@ class CourierCreateView(WebLoginRequiredMixin, CreateView):
 
 class ClientListView(AdminOr404Mixin, ListView):
     model = Client
+
+class ProfileView(WebLoginRequiredMixin, DetailView):
+    def get_object(self, queryset=None):
+        return self.request.user

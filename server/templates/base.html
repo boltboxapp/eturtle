@@ -36,10 +36,11 @@
                         <a href="{% url courier_list %}" class="nav-button {% block courier_tab_class %}{% endblock %}">Futárok</a>
                     {% endif %}
                     <a href="{% url package_list %}" class="nav-button {% block package_tab_class %}{% endblock %}">Csomagok</a>
+                    <a href="{% url profile %}" class="nav-button {% block profile_tab_class %}{% endblock %}">Adataim</a>
                 {% endif %}
             {% endblock %}
                 {% if user.is_authenticated %}
-                    <span id="user_crumb">Helló {{ user }}! <a href="{% url auth_logout %}" class="nav-button">Kilépés</a></span>
+                    <span id="user_crumb">Helló <a href="{% url profile %}">{{ user }}</a>! <a href="{% url auth_logout %}" class="nav-button">Kilépés</a></span>
                 {% else %}
                     <span id="user_crumb"><a href="{% url auth_login %}" class="nav-button">Belépés</a></span>
                 {% endif %}

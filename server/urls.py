@@ -4,6 +4,7 @@ from django.contrib import admin
 from django.core.urlresolvers import reverse
 from django.views.generic.simple import redirect_to
 from django.utils.functional import lazy
+from server.dispatch.views import ProfileView
 
 reverse_lazy = lazy(reverse, unicode)
 admin.autodiscover()
@@ -26,6 +27,7 @@ urlpatterns = patterns('',
 
     #registration+auth app urls
     url(r'^accounts/', include('registration.backends.default.urls')),
+    url(r'^accounts/profile/', ProfileView.as_view(), name="profile"),
 
     #redirect to package_list(in dispatch app)
     url(r'^$', redirect_to, {'url': reverse_lazy('package_list')}),
