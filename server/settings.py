@@ -134,7 +134,7 @@ ACCOUNT_ACTIVATION_DAYS = 7
 #redirect after login
 LOGIN_REDIRECT_URL = '/'
 
-#email
+#email (CONFIDENTAL, DO NOT REUSE)
 EMAIL_HOST = 'post.symbler.net'
 EMAIL_HOST_USER = 'rop.post'
 EMAIL_HOST_PASSWORD = 'riprop'
