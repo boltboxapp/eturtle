@@ -10,12 +10,25 @@
                 <th>Név</th>
                 <th>Email</th>
                 <th>Eddig rendelt</th>
+                <th></th>
             </tr>
             {% for client in object_list %}
-            <tr>
+            <tr{% if not client.is_active %} class="inactive"{% endif %}>
                 <td>{{ client.username }}</td>
                 <td>{{ client.email }}</td>
                 <td>{{ client.package_set.count|default:"-" }}</td>
+                <td>
+                    <a href="{% url client_toggle client.pk %}">
+
+                    {% if not client.pk == user.pk %}
+                        {% if client.is_active %}
+                            <img src="/static/img/delete.png" alt="delete client"/>
+                        {% else %}
+                            <img src="/static/img/accept.png" alt="enable client"/>
+                        {% endif %}
+                    {% endif %}
+                    </a>
+                </td>
             </tr>
             {% endfor %}
         </table>

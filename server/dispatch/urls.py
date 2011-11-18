@@ -1,8 +1,10 @@
 from django.conf.urls.defaults import patterns, url
 from dispatch.views import PackageListView, ClientListView, CourierListView, PackageCreateView, CourierCreateView
+from server.dispatch.views import ClientToggleView
 
 urlpatterns = patterns('',
    
+    url(r'^clients/(?P<pk>\d)/toggle/', ClientToggleView.as_view(), name="client_toggle"),
     url(r'^clients/', ClientListView.as_view(), name="client_list"),
 
     url(r'^packages/new/', PackageCreateView.as_view(), name="package_add"),

@@ -2,11 +2,12 @@
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse, HttpResponseServerError, HttpResponseForbidden, HttpResponseNotFound
+from django.http import HttpResponse, HttpResponseServerError, HttpResponseForbidden, HttpResponseNotFound, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from django.views.generic import ListView
+from django.views.generic.base import View
 from django.views.generic.detail import DetailView
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from dispatch.forms import PackageForm, CourierForm
 from dispatch.models import Package, Courier, Client
 from dispatch.models import ETurtleGroup as Group
@@ -64,6 +65,24 @@ class CourierCreateView(WebLoginRequiredMixin, CreateView):
 
 class ClientListView(AdminOr404Mixin, ListView):
     model = Client
+
+class ClientToggleView(AdminOr404Mixin, DeleteView):
+    model = Client
+
+    def toggle(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.is_active=not self.object.is_active
+        self.object.save()
+        return HttpResponseRedirect(self.get_success_url())
+
+    def get(self, *args, **kwargs):
+        return self.toggle(*args, **kwargs)
+
+    def post(self, *args, **kwargs):
+        return self.toggle(*args, **kwargs)
+
+    def get_success_url(self):
+        return reverse('client_list')
 
 class ProfileView(WebLoginRequiredMixin, DetailView):
     def get_object(self, queryset=None):

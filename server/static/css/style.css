@@ -164,6 +164,19 @@ table.form td {
     text-align: left;
 }
 
+table.datagrid tr.inactive th,
+table.datagrid tr.inactive td,
+table.form tr.inactive th,
+table.form tr.inactive td {
+	border-width: 1px;
+	padding: 10px;
+	border-style: none;
+	border-color: gray;
+	background-color: #eeeeee;
+    color: #aaaaaa;
+    text-align: left;
+}
+
 #middle_bar{
     padding: 10px;
 }
