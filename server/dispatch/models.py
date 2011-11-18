@@ -36,13 +36,18 @@ class ETModelBase(models.Model):
         abstract = True
 
 class Courier(ETModelBase, User):
-    STATE_ENUM = (
+    STATE_IDLE = 1
+    STATE_STANDING_BY = 2
+    STATE_PENDING = 3
+    STATE_SHIPPING = 4
+
+    STATE_CHOICES = (
         (1, 'IDLE'),
         (2, 'STANDING_BY'),
         (3, 'PENDING'),
         (4, 'SHIPPING'),
     )
-    state = models.IntegerField(choices = STATE_ENUM, default = 1)
+    state = models.IntegerField(choices = STATE_CHOICES, default = 1)
 
     def __unicode__(self):
         return u'%s' % self.username

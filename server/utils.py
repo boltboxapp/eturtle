@@ -26,7 +26,7 @@ class HttpResponseUnauthorized(HttpResponse):
                                                        content_type=content_type)
         self.status_code = 401
 
-def api_login_required(the_func):
+def api_permission_required(the_func):
     def _decorated(request, *args, **kwargs):
         print request.user
         if request.user.is_authenticated() and request.user.has_perm("dispatch.api_access"):
