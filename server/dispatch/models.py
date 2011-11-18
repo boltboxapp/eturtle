@@ -93,6 +93,17 @@ class Dispatch(ETModelBase):
     courier = models.ForeignKey('Courier')
     package = models.ForeignKey('Package')
 
+    def save(self, force_insert=False, force_update=False, using=None):
+
+        if Dispatch.objects.filter(courier=self.courier, state=1).count():
+            raise Exception("This user already has a pending dispatch.")
+
+        super(Dispatch,self).save(force_insert=force_insert,
+                                  force_update=force_update,
+                                  using=using)
+
+
+
     class Meta:
         ordering = ('-date_created',)
 
