@@ -85,6 +85,12 @@ class ClientToggleView(AdminOr404Mixin, DeleteView):
     def get_success_url(self):
         return reverse('client_list')
 
+class CourierToggleView(ClientToggleView):
+    model = Courier
+
+    def get_success_url(self):
+        return reverse('courier_list')
+
 class ProfileView(WebLoginRequiredMixin, DetailView):
     def get_object(self, queryset=None):
         return self.request.user

@@ -17,13 +17,24 @@
                 <th>Állapot</th>
                 <th>Pozíció</th>
                 <th>Utolsó frissítés</th>
+                <th></th>
             </tr>
             {% for courier in object_list %}
-            <tr>
+            <tr{% if not courier.is_active %} class="inactive"{% endif %}>
                 <td>{{ courier.username }}</td>
                 <td>{{ courier.state }}</td>
                 <td>{{ courier.position|default:"-" }}</td>
                 <td>{{ courier.last_update|default:"-" }}</td>
+                <td>
+                    <a href="{% url courier_toggle courier.pk %}">
+
+                    {% if courier.is_active %}
+                        <img src="/static/img/delete.png" alt="delete client"/>
+                    {% else %}
+                        <img src="/static/img/accept.png" alt="enable client"/>
+                    {% endif %}
+                    </a>
+                </td>
             </tr>
             {% endfor %}
         </table>
