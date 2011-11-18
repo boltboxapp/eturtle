@@ -34,3 +34,8 @@ class CourierForm(forms.ModelForm):
     class Meta:
         model = Courier
         fields = ('username','first_name','last_name','pw1','pw2')
+
+class CourierEditForm(forms.ModelForm):
+    class Meta:
+        model = Courier
+        fields = ('first_name','last_name','email')

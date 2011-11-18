@@ -34,6 +34,10 @@
                         <img src="/static/img/accept.png" alt="enable client"/>
                     {% endif %}
                     </a>
+
+                    <a href="{% url courier_edit courier.pk %}">
+                        <img src="/static/img/edit.png" alt="edit client"/>
+                    </a>
                 </td>
             </tr>
             {% endfor %}

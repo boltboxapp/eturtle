@@ -17,6 +17,8 @@ from django.dispatch import receiver
 
 
 #signal catch for user registration
+from server.dispatch.forms import CourierEditForm
+
 @receiver(user_registered)
 def set_group_of_registered_user(sender, **kwargs):
     user = kwargs.get('user')
@@ -87,6 +89,13 @@ class ClientToggleView(AdminOr404Mixin, DeleteView):
 
 class CourierToggleView(ClientToggleView):
     model = Courier
+
+    def get_success_url(self):
+        return reverse('courier_list')
+
+class CourierUpdateView(AdminOr404Mixin, UpdateView):
+    model = Courier
+    form_class = CourierEditForm
 
     def get_success_url(self):
         return reverse('courier_list')
