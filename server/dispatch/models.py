@@ -3,7 +3,7 @@ from django.db import models
 from django.contrib.auth.models import User, Group
 
 class ETurtleGroup(Group):
-    GROUP_ADMIN = 'admin'
+    GROUP_ADMIN = 'eturtle_admin'
     GROUP_COURIER = 'courier'
     GROUP_CLIENT = 'client'
 
