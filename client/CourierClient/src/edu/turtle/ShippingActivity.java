@@ -10,26 +10,41 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 public class ShippingActivity extends Activity{
-	Button btnIdle;
+	Button btnSuccess;
+	Button btnFail;
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.shippinglayout);
-        btnIdle = (Button)this.findViewById(R.id.btnLogin);
-        btnIdle.setOnClickListener(new OnClickListener() {
+        btnSuccess = (Button)this.findViewById(R.id.btnSuccess);
+        btnSuccess.setOnClickListener(new OnClickListener() {
    
-   @Override
-   public void onClick(View v) {
-    // TODO Auto-generated method stub
-
-           Toast.makeText(ShippingActivity.this, "No packages",Toast.LENGTH_LONG).show();
-           Intent myIntent = new Intent(ShippingActivity.this, IdleActivity.class);
-           ShippingActivity.this.startActivity(myIntent);
-           ShippingActivity.this.finish();
-    
-   }
-  });       
+		   @Override
+		   public void onClick(View v) {
+		    // TODO Auto-generated method stub
+		
+		           Toast.makeText(ShippingActivity.this, "Success",Toast.LENGTH_LONG).show();
+		           Intent myIntent = new Intent(ShippingActivity.this, IdleActivity.class);
+		           ShippingActivity.this.startActivity(myIntent);
+		           ShippingActivity.this.finish();
+		    
+		   }
+		  });     
+        btnFail = (Button)this.findViewById(R.id.btnFail);
+        btnFail.setOnClickListener(new OnClickListener() {
+   
+		   @Override
+		   public void onClick(View v) {
+		    // TODO Auto-generated method stub
+		
+		           Toast.makeText(ShippingActivity.this, "Fail",Toast.LENGTH_LONG).show();
+		           Intent myIntent = new Intent(ShippingActivity.this, IdleActivity.class);
+		           ShippingActivity.this.startActivity(myIntent);
+		           ShippingActivity.this.finish();
+		    
+		   }
+		  });     
     }
 
 }
