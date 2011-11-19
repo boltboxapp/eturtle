@@ -140,9 +140,36 @@ NOT IMPLEMENTED YET
 Complete
 ^^^^^^^^
 
-NOT IMPLEMENTED YET
+Mark the current dispatched SHIPPING package as successfully SHIPPED.
+Updates the state of the `Package` and the `Dispatch` to `SHIPPED`
+
+- **Method**: `GET`
+- **URL**: `/api/complete/`
+- **Parameters**: `none`
+- **Returns**: `200 on succes, 404 if no package dispatched`
+
+Example:
+
+::
+
+  curl -b cookies.txt http://localhost:8000/api/complete/ --verbose
+
 
 Fail
 ^^^^
 
-NOT IMPLEMENTED YET
+Mark the current dispatched SHIPPING package as FAILED.
+Updates the state of the `Package` and the `Dispatch` to `FAILED`
+
+- **Method**: `GET`
+- **URL**: `/api/fail/`
+- **Parameters**: `none`
+- **Returns**: `200 on succes, 404 if no package dispatched`
+
+Example:
+
+::
+
+  curl -b cookies.txt http://localhost:8000/api/fail/ --verbose
+
+
