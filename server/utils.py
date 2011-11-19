@@ -28,7 +28,6 @@ class HttpResponseUnauthorized(HttpResponse):
 
 def api_permission_required(the_func):
     def _decorated(request, *args, **kwargs):
-        print request.user
         if request.user.is_authenticated() and request.user.has_perm("dispatch.api_access"):
             return the_func(request,*args, **kwargs)
         else:

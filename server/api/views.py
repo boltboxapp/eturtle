@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import login as auth_login
 from dispatch.models import ETurtleGroup as Group
-from server.dispatch.models import Courier
+from server.dispatch.models import Courier, Dispatch, Package
 from server.utils import api_permission_required, HttpResponseUnauthorized
 
 @csrf_exempt
@@ -22,12 +22,14 @@ def loginview(request):
 def check_in(request):
     courier = Courier.objects.get(id=request.user.id)
     courier.state = Courier.STATE_STANDING_BY
+    courier.save()
     return HttpResponse('checked in')
 
 @api_permission_required
 def leave(request):
     courier = Courier.objects.get(id=request.user.id)
     courier.state = Courier.STATE_IDLE
+    courier.save()
     #TODO: decline package if dispatched
     return HttpResponse('left')
 
@@ -38,7 +40,19 @@ def decline(request):
 
 @api_permission_required
 def accept(request):
-    #TODO:implement
+    courier = Courier.objects.get(id=request.user.id)
+
+    #get the corresponding DIspatch object
+    dispatch = Dispatch.objects.get(courier=courier, state=1)
+
+    #updates the state of the pending dispatch
+    dispatch.state=Dispatch.STATE_SHIPPING
+    dispatch.save()
+
+    #updates the state of the package
+    dispatch.package.state=Package.STATE_SHIPPING
+    dispatch.package.save()
+
     return HttpResponse('accepted')
 
 @api_permission_required
