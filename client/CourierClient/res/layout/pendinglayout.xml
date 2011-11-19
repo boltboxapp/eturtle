@@ -27,6 +27,11 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="Reject" />
+	<Button
+        android:id="@+id/btnCheckOut"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Checkout" />
 
 </LinearLayout>
 </RelativeLayout>

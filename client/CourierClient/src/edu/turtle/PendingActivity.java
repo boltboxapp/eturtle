@@ -11,26 +11,40 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 public class PendingActivity extends Activity{
-	Button btnShipping;
+	Button btnAccept;
+	Button btnReject;
+	Button btnCheckOut;
 	Button btnMap;
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pendinglayout);
-        btnShipping = (Button)this.findViewById(R.id.btnShipping);
-        btnShipping.setOnClickListener(new OnClickListener() {    
+        btnAccept = (Button)this.findViewById(R.id.btnAccept);
+        btnAccept.setOnClickListener(new OnClickListener() {    
 		   @Override
 		   public void onClick(View v) {
 		    // TODO Auto-generated method stub
 		
-		           Toast.makeText(PendingActivity.this, "No packages",Toast.LENGTH_LONG).show();
+		           Toast.makeText(PendingActivity.this, "Accepting",Toast.LENGTH_LONG).show();
 		           Intent myIntent = new Intent(PendingActivity.this, ShippingActivity.class);
 		           PendingActivity.this.startActivity(myIntent);
 		           PendingActivity.this.finish();
 		    
 		   }
 		});
-        
+        btnReject = (Button)this.findViewById(R.id.btnReject);
+        btnReject.setOnClickListener(new OnClickListener() {    
+		   @Override
+		   public void onClick(View v) {
+		    // TODO Auto-generated method stub
+		
+		           Toast.makeText(PendingActivity.this, "Rejecting",Toast.LENGTH_LONG).show();
+		           Intent myIntent = new Intent(PendingActivity.this, StandingByActivity.class);
+		           PendingActivity.this.startActivity(myIntent);
+		           PendingActivity.this.finish();
+		    
+		   }
+		});
         btnMap = (Button)this.findViewById(R.id.btnMap);
         btnMap.setOnClickListener(new OnClickListener() {
         	 @Override
@@ -48,6 +62,23 @@ public class PendingActivity extends Activity{
   		    
   		   }
   		});
+        
+        btnCheckOut = (Button)this.findViewById(R.id.btnCheckOut);
+        btnCheckOut.setOnClickListener(new OnClickListener() {
+    
+ 		   @Override
+ 		   public void onClick(View v) {
+ 		    // TODO Auto-generated method stub
+ 		
+ 		           Toast.makeText(PendingActivity.this, "Rejecting and Checking out",Toast.LENGTH_LONG).show();
+ 		           Intent myIntent = new Intent(PendingActivity.this,IdleActivity.class);
+ 		           PendingActivity.this.startActivity(myIntent);
+ 		           PendingActivity.this.finish();
+ 		    
+ 		   }
+ 		  });    
+        
+        
         }
     }
 
