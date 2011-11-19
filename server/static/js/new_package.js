@@ -112,8 +112,6 @@ $(function(){
             $("#id_src_lat").val(ui.item.latitude);
             $("#id_src_lng").val(ui.item.longitude);
 
-            console.log(ui.item.latitude);
-            console.log(ui.item.longitude);
             var location = new google.maps.LatLng(ui.item.latitude, ui.item.longitude);
             marker_src.setPosition(location);
             set_viewport();

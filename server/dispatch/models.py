@@ -49,6 +49,10 @@ class Courier(ETModelBase, User):
     )
     state = models.IntegerField(choices = STATE_CHOICES, default = 1)
 
+    lat = models.CharField(max_length=20, default='', blank=True)
+    lng = models.CharField(max_length=20, default='', blank=True)
+    last_pos_update = models.DateTimeField(null=True, blank=True)
+
     def __unicode__(self):
         return u'%s' % self.username
 
