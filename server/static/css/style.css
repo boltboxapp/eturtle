@@ -85,6 +85,8 @@ body > #container{
     margin: auto;
     margin-top: 20px;
     padding: 20px;
+    position: relative;
+    margin-left:
 }
 
 
@@ -192,10 +194,17 @@ a.middle_button{
     border-radius: 5px;
 }
 
+#map_canvas{
+    width: 500px;
+    height: 500px;
+    float:right;
+}
 
+.left {
+    float:left;
+    width: 360px;
 
-
-
+}
 
 
 /* ==|== non-semantic helper classes ======================================== */

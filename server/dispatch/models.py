@@ -73,8 +73,14 @@ class Package(ETModelBase):
     client = models.ForeignKey(User)
 
     name = models.CharField(max_length=100)
+
     source = models.CharField(max_length=100)
+    src_lat = models.CharField(max_length=20)
+    src_lng = models.CharField(max_length=20)
+
     destination = models.CharField(max_length=100)
+    dst_lat = models.CharField(max_length=20)
+    dst_lng = models.CharField(max_length=20)
 
     state = models.IntegerField(choices = STATE_ENUM, default = 1)
 

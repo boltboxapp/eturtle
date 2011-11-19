@@ -6,6 +6,12 @@ from dispatch.models import Package, Courier
 from django import forms
 
 class PackageForm(forms.ModelForm):
+    src_lat = forms.CharField(widget=forms.HiddenInput(), required=False)
+    src_lng = forms.CharField(widget=forms.HiddenInput(), required=False)
+
+    dst_lat = forms.CharField(widget=forms.HiddenInput(), required=False)
+    dst_lng = forms.CharField(widget=forms.HiddenInput(), required=False)
+
     class Meta:
         model = Package
         exclude = ('client','state')
