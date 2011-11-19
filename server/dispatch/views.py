@@ -49,7 +49,15 @@ class PackageCreateView(WebLoginRequiredMixin, CreateView):
         return reverse('package_list', kwargs={})
 
 class PackageDetailView(WebLoginRequiredMixin, DetailView):
-    model = Package
+    queryset = Package.objects.all()
+
+    def get_queryset(self, queryset=None):
+        queryset = super(PackageDetailView,self).get_queryset()
+
+        if not self.request.user.has_perm('dispatch.eturtle_admin'):
+            queryset = queryset.filter(client = self.request.user)
+
+        return queryset
 
 class CourierListView(AdminOr404Mixin, ListView):
     model = Courier
