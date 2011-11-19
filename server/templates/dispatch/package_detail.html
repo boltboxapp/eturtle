@@ -18,7 +18,14 @@
             <th>Állapot</th><td>{{ package.get_state_display }}</td>
         </tr>
         <tr>
-            <th>Futár</th><td>{{ package.dispatch_set.all.0.courier|default:"-" }}</td>
+            <th>Futár</th>
+            <td>
+                {% with courier=package.dispatch_set.all.0.courier %}
+                    <span id="username">{{ courier|default:"-" }}</span>
+                    <input type="hidden" id="latlng" name="lat"
+                            value="{{courier.lat}},{{courier.lng}}"/>
+                {% endwith %}
+            </td>
         </tr>
         <tr>
             <th>Eltelt idő</th><td>{{ package.date_created|timesince }}</td>
