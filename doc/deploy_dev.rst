@@ -26,7 +26,7 @@ Requirements:
 
 `source virtual_eturtle/bin/activate`
 
-`pip install -r requirements.py`
+`pip install -r requirements.txt`
 
 If everything is successful, the last row will be:
 

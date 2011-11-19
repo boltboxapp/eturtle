@@ -1,10 +1,13 @@
 from django.contrib.auth import authenticate
+from django.core import serializers
 from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import login as auth_login
 from dispatch.models import ETurtleGroup as Group
 from server.dispatch.models import Courier, Dispatch, Package
 from server.utils import api_permission_required, HttpResponseUnauthorized
+import json
 
 @csrf_exempt
 def loginview(request):
@@ -39,11 +42,24 @@ def decline(request):
     return HttpResponse('declined')
 
 @api_permission_required
+def get(request):
+    courier = Courier.objects.get(id=request.user.id)
+
+    dispatch = get_object_or_404(Dispatch, courier=courier, state=Dispatch.STATE_PENDING)
+
+    package = dispatch.package
+
+    dump = serializers.serialize("json", [package])[1:-1]
+    response = HttpResponse(dump)
+    response['Content-Type'] = 'application/json; charset=utf-8'
+    return response
+
+@api_permission_required
 def accept(request):
     courier = Courier.objects.get(id=request.user.id)
 
-    #get the corresponding DIspatch object
-    dispatch = Dispatch.objects.get(courier=courier, state=1)
+    #get the corresponding Dispatch object
+    dispatch = get_object_or_404(Dispatch, courier=courier, state=Dispatch.STATE_PENDING)
 
     #updates the state of the pending dispatch
     dispatch.state=Dispatch.STATE_SHIPPING
@@ -57,10 +73,30 @@ def accept(request):
 
 @api_permission_required
 def complete(request):
-    #TODO:implement
+    courier = Courier.objects.get(id=request.user.id)
+
+    #get the corresponding Dispatch object
+    dispatch = get_object_or_404(Dispatch, courier=courier, state=Dispatch.STATE_SHIPPING)
+    dispatch.state=Dispatch.STATE_SHIPPED
+    dispatch.save()
+
+    #updates the state of the package
+    dispatch.package.state=Package.STATE_SHIPPED
+    dispatch.package.save()
+
     return HttpResponse('completed')
 
 @api_permission_required
 def fail(request):
-    #TODO:implement
+    courier = Courier.objects.get(id=request.user.id)
+
+    #get the corresponding Dispatch object
+    dispatch = get_object_or_404(Dispatch, courier=courier, state=Dispatch.STATE_SHIPPING)
+    dispatch.state=Dispatch.STATE_FAILED
+    dispatch.save()
+
+    #updates the state of the package
+    dispatch.package.state=Package.STATE_FAILED
+    dispatch.package.save()
+
     return HttpResponse('failed')
