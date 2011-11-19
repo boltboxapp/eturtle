@@ -1,6 +1,7 @@
+from datetime import datetime
 from django.contrib.auth import authenticate
 from django.core import serializers
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import login as auth_login
@@ -11,8 +12,12 @@ import json
 
 @csrf_exempt
 def loginview(request):
+    if not request.method=='POST':
+        return HttpResponseBadRequest("post required")
     username = request.POST.get('username')
     password = request.POST.get('password')
+    if not (username and password):
+        return HttpResponseBadRequest("invalid or missing parameters")
 
     user = authenticate(username=username, password=password)
     if user and user.is_active and user.has_perm("dispatch.api_access"):
@@ -100,3 +105,22 @@ def fail(request):
     dispatch.package.save()
 
     return HttpResponse('failed')
+
+@csrf_exempt
+@api_permission_required
+def loc_update(request):
+    if not request.method=='POST':
+        return HttpResponseBadRequest("post required")
+    lat = request.POST.get('lat')
+    lng = request.POST.get('lng')
+    if not (lat and lng):
+        return HttpResponseBadRequest("invalid or missing parameters")
+
+    courier = Courier.objects.get(id=request.user.id)
+
+    courier.lat = lat
+    courier.lng = lng
+    courier.last_pos_update = datetime.now()
+    courier.save()
+
+    return HttpResponse('location updated')

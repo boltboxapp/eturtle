@@ -17,7 +17,7 @@ Only `couriers` can log in with this method (users in courier group with api acc
 
 ::
 
-  curl -c cookies.txt -d "username=roka&password=alma" http://localhost:9000/api/login/ --verbose
+  curl -c cookies.txt -d "username=roka&password=roka" http://localhost:8000/api/login/ --verbose
 
 Send requests
 ^^^^^^^^^^^^^
@@ -25,23 +25,24 @@ You can make regular requests with the cookie (sessionid) received on login.
 
 ::
 
-  curl -b cookies.txt http://localhost:9000/api/complete/ --verbose
+  curl -b cookies.txt http://localhost:8000/api/complete/ --verbose
 
 
 List of functions
 -----------------
-======== =========================================================== ================
+======== =========================================================== ==================
 name     description                                                 url
-======== =========================================================== ================
+======== =========================================================== ==================
 Login    Logs in the courier                                         `/api/login/`
 Check in Sets Courier state to STANDING_BY                           `/api/check_in/`
+Location Updates the position of the courier                         `/api/loc_update/`
 Leave    Sets Courier state to IDLE, rejects current PENDING package `/api/leave/`
 Get      Gets the details of the current dispatched PENDING package  `/api/get/`
 Accept   Accpets current PENDING package                             `/api/accept/`
 Decline  Declines current PENDING package                            `/api/decline/`
 Complete Sets package to SHIPPED, Courier to IDLE                    `/api/complete/`
 Fail     Sets package to FAILED, Courier to IDLE                     `/api/fail/`
-======== =========================================================== ================
+======== =========================================================== ==================
 
 Functions
 ---------
@@ -60,6 +61,22 @@ Example:
 ::
 
   curl -b cookies.txt http://localhost:8000/api/check_in/ --verbose
+
+Location
+^^^^^^^^
+
+Location update of the courier.
+
+- **Method**: `POST`
+- **URL**: `/api/loc_update/`
+- **Parameters**: `lat,lng`
+- **Returns**: `200`
+
+Example:
+
+::
+
+  curl -b cookies.txt -d "lat=47.47307989999999&lng=19.053034199999956" http://localhost:8000/api/loc_update/ --verbose
 
 Leave
 ^^^^^
