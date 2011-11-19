@@ -43,7 +43,7 @@ def accept(request):
     courier = Courier.objects.get(id=request.user.id)
 
     #get the corresponding DIspatch object
-    dispatch = Dispatch.objects.get(state=1)
+    dispatch = Dispatch.objects.get(courier=courier, state=1)
 
     #updates the state of the pending dispatch
     dispatch.state=Dispatch.STATE_SHIPPING
