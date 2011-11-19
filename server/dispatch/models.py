@@ -3,7 +3,7 @@ from django.db import models
 from django.contrib.auth.models import User, Group
 
 class ETurtleGroup(Group):
-    GROUP_ADMIN = 'admin'
+    GROUP_ADMIN = 'eturtle_admin'
     GROUP_COURIER = 'courier'
     GROUP_CLIENT = 'client'
 
@@ -49,6 +49,10 @@ class Courier(ETModelBase, User):
     )
     state = models.IntegerField(choices = STATE_CHOICES, default = 1)
 
+    lat = models.CharField(max_length=20, default='', blank=True)
+    lng = models.CharField(max_length=20, default='', blank=True)
+    last_pos_update = models.DateTimeField(null=True, blank=True)
+
     def __unicode__(self):
         return u'%s' % self.username
 
@@ -73,8 +77,14 @@ class Package(ETModelBase):
     client = models.ForeignKey(User)
 
     name = models.CharField(max_length=100)
+
     source = models.CharField(max_length=100)
+    src_lat = models.CharField(max_length=20)
+    src_lng = models.CharField(max_length=20)
+
     destination = models.CharField(max_length=100)
+    dst_lat = models.CharField(max_length=20)
+    dst_lng = models.CharField(max_length=20)
 
     state = models.IntegerField(choices = STATE_ENUM, default = 1)
 
@@ -92,6 +102,17 @@ class Dispatch(ETModelBase):
     state = models.IntegerField(choices = STATE_ENUM, default = 1)
     courier = models.ForeignKey('Courier')
     package = models.ForeignKey('Package')
+
+    def save(self, force_insert=False, force_update=False, using=None):
+
+        if Dispatch.objects.filter(courier=self.courier, state=1).count():
+            raise Exception("This user already has a pending dispatch.")
+
+        super(Dispatch,self).save(force_insert=force_insert,
+                                  force_update=force_update,
+                                  using=using)
+
+
 
     class Meta:
         ordering = ('-date_created',)

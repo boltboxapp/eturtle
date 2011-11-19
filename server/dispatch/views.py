@@ -17,6 +17,8 @@ from django.dispatch import receiver
 
 
 #signal catch for user registration
+from server.dispatch.forms import CourierEditForm
+
 @receiver(user_registered)
 def set_group_of_registered_user(sender, **kwargs):
     user = kwargs.get('user')
@@ -44,7 +46,18 @@ class PackageCreateView(WebLoginRequiredMixin, CreateView):
         return super(PackageCreateView, self).form_valid(form)
 
     def get_success_url(self):
-        return reverse('package_list', kwargs={})
+        return reverse('package_detail', kwargs={'pk':self.object.pk})
+
+class PackageDetailView(WebLoginRequiredMixin, DetailView):
+    queryset = Package.objects.all()
+
+    def get_queryset(self, queryset=None):
+        queryset = super(PackageDetailView,self).get_queryset()
+
+        if not self.request.user.has_perm('dispatch.eturtle_admin'):
+            queryset = queryset.filter(client = self.request.user)
+
+        return queryset
 
 class CourierListView(AdminOr404Mixin, ListView):
     model = Courier
@@ -87,6 +100,13 @@ class ClientToggleView(AdminOr404Mixin, DeleteView):
 
 class CourierToggleView(ClientToggleView):
     model = Courier
+
+    def get_success_url(self):
+        return reverse('courier_list')
+
+class CourierUpdateView(AdminOr404Mixin, UpdateView):
+    model = Courier
+    form_class = CourierEditForm
 
     def get_success_url(self):
         return reverse('courier_list')

@@ -22,7 +22,7 @@
             {% for package in object_list %}
             <tr>
                 <td>{{ package.client }}</td>
-                <td>{{ package.name }}</td>
+                <td><a href="{% url package_detail package.pk %}">{{ package.name }}</a></td>
                 <td>{{ package.get_state_display }}</td>
                 <td>{{ package.dispatch_set.all.0.courier|default:"-" }}</td>
                 <td>{{ package.date_created|timesince }}</td>

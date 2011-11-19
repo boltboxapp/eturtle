@@ -1,0 +1,124 @@
+[
+  {
+    "fields": {
+      "name": "eturtle_admin"
+    },
+    "model": "auth.group",
+    "pk": 1
+  },
+  {
+    "fields": {
+      "name": "courier"
+    },
+    "model": "auth.group",
+    "pk": 2
+  },
+  {
+    "fields": {
+      "name": "client"
+    },
+    "model": "auth.group",
+    "pk": 3
+  },
+  {
+    "fields": {
+      "date_joined": "2011-11-14 11:37:15",
+      "email": "alma@alma.hu",
+      "first_name": "Alm\u00e1si",
+      "groups": [
+        1
+      ],
+      "is_active": true,
+      "is_staff": true,
+      "is_superuser": true,
+      "last_login": "2011-11-18 05:52:13",
+      "last_name": "Piriszlo",
+      "password": "sha1$8c830$ec8e323b196f2310eca0be1934ba42662e2c6097",
+      "user_permissions": [],
+      "username": "alma"
+    },
+    "model": "auth.user",
+    "pk": 1
+  },
+  {
+    "fields": {
+      "date_joined": "2011-11-14 11:38:13",
+      "email": "veg@bela.hu",
+      "first_name": "B\u00e9la",
+      "groups": [
+        3
+      ],
+      "is_active": true,
+      "is_staff": false,
+      "is_superuser": false,
+      "last_login": "2011-11-18 05:52:00",
+      "last_name": "V\u00e9g",
+      "password": "sha1$5119b$18e5db0711aaabbd871443d421bbc77f45c77500",
+      "user_permissions": [],
+      "username": "bela"
+    },
+    "model": "auth.user",
+    "pk": 2
+  },
+  {
+    "fields": {
+      "date_joined": "2011-11-14 11:39:28",
+      "email": "mekk@elek.hu",
+      "first_name": "Mekk",
+      "groups": [
+        3
+      ],
+      "is_active": true,
+      "is_staff": false,
+      "is_superuser": false,
+      "last_login": "2011-11-18 05:51:47",
+      "last_name": "Elek",
+      "password": "sha1$e5fff$56777fe9a8fcb8a7d50c3bf497edc516eaac2e14",
+      "user_permissions": [],
+      "username": "elek"
+    },
+    "model": "auth.user",
+    "pk": 3
+  },
+  {
+    "fields": {
+      "date_joined": "2011-11-14 13:39:36",
+      "email": "asdas@asdasd.gg",
+      "first_name": "Tekn\u0151c",
+      "groups": [],
+      "is_active": true,
+      "is_staff": false,
+      "is_superuser": false,
+      "last_login": "2011-11-18 05:49:40",
+      "last_name": "Ern\u0151",
+      "password": "sha1$4b4b9$6455492fb1625102b59d40937d6c05e97ec2c82f",
+      "user_permissions": [],
+      "username": "teki"
+    },
+    "model": "auth.user",
+    "pk": 4
+  },
+  {
+    "fields": {
+      "date_joined": "2011-11-14 17:48:16",
+      "email": "roka@koma.hu",
+      "first_name": "R\u00f3ka",
+      "groups": [
+        2
+      ],
+      "is_active": true,
+      "is_staff": false,
+      "is_superuser": false,
+      "last_login": "2011-11-18 05:49:34",
+      "last_name": "Koma",
+      "password": "sha1$a86f7$1a999cd1a5e89d1fa83fd464d6fad144f14d8891",
+      "user_permissions": [
+        25,
+        49
+      ],
+      "username": "roka"
+    },
+    "model": "auth.user",
+    "pk": 6
+  }
+]

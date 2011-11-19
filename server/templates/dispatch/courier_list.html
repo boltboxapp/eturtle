@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block content %}
-
+<div class="left">
     {% if object_list %}
         <table class="datagrid">
             <tr>
@@ -20,11 +20,15 @@
                 <th></th>
             </tr>
             {% for courier in object_list %}
-            <tr{% if not courier.is_active %} class="inactive"{% endif %}>
-                <td>{{ courier.username }}</td>
-                <td>{{ courier.state }}</td>
-                <td>{{ courier.position|default:"-" }}</td>
-                <td>{{ courier.last_update|default:"-" }}</td>
+            <tr class="courier_row{% if not courier.is_active %} inactive{% endif %}">
+                <td class="username">{{ courier.username }}</td>
+                <td>{{ courier.get_state_display }}</td>
+                <td class="position">
+                    {% if courier.lat and courier.lng %}
+                        {{ courier.lat|slice:":8" }},{{ courier.lng|slice:":8" }}
+                    {% endif %}
+                </td>
+                <td>{{ courier.last_pos_update|timesince }}</td>
                 <td>
                     <a href="{% url courier_toggle courier.pk %}">
 
@@ -34,6 +38,10 @@
                         <img src="/static/img/accept.png" alt="enable client"/>
                     {% endif %}
                     </a>
+
+                    <a href="{% url courier_edit courier.pk %}">
+                        <img src="/static/img/edit.png" alt="edit client"/>
+                    </a>
                 </td>
             </tr>
             {% endfor %}
@@ -41,5 +49,13 @@
     {% else %}
         Nincs futár.
     {% endif %}
+</div>
+<div id="map_canvas"></div>
+<div class="clearfix"></div>
     
+{% endblock %}
+
+{% block extra_script %}
+    <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+    <script type="text/javascript" src="/static/js/couriers.js"></script>
 {% endblock %}

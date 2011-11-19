@@ -6,6 +6,12 @@ from dispatch.models import Package, Courier
 from django import forms
 
 class PackageForm(forms.ModelForm):
+    src_lat = forms.CharField(widget=forms.HiddenInput(), required=False)
+    src_lng = forms.CharField(widget=forms.HiddenInput(), required=False)
+
+    dst_lat = forms.CharField(widget=forms.HiddenInput(), required=False)
+    dst_lng = forms.CharField(widget=forms.HiddenInput(), required=False)
+
     class Meta:
         model = Package
         exclude = ('client','state')
@@ -34,3 +40,8 @@ class CourierForm(forms.ModelForm):
     class Meta:
         model = Courier
         fields = ('username','first_name','last_name','pw1','pw2')
+
+class CourierEditForm(forms.ModelForm):
+    class Meta:
+        model = Courier
+        fields = ('first_name','last_name','email')
