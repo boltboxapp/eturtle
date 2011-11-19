@@ -48,6 +48,9 @@ class PackageCreateView(WebLoginRequiredMixin, CreateView):
     def get_success_url(self):
         return reverse('package_list', kwargs={})
 
+class PackageDetailView(WebLoginRequiredMixin, DetailView):
+    model = Package
+
 class CourierListView(AdminOr404Mixin, ListView):
     model = Courier
 

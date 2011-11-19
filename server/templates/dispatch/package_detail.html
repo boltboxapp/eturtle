@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block package_tab_class %}selected{% endblock %}
+
+{% block content %}
+<div class="left">
+    <table class="form">
+        <tr>
+            <th>Csomag név</th><td>{{ package.name }}</td>
+        </tr>
+        <tr>
+            <th>Honnan</th><td>{{ package.source }}</td>
+        </tr>
+        <tr>
+            <th>Hova</th><td>{{ package.destination }}</td>
+        </tr>
+        <tr>
+            <th>Állapot</th><td>{{ package.get_state_display }}</td>
+        </tr>
+        <tr>
+            <th>Futár</th><td>{{ package.dispatch_set.all.0.courier|default:"-" }}</td>
+        </tr>
+        <tr>
+            <th>Eltelt idő</th><td>{{ package.date_created|timesince }}</td>
+        </tr>
+    </table>
+    <input type="hidden" id="source" name="source" value="{{ package.source }}"/>
+    <input type="hidden" id="destination" name="destination" value="{{ package.destination }}"/>
+
+</div>
+<div id="map_canvas"></div>
+<div class="clearfix"></div>
+
+{% endblock %}
+
+{% block extra_script %}
+    <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+    <script type="text/javascript" src="/static/js/package_detail.js"></script>
+{% endblock %}
