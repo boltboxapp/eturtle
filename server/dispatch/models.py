@@ -67,6 +67,12 @@ class Client(User):
         proxy = True
 
 class Package(ETModelBase):
+    STATE_NEW = 1
+    STATE_PENDING = 2
+    STATE_SHIPPING = 3
+    STATE_SHIPPED = 4
+    STATE_FAILED = 5
+
     STATE_ENUM = [
         (1, 'NEW'),
         (2, 'PENDING'),
@@ -92,6 +98,12 @@ class Package(ETModelBase):
         return u'%s' % self.name
 
 class Dispatch(ETModelBase):
+    STATE_PENDING = 1
+    STATE_REJECTED = 2
+    STATE_SHIPPING = 3
+    STATE_SHIPPED = 4
+    STATE_FAILED = 5
+
     STATE_ENUM = [
         (1, 'PENDING'),
         (2, 'REJECTED'),
