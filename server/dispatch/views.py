@@ -46,7 +46,7 @@ class PackageCreateView(WebLoginRequiredMixin, CreateView):
         return super(PackageCreateView, self).form_valid(form)
 
     def get_success_url(self):
-        return reverse('package_list', kwargs={})
+        return reverse('package_detail', kwargs={'pk':self.object.pk})
 
 class PackageDetailView(WebLoginRequiredMixin, DetailView):
     queryset = Package.objects.all()
