@@ -1,10 +1,13 @@
 from django.contrib.auth import authenticate
+from django.core import serializers
 from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import login as auth_login
 from dispatch.models import ETurtleGroup as Group
 from server.dispatch.models import Courier, Dispatch, Package
 from server.utils import api_permission_required, HttpResponseUnauthorized
+import json
 
 @csrf_exempt
 def loginview(request):
@@ -37,6 +40,17 @@ def leave(request):
 def decline(request):
     #TODO:implement
     return HttpResponse('declined')
+
+#@api_permission_required
+def get(request):
+    courier = Courier.objects.get(id=request.user.id)
+
+    dispatch = get_object_or_404(Dispatch, courier=courier, state=1)
+
+    package = dispatch.package
+
+    dump = serializers.serialize("json", [package])[1:-1]
+    return HttpResponse(dump)
 
 @api_permission_required
 def accept(request):
