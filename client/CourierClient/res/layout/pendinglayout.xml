@@ -9,5 +9,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="to shipping" />
-
+	<Button
+        android:id="@+id/btnMap"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="to map" />
 </LinearLayout>
