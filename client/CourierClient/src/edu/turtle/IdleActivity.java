@@ -26,7 +26,8 @@ public class IdleActivity extends Activity{
            Toast.makeText(IdleActivity.this, "Checking in...",Toast.LENGTH_LONG).show();
            Intent myIntent = new Intent(IdleActivity.this, StandingByActivity.class);
            IdleActivity.this.startActivity(myIntent);
-    
+           IdleActivity.this.finish();
+           
     
    }
   });       

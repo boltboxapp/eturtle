@@ -26,7 +26,7 @@ public class StandingByActivity extends Activity{
            Toast.makeText(StandingByActivity.this, "No packages",Toast.LENGTH_LONG).show();
            Intent myIntent = new Intent(StandingByActivity.this,PendingActivity.class);
            StandingByActivity.this.startActivity(myIntent);
-    
+           StandingByActivity.this.finish();
     
    }
   });       

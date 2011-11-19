@@ -38,7 +38,7 @@ public class LoginActivity extends Activity {
            Toast.makeText(LoginActivity.this, "Login Successful",Toast.LENGTH_LONG).show();
            Intent myIntent = new Intent(LoginActivity.this, IdleActivity.class);
            LoginActivity.this.startActivity(myIntent);
-    
+           LoginActivity.this.finish();
     	} else{
            Toast.makeText(LoginActivity.this, "Invalid Login",Toast.LENGTH_LONG).show();
           }

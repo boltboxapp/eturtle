@@ -26,7 +26,7 @@ public class PendingActivity extends Activity{
            Toast.makeText(PendingActivity.this, "No packages",Toast.LENGTH_LONG).show();
            Intent myIntent = new Intent(PendingActivity.this, ShippingActivity.class);
            PendingActivity.this.startActivity(myIntent);
-    
+           PendingActivity.this.finish();
     
    }
   });       
