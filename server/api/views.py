@@ -50,14 +50,16 @@ def get(request):
     package = dispatch.package
 
     dump = serializers.serialize("json", [package])[1:-1]
-    return HttpResponse(dump)
+    response = HttpResponse(dump)
+    response['Content-Type'] = 'application/json; charset=utf-8'
+    return response
 
 @api_permission_required
 def accept(request):
     courier = Courier.objects.get(id=request.user.id)
 
-    #get the corresponding DIspatch object
-    dispatch = Dispatch.objects.get(courier=courier, state=1)
+    #get the corresponding Dispatch object
+    dispatch = get_object_or_404(Dispatch, courier=courier, state=1)
 
     #updates the state of the pending dispatch
     dispatch.state=Dispatch.STATE_SHIPPING

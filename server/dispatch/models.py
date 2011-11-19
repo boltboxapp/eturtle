@@ -117,7 +117,7 @@ class Dispatch(ETModelBase):
 
     def save(self, force_insert=False, force_update=False, using=None):
 
-        if Dispatch.objects.filter(courier=self.courier, state=1).count():
+        if not self.id and Dispatch.objects.filter(courier=self.courier, state=1).count():
             raise Exception("This user already has a pending dispatch.")
 
         super(Dispatch,self).save(force_insert=force_insert,
