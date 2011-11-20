@@ -12,7 +12,8 @@ First, you need to log in.
 - **URL**: `/api/login/`
 - **Parameters**: `username,password`
 
-Only `couriers` can log in with this method (users in courier group with api access permission)
+Only `couriers` can log in with this method (users in courier group with api access
+permission)
 
 
 ::
@@ -82,7 +83,8 @@ Example:
 C2DM key
 ^^^^^^^^
 
-Updates the c2dm registration key in the database. It is esseintial for using android push service.
+Updates the c2dm registration key in the database. It is esseintial for using android
+push service.
 
 - **Method**: `POST`
 - **URL**: `/api/c2dmkey_update/`
@@ -98,9 +100,8 @@ Example:
 Leave
 ^^^^^
 
-Sets the state of logged in user to IDLE. 
-
-Also rejects the current package if exists (NOT IMPLEMENTED YET)
+Sets the state of logged in user to IDLE.
+Also rejects the current package if exists.
 
 - **Method**: `GET`
 - **URL**: `/api/leave/`
@@ -116,8 +117,9 @@ Example:
 Get
 ^^^
 
-Gets the details of the current dispatched package. First it tries to get the `Dispatch` instace of the logged in user. 
-There should be only one with `PENDING` state. After that, gets the `Package` object according to the `Dispatch`, 
+Gets the details of the current dispatched package. First it tries to get the `Dispatch`
+instace of the logged in user. There should be only one with `PENDING` state. After that,
+gets the `Package` object according to the `Dispatch`,
 and dumps out the details.
 
 - **Method**: `GET`
@@ -153,7 +155,8 @@ Example:
 Accept
 ^^^^^^
 
-Accepts the current dispatched package. Updates the state of the `Package` and the `Dispatch` to `SHIPPING`
+Accepts the current dispatched package. Updates the state of the `Package`, `Dispatch`,
+ and `Courier` to `SHIPPING`
 
 - **Method**: `GET`
 - **URL**: `/api/accept/`
@@ -169,13 +172,26 @@ Example:
 Decline
 ^^^^^^^
 
-NOT IMPLEMENTED YET
+Declines the current dispatched package. Updates the state of the `Package` and the
+`Dispatch` to `REJECTED`, and updates the state of the `Courier` to `IDLE`.
+
+- **Method**: `GET`
+- **URL**: `/api/decline/`
+- **Parameters**: `none`
+- **Returns**: `200 on succes, 404 if no package dispatched`
+
+Example:
+
+::
+
+  curl -b cookies.txt http://localhost:8000/api/decline/ --verbose
 
 Complete
 ^^^^^^^^
 
 Mark the current dispatched SHIPPING package as successfully SHIPPED.
-Updates the state of the `Package` and the `Dispatch` to `SHIPPED`
+Updates the state of the `Package` and the `Dispatch` to `SHIPPED` and the state of the
+`Courier` to `IDLE`.
 
 - **Method**: `GET`
 - **URL**: `/api/complete/`
@@ -193,7 +209,8 @@ Fail
 ^^^^
 
 Mark the current dispatched SHIPPING package as FAILED.
-Updates the state of the `Package` and the `Dispatch` to `FAILED`
+Updates the state of the `Package` and the `Dispatch` to `FAILED` and the state of the
+`Courier` to `IDLE`.
 
 - **Method**: `GET`
 - **URL**: `/api/fail/`

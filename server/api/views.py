@@ -39,12 +39,39 @@ def leave(request):
     courier = Courier.objects.get(id=request.user.id)
     courier.state = Courier.STATE_IDLE
     courier.save()
-    #TODO: decline package if dispatched
+
+    try:
+        dispatch = Dispatch.objects.get(courier=courier, state=Dispatch.STATE_PENDING)
+    except Dispatch.DoesNotExist:
+        pass
+    else:
+        #updates the state of the Dispatch
+        dispatch.state = Dispatch.STATE_REJECTED
+        dispatch.save()
+
+        #updates the state of the Package
+        dispatch.package.state=Package.STATE_NEW
+        dispatch.package.save()
+
     return HttpResponse('left')
 
 @api_permission_required
 def decline(request):
-    #TODO:implement
+    courier = Courier.objects.get(id=request.user.id)
+    dispatch = get_object_or_404(Dispatch, courier=courier, state=Dispatch.STATE_PENDING)
+
+    #updates the state of the Dispatch
+    dispatch.state = Dispatch.STATE_REJECTED
+    dispatch.save()
+
+    #updates the state of the Courier
+    courier.state = Courier.STATE_STANDING_BY
+    courier.save()
+
+    #updates the state of the Package
+    dispatch.package.state=Package.STATE_NEW
+    dispatch.package.save()
+
     return HttpResponse('declined')
 
 @api_permission_required
@@ -71,6 +98,10 @@ def accept(request):
     dispatch.state=Dispatch.STATE_SHIPPING
     dispatch.save()
 
+    #updates the state of the Courier
+    courier.state = Courier.STATE_SHIPPING
+    courier.save()
+
     #updates the state of the package
     dispatch.package.state=Package.STATE_SHIPPING
     dispatch.package.save()
@@ -86,6 +117,10 @@ def complete(request):
     dispatch.state=Dispatch.STATE_SHIPPED
     dispatch.save()
 
+    #updates the state of the Courier
+    courier.state = Courier.STATE_IDLE
+    courier.save()
+
     #updates the state of the package
     dispatch.package.state=Package.STATE_SHIPPED
     dispatch.package.save()
@@ -100,6 +135,10 @@ def fail(request):
     dispatch = get_object_or_404(Dispatch, courier=courier, state=Dispatch.STATE_SHIPPING)
     dispatch.state=Dispatch.STATE_FAILED
     dispatch.save()
+
+    #updates the state of the Courier
+    courier.state = Courier.STATE_IDLE
+    courier.save()
 
     #updates the state of the package
     dispatch.package.state=Package.STATE_FAILED
