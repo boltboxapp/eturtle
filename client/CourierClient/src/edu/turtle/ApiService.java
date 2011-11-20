@@ -107,6 +107,7 @@ public class ApiService extends Service {
         }
         
         cookies = httpclient.getCookieStore().getCookies();
+        httpclient.getCookieStore().addCookie(cookies.get(0));
         if (cookies.isEmpty()) {
             
         } else {
@@ -120,11 +121,42 @@ public class ApiService extends Service {
     
     	
     }
-    public void checkin(){
+    public void checkin(){    	
+    	httpget(BACKEND+"check_in/");    	
+    }
+    
+    public void checkout(){    	
+    	httpget(BACKEND+"leave/");    	
+    }
+    public void accept(){    	
+    	httpget(BACKEND+"accept/");    	
+    }
+    
+    public void decline(){    	
+    	httpget(BACKEND+"decline/");    	
+    }
+    
+    public void complete(){    	
+    	httpget(BACKEND+"complete/");    	
+    }
+    
+    public void fail(){    	
+    	httpget(BACKEND+"fail/");    	
+    }
+    
+    public void update_location(double longitude, double latitude)
+    {
+    	if (cookies!=null){
+	    	ArrayList <NameValuePair> nvps = new ArrayList <NameValuePair>();
+	        nvps.add(new BasicNameValuePair("lng", String.valueOf(longitude)));
+	        nvps.add(new BasicNameValuePair("lat", String.valueOf(latitude)));
+	    	httppost(BACKEND+"loc_update/",nvps);
+    	}
+    }
+    
+    private void httpget(String url){
     	
-    	
-        httpclient.getCookieStore().addCookie(cookies.get(0));
-        HttpGet httpget = new HttpGet(BACKEND+"check_in/");
+    	HttpGet httpget = new HttpGet(url);
         
         
         HttpResponse response2 = null;
@@ -139,17 +171,53 @@ public class ApiService extends Service {
 		}
         HttpEntity entity2 = response2.getEntity();
         
-        Log.i("ApiService","Checkin get: " + response2.getStatusLine());
+        Log.i("ApiService",url + " " + response2.getStatusLine());
         if (entity2 != null) {
             try {
 				entity2.consumeContent();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+        }    	
+    	
+    }
+    private void httppost(String url, ArrayList <NameValuePair> params){
+    	
+    	   
+        HttpPost httpost = new HttpPost(url);
+        
+
+
+        try {
+			httpost.setEntity(new UrlEncodedFormEntity(params, HTTP.UTF_8));
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+        HttpResponse response = null;
+		try {
+			response = httpclient.execute(httpost);
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        HttpEntity entity = response.getEntity();
+
+        Log.i("ApiService","Location update form get: " + response.getStatusLine());
+    	
+        if (entity != null) {
+            try {
+				entity.consumeContent();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
         }
         
-    	
-    	
+            	
     }
 }
