@@ -23,16 +23,18 @@ public class LoginActivity extends Activity {
  EditText txtPassword;
  Button btnLogin;
  Button btnCancel;
+ 
  private ApiService boundservice;
  private ServiceConnection sc;
- 	private boolean authenticate(String username, String password) {
+ 
+ 	private boolean authenticate(final String username, final String password) {
  		
  		 sc = new ServiceConnection(){
 			@Override
 			public void onServiceConnected(ComponentName className, IBinder service) {
 				boundservice = ((ApiService.LocalBinder)service).getService();
 				Log.i("ApiService","Connected to Api Service");
-				boundservice.testservice();
+				boundservice.login(username, password);
 			}
 			@Override
 			public void onServiceDisconnected(ComponentName arg0) {
