@@ -1,8 +1,10 @@
 package edu.turtle;
 
 import android.app.Service;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -16,6 +18,10 @@ public class LocationService extends Service {
 
 	LocationManager locationManager;
 	LocationListener locationListener;
+	
+	private ApiService boundservice;
+	private ServiceConnection sc;
+	
 	double longitude, latitude;
     /**
      * Class for clients to access.  Because we know this service always
@@ -30,6 +36,20 @@ public class LocationService extends Service {
 
     @Override
     public void onCreate() {
+    	
+    	//create api_service call
+    	sc = new ServiceConnection(){
+			@Override
+			public void onServiceConnected(ComponentName className, IBinder service) {
+				boundservice = ((ApiService.LocalBinder)service).getService();
+				Log.i("LocationService","Connected to Api Service");
+			}
+			@Override
+			public void onServiceDisconnected(ComponentName arg0) {
+				boundservice = null;
+			}};
+		bindService(new Intent(LocationService.this, ApiService.class), sc, Context.BIND_AUTO_CREATE);
+    	
     	// Acquire a reference to the system Location Manager
     	locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 
@@ -40,6 +60,9 @@ public class LocationService extends Service {
     	      longitude = location.getLongitude();
     	      latitude = location.getLatitude();
     	    	Log.i("LocationService", "Updated location long: "+ longitude + "  lat: "+ latitude);
+    	    	if (boundservice != null){
+    	    	boundservice.update_location(longitude, latitude);}
+    	    	
     	    }
 
     	    public void onProviderEnabled(String provider) {}
@@ -56,6 +79,8 @@ public class LocationService extends Service {
     	// Register the listener with the Location Manager to receive location updates
     	locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
     	locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+    
+    	
     }
 
     @Override
@@ -73,6 +98,10 @@ public class LocationService extends Service {
     	locationManager.removeUpdates(locationListener);
     	Log.i("LocationService", "Location Service Stopped");
         Toast.makeText(this, "Location Service Stopped", Toast.LENGTH_SHORT).show();
+       
+        if (sc != null){
+    		unbindService(sc);}
+    
     }
 
     @Override

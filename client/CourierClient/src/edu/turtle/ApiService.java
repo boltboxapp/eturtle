@@ -144,6 +144,16 @@ public class ApiService extends Service {
     	httpget(BACKEND+"fail/");    	
     }
     
+    public void update_location(double longitude, double latitude)
+    {
+    	if (cookies!=null){
+	    	ArrayList <NameValuePair> nvps = new ArrayList <NameValuePair>();
+	        nvps.add(new BasicNameValuePair("lng", String.valueOf(longitude)));
+	        nvps.add(new BasicNameValuePair("lat", String.valueOf(latitude)));
+	    	httppost(BACKEND+"loc_update/",nvps);
+    	}
+    }
+    
     private void httpget(String url){
     	
     	HttpGet httpget = new HttpGet(url);
@@ -170,5 +180,44 @@ public class ApiService extends Service {
 			}
         }    	
     	
+    }
+    private void httppost(String url, ArrayList <NameValuePair> params){
+    	
+    	   
+        HttpPost httpost = new HttpPost(url);
+        
+
+
+        try {
+			httpost.setEntity(new UrlEncodedFormEntity(params, HTTP.UTF_8));
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+        HttpResponse response = null;
+		try {
+			response = httpclient.execute(httpost);
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        HttpEntity entity = response.getEntity();
+
+        Log.i("ApiService","Location update form get: " + response.getStatusLine());
+    	
+        if (entity != null) {
+            try {
+				entity.consumeContent();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        }
+        
+            	
     }
 }
