@@ -7,7 +7,8 @@ import android.util.Log;
 
 public class MainActivity extends Activity{
 
-		Intent newinIntent;
+		Intent lsintent;
+		Intent nsintent;
 		
 	    /** Called when the activity is first created. */
 	    @Override
@@ -18,14 +19,20 @@ public class MainActivity extends Activity{
 	           
 	        //Starting location service
 	        Log.i("LocationService","Starting location service");
-	        newinIntent = new Intent(MainActivity.this, LocationService.class);
-	        MainActivity.this.startService(newinIntent);
+	        lsintent = new Intent(MainActivity.this, LocationService.class);
+	        MainActivity.this.startService(lsintent);
+	        
+	        //Starting notification service
+	        Log.i("NotificationService","Starting notification service");
+	        nsintent = new Intent(MainActivity.this, NotificationService.class);
+	        MainActivity.this.startService(nsintent);
 	    }
 
 		@Override
 		protected void onDestroy() {
 			// TODO Auto-generated method stub
-			MainActivity.this.stopService(newinIntent);
+			MainActivity.this.stopService(lsintent);
+			MainActivity.this.stopService(nsintent);
 			super.onDestroy();
 		}
 	    
