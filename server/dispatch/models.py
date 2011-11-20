@@ -64,7 +64,13 @@ class Courier(ETModelBase, User):
             ("web_access", "Can login via browser and access the web application."),
         )
 
+class ClientManager(models.Manager):
+    def get_query_set(self):
+        return super(ClientManager, self).get_query_set().filter(groups__name=ETurtleGroup.GROUP_CLIENT)
+
 class Client(User):
+    objects = ClientManager()
+
     class Meta:
         proxy = True
 
@@ -82,7 +88,7 @@ class Package(ETModelBase):
         (4, 'SHIPPED'),
         (5, 'FAILED'),
     ]
-    client = models.ForeignKey(User)
+    client = models.ForeignKey(Client)
 
     name = models.CharField(max_length=100)
 
