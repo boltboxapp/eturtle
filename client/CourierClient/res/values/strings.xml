@@ -3,5 +3,7 @@
 
     <string name="hello">Hello World, CourierClientActivity!</string>
     <string name="app_name">CourierClient</string>
+    <string name="options">Beállítások</string>
+    <string name="exit">Kilépés</string>
 
 </resources>

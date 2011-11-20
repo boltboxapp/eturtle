@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="propertyEdit">
+    	<item name="android:layout_width">fill_parent</item>
+    	<item name="android:layout_height">wrap_content</item>
+    	<item name="android:textSize">20sp</item>
+    </style>
+    <style name="propertyValue" parent="@android:style/TextAppearance.Medium">
+    	<item name="android:layout_width">wrap_content</item>
+    	<item name="android:layout_height">wrap_content</item>
+    	<item name="android:textSize">20sp</item>
+    </style>
+    <style name="propertyKey" parent="propertyValue">
+    	<item name="android:textStyle">bold</item>
+    </style>
+    <style name="hr">
+	    <item name="android:layout_width">fill_parent</item>
+		<item name="android:layout_height">2dip</item>
+		<item name="android:background">@android:drawable/divider_horizontal_dark</item>
+	</style>
+</resources>

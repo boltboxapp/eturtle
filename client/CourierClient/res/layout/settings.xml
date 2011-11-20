@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_height="fill_parent" android:layout_width="fill_parent"
+  android:scrollbarStyle="outsideInset"
+  android:padding="5sp">
+	<LinearLayout
+			android:layout_height="fill_parent"
+			android:layout_width="fill_parent"
+			android:orientation="vertical">  
+
+	    <TextView style="@style/propertyKey" android:text="Api URL"></TextView>
+	    <EditText style="@style/propertyEdit" android:id="@+id/settings_apiurl"></EditText>
+
+	</LinearLayout>
+</ScrollView>
