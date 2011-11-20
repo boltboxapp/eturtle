@@ -25,7 +25,9 @@ import android.util.Log;
 
 public class ApiService extends Service {
 
-	
+	private List<Cookie> cookies = null;
+	DefaultHttpClient httpclient;
+	private  String BACKEND = "http://lepi.zapto.org/api/";
     public class LocalBinder extends Binder {
         ApiService getService() {
             return ApiService.this;
@@ -34,7 +36,7 @@ public class ApiService extends Service {
 
     @Override
     public void onCreate() {
-    	
+    	httpclient = new DefaultHttpClient();
     }
 
     @Override
@@ -48,7 +50,7 @@ public class ApiService extends Service {
     @Override
     public void onDestroy() {
         
-        
+    	httpclient.getConnectionManager().shutdown();   
     	Log.i("ApiService", "Api Service Stopped");
     }
 
@@ -67,10 +69,8 @@ public class ApiService extends Service {
     public void login(String username, String password){
     	
     	Log.i("ApiService","Logging in");
-    	
-    	DefaultHttpClient httpclient = new DefaultHttpClient();
-        
-        HttpPost httpost = new HttpPost("http://192.168.2.6:8000/api/login/");
+    	       
+        HttpPost httpost = new HttpPost(BACKEND + "login/");
         
         List <NameValuePair> nvps = new ArrayList <NameValuePair>();
         nvps.add(new BasicNameValuePair("username", "roka"));
@@ -106,7 +106,7 @@ public class ApiService extends Service {
 			}
         }
         
-        List<Cookie> cookies = httpclient.getCookieStore().getCookies();
+        cookies = httpclient.getCookieStore().getCookies();
         if (cookies.isEmpty()) {
             
         } else {
@@ -115,9 +115,16 @@ public class ApiService extends Service {
             }
         }
         
-        /*
+       
+        
+    
+    	
+    }
+    public void checkin(){
+    	
+    	
         httpclient.getCookieStore().addCookie(cookies.get(0));
-        HttpGet httpget = new HttpGet("http://192.168.2.6:8000/api/check_in/");
+        HttpGet httpget = new HttpGet(BACKEND+"check_in/");
         
         
         HttpResponse response2 = null;
@@ -141,10 +148,8 @@ public class ApiService extends Service {
 				e.printStackTrace();
 			}
         }
-        */
-        httpclient.getConnectionManager().shutdown();   
+        
     	
     	
     }
-    
 }
