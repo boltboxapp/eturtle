@@ -30,7 +30,7 @@ DATABASES = {
 # timezone as the operating system.
 # If running in a Windows environment this must be set to the same as your
 # system time zone.
-TIME_ZONE = 'America/Chicago'
+TIME_ZONE = 'Europe/Budapest'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
@@ -118,15 +118,25 @@ LOGGING = {
             'level': 'ERROR',
             'class': 'django.utils.log.AdminEmailHandler'
         },
-        'file':{
+        'file_loc':{
             'level': 'INFO',
             'class': 'logging.FileHandler',
                 'filename': 'location_updates.log',
+        },
+        'file_c2dm':{
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+                'filename': 'c2dm_updates.log',
         }
     },
     'loggers': {
         'location_logger': {
-            'handlers':['file'],
+            'handlers':['file_loc'],
+            'propagate': False,
+            'level':'INFO',
+        },
+        'c2dm_logger': {
+            'handlers':['file_c2dm'],
             'propagate': False,
             'level':'INFO',
         },

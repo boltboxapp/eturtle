@@ -53,6 +53,8 @@ class Courier(ETModelBase, User):
     lng = models.CharField(max_length=20, default='', blank=True)
     last_pos_update = models.DateTimeField(null=True, blank=True)
 
+    c2dmkey = models.CharField(max_length='256', null=True, blank=True)
+
     def __unicode__(self):
         return u'%s' % self.username
 
