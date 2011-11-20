@@ -1,13 +1,13 @@
 =======================
 Developer Documentation
 =======================
-`Deployment documentation<https://github.com/lepilepi/eturtle/blob/master/doc/deploy_dev.rst>`_
+`Deployment documentation <https://github.com/lepilepi/eturtle/blob/master/doc/deploy_dev.rst>`_
 
-`Api documentation<https://github.com/lepilepi/eturtle/blob/master/doc/using_api.rst>`_
+`Api documentation <https://github.com/lepilepi/eturtle/blob/master/doc/using_api.rst>`_
 
-`Using C2DM with curl<https://github.com/lepilepi/eturtle/blob/master/doc/using_c2dm.rst>`_
+`Using C2DM with curl <https://github.com/lepilepi/eturtle/blob/master/doc/using_c2dm.rst>`_
 
-`Using Groups<https://github.com/lepilepi/eturtle/blob/master/doc/groups.rst>`_
+`Using Groups <https://github.com/lepilepi/eturtle/blob/master/doc/groups.rst>`_
 
 =========
 Use cases
