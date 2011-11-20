@@ -1,14 +1,10 @@
 package edu.turtle;
 
 
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences.Editor;
-import android.util.Config;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -16,6 +12,7 @@ public class C2DMReceiver extends BroadcastReceiver {
 	private static String KEY = "c2dmPref";
 	private static String REGISTRATION_KEY = "registrationKey";
 
+	@SuppressWarnings("unused")
 	private Context context;
 	@Override
 	public void onReceive(Context context, Intent intent) {
