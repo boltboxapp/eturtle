@@ -6,7 +6,23 @@
 	
     <uses-sdk android:minSdkVersion="8" />
 	<uses-library android:name="com.google.android.maps" />     
-	<uses-permission android:name="android.permission.INTERNET" />
+	
+	<!-- Only this application can receive the messages and registration result --> 
+   	<permission android:name="edu.turtle.permission.C2D_MESSAGE" android:protectionLevel="signature" />
+   	
+   	<uses-permission android:name="edu.turtle.permission.C2D_MESSAGE" />
+   	<uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+   	<uses-permission android:name="android.permission.INTERNET" />
+    <!-- C2DM -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+    <uses-permission android:name="android.permission.READ_SYNC_STATS" />
+    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
+    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+	<!-- LocationService -->
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <application
         android:icon="@drawable/ic_launcher"
@@ -47,8 +63,26 @@
             android:name=".ShippingActivity" >
             
         </activity>
+		
 		<service android:enabled="true" android:name=".LocationService" />
-                 
+        <service android:enabled="true" android:name=".NotificationService" />
+        <service android:enabled="true" android:name=".ApiService" />
+        
+        <!-- Only C2DM servers can send messages for the app. If permission is not set - any other app can generate it --> 
+		<receiver android:name=".C2DMReceiver" android:permission="com.google.android.c2dm.permission.SEND">
+		    <!-- Receive the actual message -->
+		    <intent-filter>
+		        <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+		        <category android:name="edu.turtle" />
+		    </intent-filter>
+		    <!-- Receive the registration id -->
+		    <intent-filter>
+		        <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+		        <category android:name="edu.turtle" />
+		    </intent-filter>
+		</receiver>
+        
+        
     </application>
 
 </manifest>
