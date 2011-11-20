@@ -44,7 +44,9 @@ def leave(request):
 
 @api_permission_required
 def decline(request):
-    #TODO:implement
+    courier = Courier.objects.get(id=request.user.id)
+    dispatch = get_object_or_404(Dispatch, courier=courier, state=Dispatch.STATE_PENDING)
+
     return HttpResponse('declined')
 
 @api_permission_required
