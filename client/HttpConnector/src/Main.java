@@ -33,7 +33,9 @@ public class Main {
         HttpEntity entity = response.getEntity();
 
         System.out.println("Login form get: " + response.getStatusLine());
-        
+        if (entity != null) {
+            entity.consumeContent();
+        }
         System.out.println("Initial set of cookies:");
         List<Cookie> cookies = httpclient.getCookieStore().getCookies();
         if (cookies.isEmpty()) {
@@ -44,16 +46,19 @@ public class Main {
             }
         }
         
-        httpclient.getConnectionManager().shutdown();   
-        httpclient = new DefaultHttpClient();
+        
         httpclient.getCookieStore().addCookie(cookies.get(0));
         HttpGet httpget = new HttpGet("http://192.168.2.6:8000/api/check_in/");
         
         
         HttpResponse response2 = httpclient.execute(httpget);
         HttpEntity entity2 = response2.getEntity();
-
+        
         System.out.println("Checkin get: " + response2.getStatusLine());
+        if (entity2 != null) {
+            entity2.consumeContent();
+        }
+        
         httpclient.getConnectionManager().shutdown();   
         
        
