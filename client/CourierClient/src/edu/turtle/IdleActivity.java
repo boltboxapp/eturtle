@@ -67,7 +67,8 @@ public class IdleActivity extends Activity{
 	
 	@Override
 	protected void onDestroy() {
-		unbindService(sc);
+		if (sc != null){
+			unbindService(sc);}
 		super.onDestroy();
 	}
 

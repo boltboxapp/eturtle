@@ -107,6 +107,7 @@ public class ApiService extends Service {
         }
         
         cookies = httpclient.getCookieStore().getCookies();
+        httpclient.getCookieStore().addCookie(cookies.get(0));
         if (cookies.isEmpty()) {
             
         } else {
@@ -120,11 +121,32 @@ public class ApiService extends Service {
     
     	
     }
-    public void checkin(){
+    public void checkin(){    	
+    	httpget(BACKEND+"check_in/");    	
+    }
+    
+    public void checkout(){    	
+    	httpget(BACKEND+"leave/");    	
+    }
+    public void accept(){    	
+    	httpget(BACKEND+"accept/");    	
+    }
+    
+    public void decline(){    	
+    	httpget(BACKEND+"decline/");    	
+    }
+    
+    public void complete(){    	
+    	httpget(BACKEND+"complete/");    	
+    }
+    
+    public void fail(){    	
+    	httpget(BACKEND+"fail/");    	
+    }
+    
+    private void httpget(String url){
     	
-    	
-        httpclient.getCookieStore().addCookie(cookies.get(0));
-        HttpGet httpget = new HttpGet(BACKEND+"check_in/");
+    	HttpGet httpget = new HttpGet(url);
         
         
         HttpResponse response2 = null;
@@ -139,17 +161,14 @@ public class ApiService extends Service {
 		}
         HttpEntity entity2 = response2.getEntity();
         
-        Log.i("ApiService","Checkin get: " + response2.getStatusLine());
+        Log.i("ApiService",url + " " + response2.getStatusLine());
         if (entity2 != null) {
             try {
 				entity2.consumeContent();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-        }
-        
-    	
+        }    	
     	
     }
 }
