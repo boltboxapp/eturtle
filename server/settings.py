@@ -117,9 +117,19 @@ LOGGING = {
         'mail_admins': {
             'level': 'ERROR',
             'class': 'django.utils.log.AdminEmailHandler'
+        },
+        'file':{
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+                'filename': 'location_updates.log',
         }
     },
     'loggers': {
+        'location_logger': {
+            'handlers':['file'],
+            'propagate': False,
+            'level':'INFO',
+        },
         'django.request': {
             'handlers': ['mail_admins'],
             'level': 'ERROR',

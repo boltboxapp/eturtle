@@ -1,4 +1,5 @@
 from datetime import datetime
+import logging
 from django.contrib.auth import authenticate
 from django.core import serializers
 from django.http import HttpResponse, HttpResponseBadRequest
@@ -122,5 +123,8 @@ def loc_update(request):
     courier.lng = lng
     courier.last_pos_update = datetime.now()
     courier.save()
+
+    logger = logging.getLogger('location_logger')
+    logger.info("%s: %s, %s @ %s" % (courier,lat,lng,courier.last_pos_update.isoformat()))
 
     return HttpResponse('location updated')
