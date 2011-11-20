@@ -52,6 +52,16 @@ public class PendingActivity extends Activity{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pendinglayout);
+        
+        
+        
+        String regid= getIntent().getStringExtra("message");    
+        Log.i("RegistrationService", "PENDING "+regid);
+        
+        
+	    
+        
+        
         btnAccept = (Button)this.findViewById(R.id.btnAccept);
         btnAccept.setOnClickListener(new OnClickListener() {    
 		   @Override

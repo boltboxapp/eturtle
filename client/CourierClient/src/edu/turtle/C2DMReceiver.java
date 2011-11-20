@@ -73,6 +73,16 @@ public class C2DMReceiver extends BroadcastReceiver {
 	private void handleMessage(Context context, Intent intent)
 	{
 		String msg= intent.getStringExtra("message");    
-	    Toast.makeText(context,"message : "+msg,1).show();
+	    //Toast.makeText(context,"message : "+msg,1).show();
+	    
+		Bundle bundle = intent.getExtras();
+        intent = new Intent();
+        intent.putExtra("message", msg);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);       
+        
+        
+        intent.setClass(context, PendingActivity.class);
+        context.startActivity( intent);   
+	    
 	}
 }
