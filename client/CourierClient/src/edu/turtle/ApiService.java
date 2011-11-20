@@ -28,6 +28,8 @@ public class ApiService extends Service {
 	private List<Cookie> cookies = null;
 	DefaultHttpClient httpclient;
 	private  String BACKEND = "http://lepi.zapto.org/api/";
+	private String c2dmregid;
+	
     public class LocalBinder extends Binder {
         ApiService getService() {
             return ApiService.this;
@@ -116,8 +118,8 @@ public class ApiService extends Service {
             }
         }
         
-       
-        
+       Log.i("ApiService","Attempting c2dm key posting with saved key");
+       update_c2dm_key(); 
     
     	
     }
@@ -151,6 +153,26 @@ public class ApiService extends Service {
 	        nvps.add(new BasicNameValuePair("lng", String.valueOf(longitude)));
 	        nvps.add(new BasicNameValuePair("lat", String.valueOf(latitude)));
 	    	httppost(BACKEND+"loc_update/",nvps);
+    	}
+    }
+    public void update_c2dm_key(String key)
+    {
+    	if (cookies!=null){
+	    	ArrayList <NameValuePair> nvps = new ArrayList <NameValuePair>();
+	        nvps.add(new BasicNameValuePair("registration_id", key));
+	        
+	    	httppost(BACKEND+"c2dmkey_update/",nvps);
+    	} else {
+    		
+    		c2dmregid = key;
+    	}
+    }
+    public void update_c2dm_key()
+    {
+    	if (c2dmregid != null) 
+    	{
+    		update_c2dm_key(c2dmregid);
+    		
     	}
     }
     

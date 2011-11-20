@@ -70,6 +70,7 @@
 		<service android:enabled="true" android:name=".LocationService" />
         <service android:enabled="true" android:name=".NotificationService" />
         <service android:enabled="true" android:name=".ApiService" />
+        <service android:enabled="true" android:name=".RegistrationService" />
         
         <!-- Only C2DM servers can send messages for the app. If permission is not set - any other app can generate it --> 
 		<receiver android:name=".C2DMReceiver" android:permission="com.google.android.c2dm.permission.SEND">

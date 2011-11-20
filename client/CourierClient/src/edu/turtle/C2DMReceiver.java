@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences.Editor;
+import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -58,14 +59,30 @@ public class C2DMReceiver extends BroadcastReceiver {
             editor.putString(REGISTRATION_KEY, registration);
     		editor.commit();
 	       // Send the registration ID to the 3rd party site that is sending the messages.
-	       // This should be done in a separate thread.
-	       // When done, remember that all registration is done.
+    		Bundle bundle = intent.getExtras();
+            intent = new Intent();
+            intent.putExtra("messageBundle", bundle);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);       
+            
+            
+            intent.setClass(context, RegistrationService.class);
+            context.startService( intent);      
 	    }
 	}
 
 	private void handleMessage(Context context, Intent intent)
 	{
 		String msg= intent.getStringExtra("message");    
-	    Toast.makeText(context,"message : "+msg,1).show();
+	    //Toast.makeText(context,"message : "+msg,1).show();
+	    
+		Bundle bundle = intent.getExtras();
+        intent = new Intent();
+        intent.putExtra("message", msg);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);       
+        
+        
+        intent.setClass(context, PendingActivity.class);
+        context.startActivity( intent);   
+	    
 	}
 }
