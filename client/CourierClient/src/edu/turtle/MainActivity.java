@@ -9,7 +9,9 @@ public class MainActivity extends Activity{
 
 		Intent lsintent;
 		Intent nsintent;
+		Intent asintent;
 		
+
 	    /** Called when the activity is first created. */
 	    @Override
 	    public void onCreate(Bundle savedInstanceState) {
@@ -26,6 +28,14 @@ public class MainActivity extends Activity{
 	        Log.i("NotificationService","Starting notification service");
 	        nsintent = new Intent(MainActivity.this, NotificationService.class);
 	        MainActivity.this.startService(nsintent);
+	        
+	        //Starting api service
+	        Log.i("ApiService","Starting api service");
+	        asintent = new Intent(MainActivity.this, ApiService.class);
+	        MainActivity.this.startService(asintent);
+	        
+	        
+	        
 	    }
 
 		@Override
@@ -33,6 +43,7 @@ public class MainActivity extends Activity{
 			// TODO Auto-generated method stub
 			MainActivity.this.stopService(lsintent);
 			MainActivity.this.stopService(nsintent);
+			MainActivity.this.stopService(asintent);
 			super.onDestroy();
 		}
 	    
