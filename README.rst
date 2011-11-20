@@ -3,6 +3,8 @@ Developer Documentation
 =======================
 `Deployment documentation <https://github.com/lepilepi/eturtle/blob/master/doc/deploy_dev.rst>`_
 
+`Models documentation <https://github.com/lepilepi/eturtle/blob/master/doc/models.rst>`_
+
 `Api documentation <https://github.com/lepilepi/eturtle/blob/master/doc/using_api.rst>`_
 
 `Using C2DM with curl <https://github.com/lepilepi/eturtle/blob/master/doc/using_c2dm.rst>`_
