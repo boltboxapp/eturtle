@@ -30,19 +30,20 @@ You can make regular requests with the cookie (sessionid) received on login.
 
 List of functions
 -----------------
-======== =========================================================== ==================
+======== =========================================================== ======================
 name     description                                                 url
-======== =========================================================== ==================
+======== =========================================================== ======================
 Login    Logs in the courier                                         `/api/login/`
 Check in Sets Courier state to STANDING_BY                           `/api/check_in/`
 Location Updates the position of the courier                         `/api/loc_update/`
+C2DM key Updates the c2dm registration key                           `/api/c2dmkey_update/`
 Leave    Sets Courier state to IDLE, rejects current PENDING package `/api/leave/`
 Get      Gets the details of the current dispatched PENDING package  `/api/get/`
 Accept   Accpets current PENDING package                             `/api/accept/`
 Decline  Declines current PENDING package                            `/api/decline/`
 Complete Sets package to SHIPPED, Courier to IDLE                    `/api/complete/`
 Fail     Sets package to FAILED, Courier to IDLE                     `/api/fail/`
-======== =========================================================== ==================
+======== =========================================================== ======================
 
 Functions
 ---------
@@ -77,6 +78,22 @@ Example:
 ::
 
   curl -b cookies.txt -d "lat=47.47307989999999&lng=19.053034199999956" http://localhost:8000/api/loc_update/ --verbose
+
+C2DM key
+^^^^^^^^
+
+Updates the c2dm registration key in the database. It is esseintial for using android push service.
+
+- **Method**: `POST`
+- **URL**: `/api/c2dmkey_update/`
+- **Parameters**: `registration_id`
+- **Returns**: `200`
+
+Example:
+
+::
+
+  curl -b cookies.txt -d "registration_id=asdasd2" http://localhost:8000/api/c2dmkey_update/ --verbosee
 
 Leave
 ^^^^^

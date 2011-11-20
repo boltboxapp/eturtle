@@ -1,5 +1,5 @@
 from django.conf.urls.defaults import patterns, url
-from api.views import check_in, loginview, leave, accept, decline, complete, fail, get, loc_update
+from api.views import check_in, loginview, leave, accept, decline, complete, fail, get, loc_update, c2dmkey_update
 
 urlpatterns = patterns('',
     url(r'^login/', loginview, name="api_login"),
@@ -7,6 +7,7 @@ urlpatterns = patterns('',
     url(r'^leave/', leave, name="api_leave"),
 
     url(r'^loc_update/', loc_update, name="api_loc_update"),
+    url(r'^c2dmkey_update/', c2dmkey_update, name="api_loc_update"),
 
     url(r'^get/', get, name="api_get"),
     url(r'^accept/', accept, name="api_accept"),

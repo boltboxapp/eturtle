@@ -15,8 +15,8 @@ import json
 def loginview(request):
     if not request.method=='POST':
         return HttpResponseBadRequest("post required")
-    username = request.POST.get('username')
-    password = request.POST.get('password')
+    username = request.POST.get('username' or None)
+    password = request.POST.get('password' or None)
     if not (username and password):
         return HttpResponseBadRequest("invalid or missing parameters")
 
@@ -112,8 +112,8 @@ def fail(request):
 def loc_update(request):
     if not request.method=='POST':
         return HttpResponseBadRequest("post required")
-    lat = request.POST.get('lat')
-    lng = request.POST.get('lng')
+    lat = request.POST.get('lat' or None)
+    lng = request.POST.get('lng' or None)
     if not (lat and lng):
         return HttpResponseBadRequest("invalid or missing parameters")
 
@@ -128,3 +128,22 @@ def loc_update(request):
     logger.info("%s: %s, %s @ %s" % (courier,lat,lng,courier.last_pos_update.isoformat()))
 
     return HttpResponse('location updated')
+
+@csrf_exempt
+@api_permission_required
+def c2dmkey_update(request):
+    if not request.method=='POST':
+        return HttpResponseBadRequest("post required")
+    registration_id = request.POST.get('registration_id')
+    if not registration_id:
+        return HttpResponseBadRequest("invalid or missing parameters")
+
+    courier = Courier.objects.get(id=request.user.id)
+    courier.c2dmkey = registration_id
+    courier.save()
+
+    logger = logging.getLogger('c2dm_logger')
+    logger.info("%s: %s @ %s" % (courier,registration_id,datetime.now()))
+
+    return HttpResponse('c2dm key updated')
+
