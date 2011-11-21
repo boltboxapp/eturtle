@@ -3,11 +3,11 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse, HttpResponseServerError, HttpResponseForbidden, HttpResponseNotFound, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseServerError, HttpResponseForbidden, HttpResponseNotFound, HttpResponseRedirect, Http404
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from django.views.generic import ListView
-from django.views.generic.base import View
+from django.views.generic.base import TemplateView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from dispatch.forms import PackageForm, CourierForm
@@ -126,7 +126,8 @@ def push_test(request,pk,message):
 
     return HttpResponse('%s' % x)
 
-@login_required
-def dispatcher_test(request):
-    run_dispatcher()
-    return HttpResponse('ok')
+class RunDispatcherView(AdminOr404Mixin, TemplateView):
+    template_name = "dispatch/run.html"
+
+    def get_context_data(self, **kwargs):
+        return {'data': run_dispatcher()}

@@ -60,12 +60,17 @@ def push(courier, message):
 def run_dispatcher():
     packages = Package.objects.filter(state=Package.STATE_NEW)
     couriers = Courier.objects.filter(state=Courier.STATE_STANDING_BY)
-    
-    if not packages.count():
-        return
 
-    if not couriers.count():
-        return
+    num_packages = packages.count()
+    num_couriers = couriers.count()
+
+    if not num_packages:
+        return (0,0,[])
+
+    if not num_couriers:
+        return (0,0,[])
+
+    assignments=[]
 
     for p in packages:
         couriers = Courier.objects.filter(state=Courier.STATE_STANDING_BY)
@@ -93,3 +98,7 @@ def run_dispatcher():
 
         #send push notification to courier:
         push(c,p.serialize())
+
+        assignments.append((c,p))
+
+    return (num_packages,num_couriers,assignments)

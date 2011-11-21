@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+<p>A csomagkiosztás sikeresen lefutott.</p>
+<p>
+    Részletek:<br/>
+    Kisztandó csomagok száma: {{ data.0 }}<br/>
+    Szabad futárok száma: {{ data.1 }}<br/>
+</p>
+
+{% if data.2 %}
+    <table>
+        {% for d in data.2 %}
+        <tr>
+            <td>{{ d.0 }}</td>
+            <td>{{ d.1 }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+{% endif %}
+
+{% endblock %}
