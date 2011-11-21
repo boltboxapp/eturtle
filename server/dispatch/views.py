@@ -1,8 +1,10 @@
 # Create your views here.
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseServerError, HttpResponseForbidden, HttpResponseNotFound, HttpResponseRedirect
+from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from django.views.generic import ListView
 from django.views.generic.base import View
@@ -17,6 +19,7 @@ from django.dispatch import receiver
 
 
 #signal catch for user registration
+from server.dispatch.dispatcher import push
 from server.dispatch.forms import CourierEditForm
 
 @receiver(user_registered)
@@ -114,3 +117,10 @@ class CourierUpdateView(AdminOr404Mixin, UpdateView):
 class ProfileView(WebLoginRequiredMixin, DetailView):
     def get_object(self, queryset=None):
         return self.request.user
+
+@login_required
+def push_test(request,pk,message):
+    courier = get_object_or_404(Courier, pk=pk)
+    x = push(courier, message)
+
+    return HttpResponse('%s' % x)
