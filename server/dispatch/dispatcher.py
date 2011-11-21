@@ -1,8 +1,11 @@
+from decimal import Decimal
 import logging
 from datetime import datetime
 import urllib
 import urllib2
 from django.core.cache import cache
+from server.dispatch.models import Courier, Package, Dispatch
+from math import sqrt
 
 def get_google_token():
     auth_token = cache.get('google_auth_token',None)
@@ -55,8 +58,38 @@ def push(courier, message):
     return body
 
 def run_dispatcher():
-    #get un-assigned packages
-    #assign them efficiently:
-    #    1. create Dispatch(PENDING)
-    #    2. notify cliend (c2dm)
-    return None
+    packages = Package.objects.filter(state=Package.STATE_NEW)
+    couriers = Courier.objects.filter(state=Courier.STATE_STANDING_BY)
+    
+    if not packages.count():
+        return
+
+    if not couriers.count():
+        return
+
+    for p in packages:
+        couriers = Courier.objects.filter(state=Courier.STATE_STANDING_BY)
+        if not couriers.count():
+            continue
+
+        nearest_courier = None
+        min_d=Decimal('infinity')
+        for c in couriers:
+            try:
+                d=sqrt((abs(float(p.src_lat)-float(c.lat)))**2 + (abs(float(p.src_lng)-float(c.lng)))**2)
+                if d<min_d:
+                    min_d = d
+                    nearest_courier =c
+            except ValueError:
+                print "ValueError for package %s" % p
+                continue
+
+        #dispatch the packege to the nearest_courier:
+        c.state=Courier.STATE_PENDING
+        c.save()
+        p.state=Package.STATE_PENDING
+        p.save()
+        Dispatch(courier=c,package=p).save()
+
+        #send push notification to courier:
+        push(c,p.serialize())

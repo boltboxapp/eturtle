@@ -1,6 +1,7 @@
 from django.core.exceptions import ImproperlyConfigured
 from django.db import models
 from django.contrib.auth.models import User, Group
+import json
 
 class ETurtleGroup(Group):
     GROUP_ADMIN = 'eturtle_admin'
@@ -101,6 +102,17 @@ class Package(ETModelBase):
     dst_lng = models.CharField(max_length=20)
 
     state = models.IntegerField(choices = STATE_ENUM, default = 1)
+
+    def serialize(self):
+        data={'name':self.name,
+               'source':self.source,
+               'src_lat':self.src_lat,
+               'src_lng':self.src_lng,
+               'destination':self.destination,
+               'dst_lat':self.dst_lat,
+               'dst_lng':self.dst_lng,
+               'date_created':self.date_created.isoformat()}
+        return json.dumps(data)
 
     def __unicode__(self):
         return u'%s' % self.name

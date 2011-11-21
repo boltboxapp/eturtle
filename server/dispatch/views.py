@@ -16,6 +16,7 @@ from dispatch.models import ETurtleGroup as Group
 from utils import AdminOr404Mixin, WebLoginRequiredMixin
 from registration.signals import user_registered
 from django.dispatch import receiver
+from dispatcher import run_dispatcher
 
 
 #signal catch for user registration
@@ -124,3 +125,8 @@ def push_test(request,pk,message):
     x = push(courier, message)
 
     return HttpResponse('%s' % x)
+
+@login_required
+def dispatcher_test(request):
+    run_dispatcher()
+    return HttpResponse('ok')
