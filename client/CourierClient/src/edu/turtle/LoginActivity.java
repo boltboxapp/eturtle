@@ -70,7 +70,8 @@ public class LoginActivity extends Activity {
         
         txtUserName=(EditText)this.findViewById(R.id.txtUname);
         txtPassword=(EditText)this.findViewById(R.id.txtPwd);
-        btnLogin=(Button)this.findViewById(R.id.btnLogin);
+        txtUserName.setText("roka");
+        txtPassword.setText("roka");
         btnLogin=(Button)this.findViewById(R.id.btnLogin);
         btnLogin.setOnClickListener(new OnClickListener() {
    

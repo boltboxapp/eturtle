@@ -97,8 +97,8 @@ public class ApiService extends Service {
         
 
         List <NameValuePair> nvps = new ArrayList <NameValuePair>();
-        nvps.add(new BasicNameValuePair("username", "roka"));
-        nvps.add(new BasicNameValuePair("password", "roka"));
+        nvps.add(new BasicNameValuePair("username", username));
+        nvps.add(new BasicNameValuePair("password", password));
 
         try {
 			httpost.setEntity(new UrlEncodedFormEntity(nvps, HTTP.UTF_8));
