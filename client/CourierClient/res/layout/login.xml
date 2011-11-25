@@ -32,7 +32,7 @@
 				 </EditText>
 
 			     <CheckBox
-			         android:id="@+id/remember_me"
+			         android:id="@+id/chkRemember_me"
 			         android:layout_width="wrap_content"
 			         android:layout_height="wrap_content"
 			         android:layout_centerHorizontal="true"
