@@ -143,6 +143,8 @@ class ProfileView(WebLoginRequiredMixin, DetailView):
 
 @login_required
 def push_test(request,pk,message):
+    if not request.user.has_perm('dispatch.eturtle_admin'):
+        raise Http404()
     courier = get_object_or_404(Courier, pk=pk)
     x = push(courier, message)
 
