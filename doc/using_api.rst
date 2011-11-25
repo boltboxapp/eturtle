@@ -11,6 +11,7 @@ First, you need to log in.
 - **Method**: `POST`
 - **URL**: `/api/login/`
 - **Parameters**: `username,password`
+- **Returns**: `200, 401`
 
 Only `couriers` can log in with this method (users in courier group with api access
 permission)
