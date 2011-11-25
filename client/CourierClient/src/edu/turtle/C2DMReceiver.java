@@ -55,10 +55,10 @@ public class C2DMReceiver extends BroadcastReceiver {
 	    } else if (registration != null) {
 	    	Log.d("c2dm", registration);
 	    	Editor editor =
-                context.getSharedPreferences(KEY, Context.MODE_PRIVATE).edit();
+            context.getSharedPreferences(KEY, Context.MODE_PRIVATE).edit();
             editor.putString(REGISTRATION_KEY, registration);
     		editor.commit();
-	       // Send the registration ID to the 3rd party site that is sending the messages.
+	        // Send the registration ID to the 3rd party site that is sending the messages.
     		Bundle bundle = intent.getExtras();
             intent = new Intent();
             intent.putExtra("messageBundle", bundle);
