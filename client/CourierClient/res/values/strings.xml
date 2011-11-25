@@ -14,5 +14,6 @@
     <string name="login">Bejelentkezés</string>
     <string name="login_title">ETurtle - Bejelentkezés</string>
     <string name="remember">Adatok megjegyzése</string>
+    <string name="api_url">Szolgáltatás címe</string>
 
 </resources>
