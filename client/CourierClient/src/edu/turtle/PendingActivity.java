@@ -1,5 +1,7 @@
 package edu.turtle;
 
+import org.apache.http.client.HttpResponseException;
+
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
@@ -32,15 +34,37 @@ public class PendingActivity extends Activity{
 			public void onServiceConnected(ComponentName className, IBinder service) {
 				boundservice = ((ApiService.LocalBinder)service).getService();
 				Log.i("ApiService","Connected to Api Service");
-				if (method.contentEquals("ACCEPT")) {
-					boundservice.accept();
+				try{
+					if (method.contentEquals("ACCEPT")) {
+						boundservice.accept();
+						Toast.makeText(PendingActivity.this, "Accepting",Toast.LENGTH_LONG).show();
+				        Intent myIntent = new Intent(PendingActivity.this, ShippingActivity.class);
+				        PendingActivity.this.startActivity(myIntent);
+				        PendingActivity.this.finish();
+						}
+					else if (method.contentEquals("DECLINE")) {
+						boundservice.decline();
+						Toast.makeText(PendingActivity.this, "Rejecting",Toast.LENGTH_LONG).show();				        
+						Intent myIntent = new Intent(PendingActivity.this, StandingByActivity.class);
+				        PendingActivity.this.startActivity(myIntent);
+				        PendingActivity.this.finish();
+						
+					} else if (method.contentEquals("LEAVE")){
+						
+						boundservice.checkout();
+						Toast.makeText(PendingActivity.this, "Rejecting and Checking out",Toast.LENGTH_LONG).show();
+		 		        Intent myIntent = new Intent(PendingActivity.this,IdleActivity.class);
+		 		        PendingActivity.this.startActivity(myIntent);
+		 		        PendingActivity.this.finish();
 					}
-				else if (method.contentEquals("DECLINE")) {
-					boundservice.decline();
-					
-				} else if (method.contentEquals("LEAVE")){
-					boundservice.checkout();
-					
+				}
+				catch (HttpResponseException e){
+					if(e.getStatusCode()==500)
+						Toast.makeText(PendingActivity.this, "Server Error!",Toast.LENGTH_LONG).show();
+						
+				}
+				catch (Exception e) {
+					Toast.makeText(PendingActivity.this, "Could not connect to server.",Toast.LENGTH_LONG).show();
 				}
 			}
 			@Override
@@ -75,15 +99,8 @@ public class PendingActivity extends Activity{
         btnAccept.setOnClickListener(new OnClickListener() {    
 		   @Override
 		   public void onClick(View v) {
-		    // TODO Auto-generated method stub
-		
-		           Toast.makeText(PendingActivity.this, "Accepting",Toast.LENGTH_LONG).show();
 		           
 		           api_method("ACCEPT");
-		           
-		           Intent myIntent = new Intent(PendingActivity.this, ShippingActivity.class);
-		           PendingActivity.this.startActivity(myIntent);
-		           PendingActivity.this.finish();
 		    
 		   }
 		});
@@ -91,15 +108,10 @@ public class PendingActivity extends Activity{
         btnReject.setOnClickListener(new OnClickListener() {    
 		   @Override
 		   public void onClick(View v) {
-		    // TODO Auto-generated method stub
-		
-		           Toast.makeText(PendingActivity.this, "Rejecting",Toast.LENGTH_LONG).show();
-		           
-		           api_method("DECLINE");
-		           
-		           Intent myIntent = new Intent(PendingActivity.this, StandingByActivity.class);
-		           PendingActivity.this.startActivity(myIntent);
-		           PendingActivity.this.finish();
+		          
+	           api_method("DECLINE");
+	           
+	           
 		    
 		   }
 		});
@@ -124,15 +136,10 @@ public class PendingActivity extends Activity{
     
  		   @Override
  		   public void onClick(View v) {
- 		    // TODO Auto-generated method stub
- 		
- 		           Toast.makeText(PendingActivity.this, "Rejecting and Checking out",Toast.LENGTH_LONG).show();
  		           
  		           api_method("LEAVE");
  		           
- 		           Intent myIntent = new Intent(PendingActivity.this,IdleActivity.class);
- 		           PendingActivity.this.startActivity(myIntent);
- 		           PendingActivity.this.finish();
+ 		           
  		    
  		   }
  		  });    

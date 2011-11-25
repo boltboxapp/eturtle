@@ -1,5 +1,7 @@
 package edu.turtle;
 
+import org.apache.http.client.HttpResponseException;
+
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
@@ -29,7 +31,21 @@ public class StandingByActivity extends Activity{
 			public void onServiceConnected(ComponentName className, IBinder service) {
 				boundservice = ((ApiService.LocalBinder)service).getService();
 				Log.i("ApiService","Connected to Api Service");
-				boundservice.checkout();
+				try {
+					boundservice.checkout();
+					Toast.makeText(StandingByActivity.this, "Checking out",Toast.LENGTH_LONG).show();  
+					Intent myIntent = new Intent(StandingByActivity.this,IdleActivity.class);
+			        StandingByActivity.this.startActivity(myIntent);
+			        StandingByActivity.this.finish();
+					
+				} catch (HttpResponseException e) {
+					// TODO Auto-generated catch block
+					if(e.getStatusCode()==500)
+						Toast.makeText(StandingByActivity.this, "Server Error!",Toast.LENGTH_LONG).show();
+				}
+				catch (Exception e) {
+					Toast.makeText(StandingByActivity.this, "Could not connect to server.",Toast.LENGTH_LONG).show();
+				}
 			}
 			@Override
 			public void onServiceDisconnected(ComponentName arg0) {
@@ -48,16 +64,8 @@ public class StandingByActivity extends Activity{
    
 		   @Override
 		   public void onClick(View v) {
-		    // TODO Auto-generated method stub
-		
-		           Toast.makeText(StandingByActivity.this, "Checking out",Toast.LENGTH_LONG).show();
-		           
-		           checkout();
-		           
-		           Intent myIntent = new Intent(StandingByActivity.this,IdleActivity.class);
-		           StandingByActivity.this.startActivity(myIntent);
-		           StandingByActivity.this.finish();
 		    
+		           checkout();
 		   }
 		  });       
     }

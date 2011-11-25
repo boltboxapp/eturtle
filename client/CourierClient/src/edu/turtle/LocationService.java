@@ -1,5 +1,7 @@
 package edu.turtle;
 
+import java.io.IOException;
+
 import android.app.Service;
 import android.content.ComponentName;
 import android.content.Context;
@@ -61,7 +63,14 @@ public class LocationService extends Service {
     	      latitude = location.getLatitude();
     	    	Log.i("LocationService", "Updated location long: "+ longitude + "  lat: "+ latitude);
     	    	if (boundservice != null){
-    	    	boundservice.update_location(longitude, latitude);}
+    	    	try {
+					boundservice.update_location(longitude, latitude);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					Toast.makeText(LocationService.this, "Could not connect to server",Toast.LENGTH_LONG).show();
+		        	
+				}}
     	    	
     	    }
 

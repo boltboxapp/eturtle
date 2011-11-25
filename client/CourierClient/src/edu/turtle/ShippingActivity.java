@@ -1,5 +1,7 @@
 package edu.turtle;
 
+import org.apache.http.client.HttpResponseException;
+
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
@@ -26,13 +28,27 @@ public class ShippingActivity extends Activity{
 			public void onServiceConnected(ComponentName className, IBinder service) {
 				boundservice = ((ApiService.LocalBinder)service).getService();
 				Log.i("ApiService","Connected to Api Service");
-				if (method.contentEquals("COMPLETE")) {
-					boundservice.complete();
-					}
-				else if (method.contentEquals("FAIL")) {
-					boundservice.fail();
-					
-				} 
+				try{
+					if (method.contentEquals("COMPLETE")) {
+						boundservice.complete();
+						Toast.makeText(ShippingActivity.this, "Success",Toast.LENGTH_LONG).show();
+				        
+						}
+					else if (method.contentEquals("FAIL")) {
+						boundservice.fail();
+						Toast.makeText(ShippingActivity.this, "Fail",Toast.LENGTH_LONG).show();
+					} 
+					Intent myIntent = new Intent(ShippingActivity.this, IdleActivity.class);
+			        ShippingActivity.this.startActivity(myIntent);
+			        ShippingActivity.this.finish();
+				}
+				catch (HttpResponseException e){
+					if(e.getStatusCode()==500)
+						Toast.makeText(ShippingActivity.this, "Server Error!",Toast.LENGTH_LONG).show();				
+				}
+				catch (Exception e) {
+					Toast.makeText(ShippingActivity.this, "Could not connect to server.",Toast.LENGTH_LONG).show();
+				}
 			}
 			@Override
 			public void onServiceDisconnected(ComponentName arg0) {
@@ -50,15 +66,7 @@ public class ShippingActivity extends Activity{
    
 		   @Override
 		   public void onClick(View v) {
-		    // TODO Auto-generated method stub
-		
-		           Toast.makeText(ShippingActivity.this, "Success",Toast.LENGTH_LONG).show();
-		           
 		           api_method("COMPLETE");
-		           
-		           Intent myIntent = new Intent(ShippingActivity.this, IdleActivity.class);
-		           ShippingActivity.this.startActivity(myIntent);
-		           ShippingActivity.this.finish();
 		    
 		   }
 		  });     
@@ -67,15 +75,8 @@ public class ShippingActivity extends Activity{
    
 		   @Override
 		   public void onClick(View v) {
-		    // TODO Auto-generated method stub
-		
-		           Toast.makeText(ShippingActivity.this, "Fail",Toast.LENGTH_LONG).show();
-		           
+		          
 		           api_method("FAIL");
-		           
-		           Intent myIntent = new Intent(ShippingActivity.this, IdleActivity.class);
-		           ShippingActivity.this.startActivity(myIntent);
-		           ShippingActivity.this.finish();
 		    
 		   }
 		  });     

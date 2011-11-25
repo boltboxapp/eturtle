@@ -40,10 +40,6 @@ public class LoginActivity extends Activity {
 				int loginstatus = boundservice.login(username, password);
 				if( loginstatus == 200)
 				{	
-		           Toast.makeText(LoginActivity.this, "Login Successful",Toast.LENGTH_LONG).show();
-		         
-		           
-		         
 		           Intent myIntent = new Intent(LoginActivity.this, IdleActivity.class);
 		           LoginActivity.this.startActivity(myIntent);
 		           LoginActivity.this.finish();

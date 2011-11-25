@@ -1,5 +1,7 @@
 package edu.turtle;
 
+import java.io.IOException;
+
 import android.app.Service;
 import android.content.ComponentName;
 import android.content.Context;
@@ -9,6 +11,7 @@ import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.Toast;
 
 public class RegistrationService extends Service {
 
@@ -40,7 +43,14 @@ public class RegistrationService extends Service {
 			@Override
 			public void onServiceConnected(ComponentName className, IBinder service) {
 				boundservice = ((ApiService.LocalBinder)service).getService();
-				boundservice.update_c2dm_key(regid);
+				try {
+					boundservice.update_c2dm_key(regid);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					Toast.makeText(RegistrationService.this, "Could not connect registration service",Toast.LENGTH_LONG).show();
+		        	
+				}
 			}
 			@Override
 			public void onServiceDisconnected(ComponentName arg0) {
