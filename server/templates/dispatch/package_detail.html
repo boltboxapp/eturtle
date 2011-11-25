@@ -2,6 +2,14 @@
 
 {% block package_tab_class %}selected{% endblock %}
 
+{% block middle_bar %}
+    {% if package.state == package.STATE_NEW %}
+    <div id="middle_bar">
+        <a href="{% url package_edit package.pk %}" class="nav-button selected">Adatok szerkesztése</a>
+    </div>
+    {% endif %}
+{% endblock %}
+
 {% block content %}
 <div class="left">
     <table class="form">

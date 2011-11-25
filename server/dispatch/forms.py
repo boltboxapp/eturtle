@@ -12,6 +12,15 @@ class PackageForm(forms.ModelForm):
     dst_lat = forms.CharField(widget=forms.HiddenInput(), required=False)
     dst_lng = forms.CharField(widget=forms.HiddenInput(), required=False)
 
+    def clean(self):
+        cleaned_data = self.cleaned_data
+
+        if self.instance:
+            if not getattr(self.instance, 'state', None)==Package.STATE_NEW:
+                raise forms.ValidationError(u"A csomag már kiosztásra került, most már \
+                nem módosítható. Kérjük lépjen kapcsolatba az ügyfélszolgálattal.")
+        return cleaned_data
+    
     class Meta:
         model = Package
         exclude = ('client','state')

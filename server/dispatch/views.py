@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
+from django.forms import forms
 from django.http import HttpResponse, HttpResponseServerError, HttpResponseForbidden, HttpResponseNotFound, HttpResponseRedirect, Http404
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
@@ -38,6 +39,27 @@ class PackageListView(WebLoginRequiredMixin, ListView):
             queryset = queryset.filter(client = self.request.user)
 
         return queryset
+
+class PackageUpdateView(WebLoginRequiredMixin, UpdateView):
+    form_class = PackageForm
+    template_name = 'dispatch/package_edit.html'
+    model = Package
+
+    def form_valid(self, form):
+        self.package = form.save(commit=False)
+        self.package.client = Client().from_user(self.request.user)
+        self.package.save()
+        return super(PackageUpdateView, self).form_valid(form)
+
+    def get_success_url(self):
+        return reverse('package_detail', kwargs={'pk':self.object.pk})
+
+    def get(self, *args, **kwargs):
+        handler = super(PackageUpdateView, self).get(*args, **kwargs)
+        if not self.get_object().state == Package.STATE_NEW:
+            raise Http404()
+        return handler
+
 
 class PackageCreateView(WebLoginRequiredMixin, CreateView):
     form_class = PackageForm

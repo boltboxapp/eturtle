@@ -74,6 +74,7 @@ class Client(User):
 
     def from_user(self, user):
         self.__dict__ = user.__dict__
+        return self
 
     class Meta:
         proxy = True
