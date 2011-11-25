@@ -1,72 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<RelativeLayout android:id="@+id/RelativeLayout01" 
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/RelativeLayout01" 
     android:layout_width="fill_parent" 
     android:layout_height="fill_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:background="#ffffff">
+    
+		<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" 
+		    android:id="@+id/LinearLayout01" 
+		    android:layout_width="fill_parent" 
+		    android:layout_height="wrap_content"
+		    android:layout_centerInParent="true"
+		    android:orientation="vertical"
+		    android:background="#ffffff"
+		    android:padding="10px">
+		    
+		    	
+				 
+				 <EditText
+				 android:hint="@string/username"
+ 				 android:id="@+id/txtUname" 
+				 android:layout_width="fill_parent" 
+				 android:layout_height="wrap_content">
+				 </EditText>
+				
+				 <EditText
+				 android:hint="@string/password" 
+				 android:id="@+id/txtPwd" 
+				 android:layout_width="fill_parent" 
+				 android:layout_height="wrap_content"
+				 android:password="true">
+				 </EditText>
 
+			     <CheckBox
+			         android:id="@+id/remember_me"
+			         android:layout_width="wrap_content"
+			         android:layout_height="wrap_content"
+			         android:layout_centerHorizontal="true"
+			         android:layout_gravity="center_horizontal"
+			         android:text="@string/remember"
+			         android:textColor="#000000" />
 
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:layout_centerInParent="true"
-    android:stretchColumns="1">
-     
-<TableRow> 
- <TextView 
- android:text="User Name: " 
- android:id="@+id/TextView01" 
- android:layout_width="wrap_content" 
- android:layout_height="wrap_content">
- </TextView>
- 
- <EditText 
- android:text="" 
- android:id="@+id/txtUname" 
- android:layout_width="fill_parent" 
- android:layout_height="wrap_content">
- </EditText>
-</TableRow>
+			     <Button
+			         android:id="@+id/btnLogin"
+			         android:layout_width="136dp"
+			         android:layout_height="wrap_content"
+			         android:layout_gravity="center_horizontal"
+			         android:text="@string/login" />
+		
+		</LinearLayout>
 
+		<ImageView
+		    android:layout_width="338px"
+		    android:layout_height="wrap_content"
+		    android:layout_above="@+id/LinearLayout01"
+		    android:layout_centerHorizontal="true"
+		    android:src="@drawable/logo_text" />
 
-<TableRow>
- <TextView 
- android:text="Password: " 
- android:id="@+id/TextView02" 
- android:layout_width="wrap_content" 
- android:layout_height="wrap_content">
- </TextView>
-
-
- <EditText 
- android:text="" 
- android:id="@+id/txtPwd" 
- android:layout_width="fill_parent" 
- android:layout_height="wrap_content"
- android:password="true">
- </EditText>
-</TableRow>
-
-
-<TableRow>
- <Button
- android:text="Cancel" 
- android:id="@+id/btnCancel" 
- android:layout_width="fill_parent" 
- android:layout_height="wrap_content">
- </Button>
-
-
- <Button
- android:text="Login" 
- android:id="@+id/btnLogin" 
- android:layout_width="fill_parent" 
- android:layout_height="wrap_content">
- </Button>
-
-
-</TableRow>
-
-
-</TableLayout>
 </RelativeLayout>

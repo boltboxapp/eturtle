@@ -45,7 +45,7 @@ class PackageCreateView(WebLoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         self.package = form.save(commit=False)
-        self.package.client = self.request.user
+        self.package.client = Client().from_user(self.request.user)
         self.package.save()
         return super(PackageCreateView, self).form_valid(form)
 
