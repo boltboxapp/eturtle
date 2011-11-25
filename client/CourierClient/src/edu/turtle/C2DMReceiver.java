@@ -59,6 +59,7 @@ public class C2DMReceiver extends BroadcastReceiver {
             editor.putString(REGISTRATION_KEY, registration);
     		editor.commit();
 	        // Send the registration ID to the 3rd party site that is sending the messages.
+    		ApiService.c2dmregid = registration;
     		Bundle bundle = intent.getExtras();
             intent = new Intent();
             intent.putExtra("messageBundle", bundle);

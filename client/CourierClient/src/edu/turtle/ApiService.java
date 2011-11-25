@@ -35,7 +35,7 @@ public class ApiService extends Service {
 	private List<Cookie> cookies = null;
 	DefaultHttpClient httpclient;
 
-	private String c2dmregid;
+	public static String c2dmregid;
 	
     public class LocalBinder extends Binder {
         ApiService getService() {
