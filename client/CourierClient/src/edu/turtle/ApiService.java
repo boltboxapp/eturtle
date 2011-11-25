@@ -1,6 +1,8 @@
 package edu.turtle;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,10 +17,14 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.cookie.Cookie;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.HTTP;
 
 import android.app.Service;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
@@ -27,7 +33,7 @@ public class ApiService extends Service {
 
 	private List<Cookie> cookies = null;
 	DefaultHttpClient httpclient;
-	private  String BACKEND = "http://lepi.zapto.org/api/";
+	private  String APIURL = "http://lepi.zapto.org/api/";
 	private String c2dmregid;
 	
     public class LocalBinder extends Binder {
@@ -38,7 +44,22 @@ public class ApiService extends Service {
 
     @Override
     public void onCreate() {
-    	httpclient = new DefaultHttpClient();
+    	HttpParams httpParameters = new BasicHttpParams();
+    	// Set the timeout in milliseconds until a connection is established.
+    	int timeoutConnection = 3000;
+    	HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
+    	// Set the default socket timeout (SO_TIMEOUT) 
+    	// in milliseconds which is the timeout for waiting for data.
+    	int timeoutSocket = 5000;
+    	HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
+    	httpclient = new DefaultHttpClient(httpParameters);
+    	
+
+    	
+    	SharedPreferences settings = getSharedPreferences("ETurtlePreferences", 0);
+    	APIURL = settings.getString("apiurl", "http://lepi.zapto.org/api/");
+    	 
+    	
     }
 
     @Override
@@ -68,12 +89,12 @@ public class ApiService extends Service {
     /**
      * Show a notification while this service is running.
      */
-    public void login(String username, String password){
+    public int login(String username, String password){
     	
     	Log.i("ApiService","Logging in");
     	       
-        HttpPost httpost = new HttpPost(BACKEND + "login/");
-        
+        HttpPost httpost = new HttpPost(APIURL + "login/");
+        Log.i("ApiService",APIURL);
         List <NameValuePair> nvps = new ArrayList <NameValuePair>();
         nvps.add(new BasicNameValuePair("username", "roka"));
         nvps.add(new BasicNameValuePair("password", "roka"));
@@ -95,7 +116,12 @@ public class ApiService extends Service {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        HttpEntity entity = response.getEntity();
+		if (response==null) return 0;
+		if (response.getStatusLine().getStatusCode()!=200)
+    	{
+    		return response.getStatusLine().getStatusCode();    		
+    	}
+		HttpEntity entity = response.getEntity();
 
         Log.i("ApiService","Login form get: " + response.getStatusLine());
     	
@@ -120,31 +146,36 @@ public class ApiService extends Service {
         
        Log.i("ApiService","Attempting c2dm key posting with saved key");
        update_c2dm_key(); 
-    
+       return 200;
     	
     }
     public void checkin(){    	
-    	httpget(BACKEND+"check_in/");    	
+    	httpget(APIURL+"check_in/");    	
     }
     
     public void checkout(){    	
-    	httpget(BACKEND+"leave/");    	
+    	httpget(APIURL+"leave/");    	
     }
     public void accept(){    	
-    	httpget(BACKEND+"accept/");    	
+    	httpget(APIURL+"accept/");    	
     }
     
     public void decline(){    	
-    	httpget(BACKEND+"decline/");    	
+    	httpget(APIURL+"decline/");    	
     }
     
     public void complete(){    	
-    	httpget(BACKEND+"complete/");    	
+    	httpget(APIURL+"complete/");    	
     }
     
     public void fail(){    	
-    	httpget(BACKEND+"fail/");    	
+    	httpget(APIURL+"fail/");    	
     }
+    
+    public void get(){    	
+    	Log.i("ApiService",httpget(APIURL+"get/"));    	
+    }
+    
     
     public void update_location(double longitude, double latitude)
     {
@@ -152,7 +183,7 @@ public class ApiService extends Service {
 	    	ArrayList <NameValuePair> nvps = new ArrayList <NameValuePair>();
 	        nvps.add(new BasicNameValuePair("lng", String.valueOf(longitude)));
 	        nvps.add(new BasicNameValuePair("lat", String.valueOf(latitude)));
-	    	httppost(BACKEND+"loc_update/",nvps);
+	    	httppost(APIURL+"loc_update/",nvps);
     	}
     }
     public void update_c2dm_key(String key)
@@ -161,7 +192,7 @@ public class ApiService extends Service {
 	    	ArrayList <NameValuePair> nvps = new ArrayList <NameValuePair>();
 	        nvps.add(new BasicNameValuePair("registration_id", key));
 	        
-	    	httppost(BACKEND+"c2dmkey_update/",nvps);
+	    	httppost(APIURL+"c2dmkey_update/",nvps);
     	} else {
     		
     		c2dmregid = key;
@@ -176,7 +207,7 @@ public class ApiService extends Service {
     	}
     }
     
-    private void httpget(String url){
+    private String httpget(String url){
     	
     	HttpGet httpget = new HttpGet(url);
         
@@ -194,6 +225,33 @@ public class ApiService extends Service {
         HttpEntity entity2 = response2.getEntity();
         
         Log.i("ApiService",url + " " + response2.getStatusLine());
+        
+        HttpEntity entity = response2.getEntity();
+        InputStream inputStream = null;
+		try {
+			inputStream = entity.getContent();
+		} catch (IllegalStateException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+        ByteArrayOutputStream content = new ByteArrayOutputStream();
+
+        // Read response into a buffered stream
+        int readBytes = 0;
+        byte[] sBuffer = new byte[512];
+        try {
+			while ((readBytes = inputStream.read(sBuffer)) != -1) {
+			    content.write(sBuffer, 0, readBytes);
+			}
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+        
         if (entity2 != null) {
             try {
 				entity2.consumeContent();
@@ -201,7 +259,7 @@ public class ApiService extends Service {
 				e.printStackTrace();
 			}
         }    	
-    	
+    	return new String(content.toByteArray());
     }
     private void httppost(String url, ArrayList <NameValuePair> params){
     	

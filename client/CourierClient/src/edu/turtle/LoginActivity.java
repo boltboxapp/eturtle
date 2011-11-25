@@ -37,7 +37,22 @@ public class LoginActivity extends Activity {
 			public void onServiceConnected(ComponentName className, IBinder service) {
 				boundservice = ((ApiService.LocalBinder)service).getService();
 				Log.i("ApiService","Connected to Api Service");
-				boundservice.login(username, password);
+				int loginstatus = boundservice.login(username, password);
+				if( loginstatus == 200)
+				{	
+		           Toast.makeText(LoginActivity.this, "Login Successful",Toast.LENGTH_LONG).show();
+		         
+		           
+		         
+		           Intent myIntent = new Intent(LoginActivity.this, IdleActivity.class);
+		           LoginActivity.this.startActivity(myIntent);
+		           LoginActivity.this.finish();
+		    	} else if (loginstatus == 403) {
+		           Toast.makeText(LoginActivity.this, "Invalid Login",Toast.LENGTH_LONG).show();
+		        } else {
+		        	Toast.makeText(LoginActivity.this, "Could not connect to login server",Toast.LENGTH_LONG).show();
+		        	
+		        }
 			}
 			@Override
 			public void onServiceDisconnected(ComponentName arg0) {
@@ -65,17 +80,7 @@ public class LoginActivity extends Activity {
    public void onClick(View v) {
     // TODO Auto-generated method stub
     
-    if (authenticate(txtUserName.getText().toString(), txtPassword.getText().toString())){
-           Toast.makeText(LoginActivity.this, "Login Successful",Toast.LENGTH_LONG).show();
-           
-           
-         
-           Intent myIntent = new Intent(LoginActivity.this, IdleActivity.class);
-           LoginActivity.this.startActivity(myIntent);
-           LoginActivity.this.finish();
-    	} else{
-           Toast.makeText(LoginActivity.this, "Invalid Login",Toast.LENGTH_LONG).show();
-        }
+    authenticate(txtUserName.getText().toString(), txtPassword.getText().toString());
     
    }
 

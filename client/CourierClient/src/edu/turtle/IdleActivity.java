@@ -27,6 +27,7 @@ public class IdleActivity extends Activity{
 				boundservice = ((ApiService.LocalBinder)service).getService();
 				Log.i("ApiService","Connected to Api Service");
 				boundservice.checkin();
+				boundservice.get();
 			}
 			@Override
 			public void onServiceDisconnected(ComponentName arg0) {
