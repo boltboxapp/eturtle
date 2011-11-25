@@ -33,7 +33,7 @@ public class ApiService extends Service {
 
 	private List<Cookie> cookies = null;
 	DefaultHttpClient httpclient;
-	private  String APIURL = "http://lepi.zapto.org/api/";
+
 	private String c2dmregid;
 	
     public class LocalBinder extends Binder {
@@ -57,8 +57,6 @@ public class ApiService extends Service {
 
     	
     	SharedPreferences settings = getSharedPreferences("ETurtlePreferences", 0);
-    	APIURL = settings.getString("apiurl", "http://lepi.zapto.org/api/");
-    	 
     	
     }
 
@@ -93,8 +91,11 @@ public class ApiService extends Service {
     	
     	Log.i("ApiService","Logging in");
     	       
-        HttpPost httpost = new HttpPost(APIURL + "login/");
-        Log.i("ApiService",APIURL);
+        Log.i("ApiService",getBackendUrl());
+
+        HttpPost httpost = new HttpPost(getBackendUrl() + "login/");
+        
+
         List <NameValuePair> nvps = new ArrayList <NameValuePair>();
         nvps.add(new BasicNameValuePair("username", "roka"));
         nvps.add(new BasicNameValuePair("password", "roka"));
@@ -149,33 +150,33 @@ public class ApiService extends Service {
        return 200;
     	
     }
-    public void checkin(){    	
-    	httpget(APIURL+"check_in/");    	
+    public void checkin(){    	  	
+
+    	httpget(getBackendUrl()+"check_in/");    	
     }
     
     public void checkout(){    	
-    	httpget(APIURL+"leave/");    	
+    	httpget(getBackendUrl()+"leave/");    	
     }
     public void accept(){    	
-    	httpget(APIURL+"accept/");    	
+    	httpget(getBackendUrl()+"accept/");    	
     }
     
     public void decline(){    	
-    	httpget(APIURL+"decline/");    	
+    	httpget(getBackendUrl()+"decline/");    	
     }
     
     public void complete(){    	
-    	httpget(APIURL+"complete/");    	
+    	httpget(getBackendUrl()+"complete/");    	
     }
     
     public void fail(){    	
-    	httpget(APIURL+"fail/");    	
+    	httpget(getBackendUrl()+"fail/");    	
+
     }
-    
     public void get(){    	
-    	Log.i("ApiService",httpget(APIURL+"get/"));    	
+    	Log.i("ApiService",httpget(getBackendUrl()+"get/"));  
     }
-    
     
     public void update_location(double longitude, double latitude)
     {
@@ -183,7 +184,9 @@ public class ApiService extends Service {
 	    	ArrayList <NameValuePair> nvps = new ArrayList <NameValuePair>();
 	        nvps.add(new BasicNameValuePair("lng", String.valueOf(longitude)));
 	        nvps.add(new BasicNameValuePair("lat", String.valueOf(latitude)));
-	    	httppost(APIURL+"loc_update/",nvps);
+
+	    	httppost(getBackendUrl()+"loc_update/",nvps);
+
     	}
     }
     public void update_c2dm_key(String key)
@@ -192,7 +195,9 @@ public class ApiService extends Service {
 	    	ArrayList <NameValuePair> nvps = new ArrayList <NameValuePair>();
 	        nvps.add(new BasicNameValuePair("registration_id", key));
 	        
-	    	httppost(APIURL+"c2dmkey_update/",nvps);
+
+	    	httppost(getBackendUrl()+"c2dmkey_update/",nvps);
+
     	} else {
     		
     		c2dmregid = key;
@@ -299,5 +304,10 @@ public class ApiService extends Service {
         }
         
             	
+    }
+    
+    private String getBackendUrl(){
+    	SharedPreferences settings = getSharedPreferences("ETurtlePreferences", 0);
+        return settings.getString("apiurl", "http://lepi.zapto.org/api/");
     }
 }

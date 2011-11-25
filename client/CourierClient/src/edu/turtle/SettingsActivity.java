@@ -14,7 +14,7 @@ public class SettingsActivity extends Activity{
         setContentView(R.layout.settings);
         
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-        String apiurl = settings.getString("apiurl", "lepi.zapto.org");
+        String apiurl = settings.getString("apiurl", "http://lepi.zapto.org/api/");
         ((EditText)findViewById(R.id.settings_apiurl)).setText(apiurl);
     }
 	

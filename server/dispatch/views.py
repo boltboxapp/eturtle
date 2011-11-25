@@ -1,11 +1,13 @@
 # Create your views here.
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse, HttpResponseServerError, HttpResponseForbidden, HttpResponseNotFound, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseServerError, HttpResponseForbidden, HttpResponseNotFound, HttpResponseRedirect, Http404
+from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from django.views.generic import ListView
-from django.views.generic.base import View
+from django.views.generic.base import TemplateView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from dispatch.forms import PackageForm, CourierForm
@@ -14,9 +16,11 @@ from dispatch.models import ETurtleGroup as Group
 from utils import AdminOr404Mixin, WebLoginRequiredMixin
 from registration.signals import user_registered
 from django.dispatch import receiver
+from dispatcher import run_dispatcher
 
 
 #signal catch for user registration
+from server.dispatch.dispatcher import push
 from server.dispatch.forms import CourierEditForm
 
 @receiver(user_registered)
@@ -114,3 +118,16 @@ class CourierUpdateView(AdminOr404Mixin, UpdateView):
 class ProfileView(WebLoginRequiredMixin, DetailView):
     def get_object(self, queryset=None):
         return self.request.user
+
+@login_required
+def push_test(request,pk,message):
+    courier = get_object_or_404(Courier, pk=pk)
+    x = push(courier, message)
+
+    return HttpResponse('%s' % x)
+
+class RunDispatcherView(AdminOr404Mixin, TemplateView):
+    template_name = "dispatch/run.html"
+
+    def get_context_data(self, **kwargs):
+        return {'data': run_dispatcher()}
