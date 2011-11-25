@@ -47,7 +47,7 @@ public class LoginActivity extends Activity {
 		           Intent myIntent = new Intent(LoginActivity.this, IdleActivity.class);
 		           LoginActivity.this.startActivity(myIntent);
 		           LoginActivity.this.finish();
-		    	} else if (loginstatus == 403) {
+		    	} else if (loginstatus == 401) {
 		           Toast.makeText(LoginActivity.this, "Invalid Login",Toast.LENGTH_LONG).show();
 		        } else {
 		        	Toast.makeText(LoginActivity.this, "Could not connect to login server",Toast.LENGTH_LONG).show();
