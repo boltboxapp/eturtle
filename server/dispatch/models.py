@@ -72,6 +72,9 @@ class ClientManager(models.Manager):
 class Client(User):
     objects = ClientManager()
 
+    def from_user(self, user):
+        self.__dict__ = user.__dict__
+
     class Meta:
         proxy = True
 

@@ -82,7 +82,7 @@ def get(request):
 
     package = dispatch.package
 
-    dump = serializers.serialize("json", [package])[1:-1]
+    dump = package.serialize()
     response = HttpResponse(dump)
     response['Content-Type'] = 'application/json; charset=utf-8'
     return response
