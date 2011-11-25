@@ -135,23 +135,17 @@ Example:
   curl -b cookies.txt http://localhost:8000/api/get/ --verbose | python -mjson.tool
 
   {
-    "fields": {
-        "client": 1, 
-        "date_created": "2011-11-19 09:43:49", 
-        "date_modified": "2011-11-19 09:43:49", 
-        "destination": "1071 Budapest, Damjanich St 21, Hungary", 
-        "dst_lat": "47.50721497157391", 
-        "dst_lng": "19.076939363476527", 
-        "name": "Mákosguba", 
-        "source": "1094 Budapest, Liliom St 58-62, Hungary", 
-        "src_lat": "47.48394254622929", 
-        "src_lng": "19.072144421998587", 
-        "state": 1
-    }, 
-    "model": "dispatch.package", 
-    "pk": 6
+    "date_created": "2011-11-25T20:46:22.608605", 
+    "destination": "1116 Budapest, S\\u00e1fr\\u00e1ny St 42, Hungary", 
+    "dst_lat": "47.4459724", 
+    "dst_lng": "19.034110300000066", 
+    "name": "Genyo", 
+    "source": "1091 Budapest, \\u00dcll\\u0151i Way 111, Hungary", 
+    "src_lat": "47.4807631", 
+    "src_lng": "19.08428409999999"
   }
 
+The same format is used in the c2dm push message.
 
 Accept
 ^^^^^^
