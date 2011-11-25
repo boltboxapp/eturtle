@@ -11,6 +11,7 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpResponseException;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -86,8 +87,9 @@ public class ApiService extends Service {
 
     /**
      * Show a notification while this service is running.
+     * @throws IOException 
      */
-    public int login(String username, String password){
+    public int login(String username, String password) {
     	
     	Log.i("ApiService","Logging in");
     	       
@@ -97,8 +99,8 @@ public class ApiService extends Service {
         
 
         List <NameValuePair> nvps = new ArrayList <NameValuePair>();
-        nvps.add(new BasicNameValuePair("username", username));
-        nvps.add(new BasicNameValuePair("password", password));
+        nvps.add(new BasicNameValuePair("username", "roka"));
+        nvps.add(new BasicNameValuePair("password", "roka"));
 
         try {
 			httpost.setEntity(new UrlEncodedFormEntity(nvps, HTTP.UTF_8));
@@ -112,12 +114,13 @@ public class ApiService extends Service {
 			response = httpclient.execute(httpost);
 		} catch (ClientProtocolException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Log.d("ApiService",e.getMessage());
+			return 0;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Log.d("ApiService",e.toString());
+			return 0;
 		}
-		if (response==null) return 0;
 		if (response.getStatusLine().getStatusCode()!=200)
     	{
     		return response.getStatusLine().getStatusCode();    		
@@ -146,39 +149,44 @@ public class ApiService extends Service {
         }
         
        Log.i("ApiService","Attempting c2dm key posting with saved key");
-       update_c2dm_key(); 
+       try {
+		update_c2dm_key();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
        return 200;
     	
     }
-    public void checkin(){    	  	
+    public void checkin() throws HttpResponseException, IOException{    	  	
 
     	httpget(getBackendUrl()+"check_in/");    	
     }
     
-    public void checkout(){    	
+    public void checkout() throws HttpResponseException, IOException{    	
     	httpget(getBackendUrl()+"leave/");    	
     }
-    public void accept(){    	
+    public void accept() throws HttpResponseException, IOException{    	
     	httpget(getBackendUrl()+"accept/");    	
     }
     
-    public void decline(){    	
+    public void decline() throws HttpResponseException, IOException{    	
     	httpget(getBackendUrl()+"decline/");    	
     }
     
-    public void complete(){    	
+    public void complete() throws HttpResponseException, IOException{    	
     	httpget(getBackendUrl()+"complete/");    	
     }
     
-    public void fail(){    	
+    public void fail() throws HttpResponseException, IOException{    	
     	httpget(getBackendUrl()+"fail/");    	
 
     }
-    public void get(){    	
+    public void get() throws Exception{    	
     	Log.i("ApiService",httpget(getBackendUrl()+"get/"));  
     }
     
-    public void update_location(double longitude, double latitude)
+    public void update_location(double longitude, double latitude) throws IOException
     {
     	if (cookies!=null){
 	    	ArrayList <NameValuePair> nvps = new ArrayList <NameValuePair>();
@@ -189,7 +197,7 @@ public class ApiService extends Service {
 
     	}
     }
-    public void update_c2dm_key(String key)
+    public void update_c2dm_key(String key) throws IOException
     {
     	if (cookies!=null){
 	    	ArrayList <NameValuePair> nvps = new ArrayList <NameValuePair>();
@@ -203,7 +211,7 @@ public class ApiService extends Service {
     		c2dmregid = key;
     	}
     }
-    public void update_c2dm_key()
+    public void update_c2dm_key() throws IOException
     {
     	if (c2dmregid != null) 
     	{
@@ -212,25 +220,22 @@ public class ApiService extends Service {
     	}
     }
     
-    private String httpget(String url){
+    private String httpget(String url) throws IOException {
     	
     	HttpGet httpget = new HttpGet(url);
         
         
         HttpResponse response2 = null;
-		try {
-			response2 = httpclient.execute(httpget);
-		} catch (ClientProtocolException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
+		response2 = httpclient.execute(httpget);
+
+
         HttpEntity entity2 = response2.getEntity();
         
         Log.i("ApiService",url + " " + response2.getStatusLine());
-        
+        if (response2.getStatusLine().getStatusCode()!=200){
+        	throw new HttpResponseException(response2.getStatusLine().getStatusCode(), url);
+        }
         HttpEntity entity = response2.getEntity();
         InputStream inputStream = null;
 		try {
@@ -266,7 +271,9 @@ public class ApiService extends Service {
         }    	
     	return new String(content.toByteArray());
     }
-    private void httppost(String url, ArrayList <NameValuePair> params){
+
+
+	private void httppost(String url, ArrayList <NameValuePair> params) throws IOException{
     	
     	   
         HttpPost httpost = new HttpPost(url);
@@ -302,8 +309,12 @@ public class ApiService extends Service {
 				e.printStackTrace();
 			}
         }
-        
-            	
+        else
+        {
+        	throw new IOException();
+        	
+        }
+        	
     }
     
     private String getBackendUrl(){

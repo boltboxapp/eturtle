@@ -1,5 +1,9 @@
 package edu.turtle;
 
+import org.apache.http.client.HttpResponseException;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
@@ -32,15 +36,37 @@ public class PendingActivity extends Activity{
 			public void onServiceConnected(ComponentName className, IBinder service) {
 				boundservice = ((ApiService.LocalBinder)service).getService();
 				Log.i("ApiService","Connected to Api Service");
-				if (method.contentEquals("ACCEPT")) {
-					boundservice.accept();
+				try{
+					if (method.contentEquals("ACCEPT")) {
+						boundservice.accept();
+						Toast.makeText(PendingActivity.this, "Accepting",Toast.LENGTH_LONG).show();
+				        Intent myIntent = new Intent(PendingActivity.this, ShippingActivity.class);
+				        PendingActivity.this.startActivity(myIntent);
+				        PendingActivity.this.finish();
+						}
+					else if (method.contentEquals("DECLINE")) {
+						boundservice.decline();
+						Toast.makeText(PendingActivity.this, "Rejecting",Toast.LENGTH_LONG).show();				        
+						Intent myIntent = new Intent(PendingActivity.this, StandingByActivity.class);
+				        PendingActivity.this.startActivity(myIntent);
+				        PendingActivity.this.finish();
+						
+					} else if (method.contentEquals("LEAVE")){
+						
+						boundservice.checkout();
+						Toast.makeText(PendingActivity.this, "Rejecting and Checking out",Toast.LENGTH_LONG).show();
+		 		        Intent myIntent = new Intent(PendingActivity.this,IdleActivity.class);
+		 		        PendingActivity.this.startActivity(myIntent);
+		 		        PendingActivity.this.finish();
 					}
-				else if (method.contentEquals("DECLINE")) {
-					boundservice.decline();
-					
-				} else if (method.contentEquals("LEAVE")){
-					boundservice.checkout();
-					
+				}
+				catch (HttpResponseException e){
+					if(e.getStatusCode()==500)
+						Toast.makeText(PendingActivity.this, "Server Error!",Toast.LENGTH_LONG).show();
+						
+				}
+				catch (Exception e) {
+					Toast.makeText(PendingActivity.this, "Could not connect to server.",Toast.LENGTH_LONG).show();
 				}
 			}
 			@Override
@@ -55,35 +81,47 @@ public class PendingActivity extends Activity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pendinglayout);
         
+        try {
         
-        
-        String regid= getIntent().getStringExtra("message");    
-        Log.i("RegistrationService", "PENDING "+regid);
-        
+        String message= getIntent().getStringExtra("message");    
+        final String srclat;
+		final String srclong;
+		final String dstlat;
+		final String dstlong;
+        Log.i("RegistrationService", "PENDING "+message);
+        JSONObject messagejson = null;
+        try {
+			messagejson = new JSONObject(message);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         
         TextView pkgname = (TextView)this.findViewById(R.id.pkgname);
         TextView srcaddress = (TextView)this.findViewById(R.id.srcaddress);
         TextView dstaddress = (TextView)this.findViewById(R.id.dstaddress);
         TextView datecreated = (TextView)this.findViewById(R.id.datecreated);
        
-        pkgname.setText("alma");
-        srcaddress.setText("korta");
-        dstaddress.setText("korta");
-        datecreated.setText("korta");
+
+			
+				pkgname.setText(messagejson.getString("name"));
+			
+			srcaddress.setText(messagejson.getString("source"));
+	        dstaddress.setText(messagejson.getString("destination"));
+	        datecreated.setText(messagejson.getString("date_created"));
+	        srclat = messagejson.getString("src_lat");
+	        srclong = messagejson.getString("src_lng");
+	        dstlat = messagejson.getString("dst_lat");
+	        dstlong = messagejson.getString("dst_lng");
+		
+        
         
         btnAccept = (Button)this.findViewById(R.id.btnAccept);
         btnAccept.setOnClickListener(new OnClickListener() {    
 		   @Override
 		   public void onClick(View v) {
-		    // TODO Auto-generated method stub
-		
-		           Toast.makeText(PendingActivity.this, "Accepting",Toast.LENGTH_LONG).show();
 		           
 		           api_method("ACCEPT");
-		           
-		           Intent myIntent = new Intent(PendingActivity.this, ShippingActivity.class);
-		           PendingActivity.this.startActivity(myIntent);
-		           PendingActivity.this.finish();
 		    
 		   }
 		});
@@ -91,15 +129,10 @@ public class PendingActivity extends Activity{
         btnReject.setOnClickListener(new OnClickListener() {    
 		   @Override
 		   public void onClick(View v) {
-		    // TODO Auto-generated method stub
-		
-		           Toast.makeText(PendingActivity.this, "Rejecting",Toast.LENGTH_LONG).show();
-		           
-		           api_method("DECLINE");
-		           
-		           Intent myIntent = new Intent(PendingActivity.this, StandingByActivity.class);
-		           PendingActivity.this.startActivity(myIntent);
-		           PendingActivity.this.finish();
+		          
+	           api_method("DECLINE");
+	           
+	           
 		    
 		   }
 		});
@@ -109,8 +142,8 @@ public class PendingActivity extends Activity{
   		   public void onClick(View v) {
   		    // TODO Auto-generated method stub
   		
-  		          
-        		 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://maps.google.com/maps?saddr=37.420098,-95.712891&daddr=37.020098,-96.712891+to:37.520098,-96.712891"));
+  		         
+        		 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://maps.google.com/maps?saddr="+srclat+","+srclong+"&daddr="+srclat+","+srclong));
         		 startActivity(browserIntent);
         		 
         		 //This is not finished because we want to go back
@@ -124,19 +157,18 @@ public class PendingActivity extends Activity{
     
  		   @Override
  		   public void onClick(View v) {
- 		    // TODO Auto-generated method stub
- 		
- 		           Toast.makeText(PendingActivity.this, "Rejecting and Checking out",Toast.LENGTH_LONG).show();
  		           
  		           api_method("LEAVE");
  		           
- 		           Intent myIntent = new Intent(PendingActivity.this,IdleActivity.class);
- 		           PendingActivity.this.startActivity(myIntent);
- 		           PendingActivity.this.finish();
+ 		           
  		    
  		   }
  		  });    
-        
+		}
+        catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         
         }
 	

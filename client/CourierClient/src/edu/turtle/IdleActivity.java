@@ -1,5 +1,9 @@
 package edu.turtle;
 
+import java.io.IOException;
+
+import org.apache.http.client.HttpResponseException;
+
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
@@ -26,8 +30,21 @@ public class IdleActivity extends Activity{
 			public void onServiceConnected(ComponentName className, IBinder service) {
 				boundservice = ((ApiService.LocalBinder)service).getService();
 				Log.i("ApiService","Connected to Api Service");
-				boundservice.checkin();
-				boundservice.get();
+				try {
+					boundservice.checkin();
+					Toast.makeText(IdleActivity.this, "Checking in...",Toast.LENGTH_SHORT).show();
+					Intent myIntent = new Intent(IdleActivity.this, StandingByActivity.class);
+			        IdleActivity.this.startActivity(myIntent);
+			        IdleActivity.this.finish();
+				} catch (HttpResponseException e) {
+					if(e.getStatusCode()==500)
+						Toast.makeText(IdleActivity.this, "Server Error!",Toast.LENGTH_LONG).show();
+				}
+				catch (IOException e) {
+					Toast.makeText(IdleActivity.this, "Something went wrong.",Toast.LENGTH_LONG).show();
+				}
+				
+				
 			}
 			@Override
 			public void onServiceDisconnected(ComponentName arg0) {
@@ -49,13 +66,11 @@ public class IdleActivity extends Activity{
    public void onClick(View v) {
     // TODO Auto-generated method stub
 
-           Toast.makeText(IdleActivity.this, "Checking in...",Toast.LENGTH_LONG).show();
+           
            
            checkin();
            
-           Intent myIntent = new Intent(IdleActivity.this, StandingByActivity.class);
-           IdleActivity.this.startActivity(myIntent);
-           IdleActivity.this.finish();
+           
            
     
    		}
