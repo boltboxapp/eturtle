@@ -195,14 +195,14 @@ a.middle_button{
 }
 
 #map_canvas{
-    width: 500px;
+    width: 400px;
     height: 500px;
     float:right;
 }
 
 .left {
     float:left;
-    width: 360px;
+    width: 460px;
 
 }
 

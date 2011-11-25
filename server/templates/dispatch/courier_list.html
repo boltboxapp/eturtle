@@ -21,11 +21,12 @@
             </tr>
             {% for courier in object_list %}
             <tr class="courier_row{% if not courier.is_active %} inactive{% endif %}">
-                <td class="username">{{ courier.username }}</td>
+                <td class="username">{{ courier.get_full_name }}</td>
                 <td>{{ courier.get_state_display }}</td>
                 <td class="position">
                     {% if courier.lat and courier.lng %}
-                        {{ courier.lat|slice:":8" }},{{ courier.lng|slice:":8" }}
+                        {{ courier.lat|slice:":8" }}<br/>
+                        {{ courier.lng|slice:":8" }}
                     {% endif %}
                 </td>
                 <td>{{ courier.last_pos_update|timesince }}</td>

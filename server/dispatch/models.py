@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.core.exceptions import ImproperlyConfigured
 from django.db import models
 from django.contrib.auth.models import User, Group
@@ -43,10 +44,10 @@ class Courier(ETModelBase, User):
     STATE_SHIPPING = 4
 
     STATE_CHOICES = (
-        (1, 'IDLE'),
-        (2, 'STANDING_BY'),
-        (3, 'PENDING'),
-        (4, 'SHIPPING'),
+        (1, 'inaktiv'),
+        (2, 'csomagra vár'),
+        (3, 'függőben'),
+        (4, 'szállít'),
     )
     state = models.IntegerField(choices = STATE_CHOICES, default = 1)
 
@@ -87,11 +88,11 @@ class Package(ETModelBase):
     STATE_FAILED = 5
 
     STATE_ENUM = [
-        (1, 'NEW'),
-        (2, 'PENDING'),
-        (3, 'SHIPPING'),
-        (4, 'SHIPPED'),
-        (5, 'FAILED'),
+        (1, u'új'),
+        (2, u'elfogadásra vár'),
+        (3, u'szállítás alatt'),
+        (4, u'kiszállítva'),
+        (5, u'sikertelen szállítás'),
     ]
     client = models.ForeignKey(Client)
 
