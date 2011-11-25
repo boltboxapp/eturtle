@@ -12,6 +12,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class PendingActivity extends Activity{
@@ -59,8 +61,15 @@ public class PendingActivity extends Activity{
         Log.i("RegistrationService", "PENDING "+regid);
         
         
-	    
-        
+        TextView pkgname = (TextView)this.findViewById(R.id.pkgname);
+        TextView srcaddress = (TextView)this.findViewById(R.id.srcaddress);
+        TextView dstaddress = (TextView)this.findViewById(R.id.dstaddress);
+        TextView datecreated = (TextView)this.findViewById(R.id.datecreated);
+       
+        pkgname.setText("alma");
+        srcaddress.setText("korta");
+        dstaddress.setText("korta");
+        datecreated.setText("korta");
         
         btnAccept = (Button)this.findViewById(R.id.btnAccept);
         btnAccept.setOnClickListener(new OnClickListener() {    
