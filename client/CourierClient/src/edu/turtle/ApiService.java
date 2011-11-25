@@ -35,7 +35,7 @@ public class ApiService extends Service {
 	private List<Cookie> cookies = null;
 	DefaultHttpClient httpclient;
 
-	private String c2dmregid;
+	public static String c2dmregid;
 	
     public class LocalBinder extends Binder {
         ApiService getService() {
@@ -99,8 +99,8 @@ public class ApiService extends Service {
         
 
         List <NameValuePair> nvps = new ArrayList <NameValuePair>();
-        nvps.add(new BasicNameValuePair("username", "roka"));
-        nvps.add(new BasicNameValuePair("password", "roka"));
+        nvps.add(new BasicNameValuePair("username", username));
+        nvps.add(new BasicNameValuePair("password", password));
 
         try {
 			httpost.setEntity(new UrlEncodedFormEntity(nvps, HTTP.UTF_8));
@@ -213,6 +213,7 @@ public class ApiService extends Service {
     }
     public void update_c2dm_key() throws IOException
     {
+    	Log.i("c2dm","saved key: "+c2dmregid);
     	if (c2dmregid != null) 
     	{
     		update_c2dm_key(c2dmregid);
@@ -288,15 +289,8 @@ public class ApiService extends Service {
 		}
 
         HttpResponse response = null;
-		try {
-			response = httpclient.execute(httpost);
-		} catch (ClientProtocolException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
+		response = httpclient.execute(httpost);
         HttpEntity entity = response.getEntity();
 
         Log.i("ApiService","Location update form get: " + response.getStatusLine());
