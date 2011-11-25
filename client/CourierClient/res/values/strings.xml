@@ -2,10 +2,13 @@
 <resources>
 
     <string name="hello">Hello World, CourierClientActivity!</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Mégse</string>
     <string name="app_name">CourierClient</string>
     <string name="options">Beállítások</string>
     <string name="options_title">ETurtle - Beállítások</string>
     <string name="exit">Kilépés</string>
+    <string name="wantexit">Ki akar lépni?</string>
     <string name="username">Felhasználónév</string>
     <string name="password">Jelszó</string>
     <string name="login">Bejelentkezés</string>
