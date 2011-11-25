@@ -64,41 +64,38 @@ def run_dispatcher():
     num_packages = packages.count()
     num_couriers = couriers.count()
 
-    if not num_packages:
-        return (0,0,[])
-
-    if not num_couriers:
-        return (0,0,[])
-
     assignments=[]
 
-    for p in packages:
-        couriers = Courier.objects.filter(state=Courier.STATE_STANDING_BY)
-        if not couriers.count():
-            continue
-
-        nearest_courier = None
-        min_d=Decimal('infinity')
-        for c in couriers:
-            try:
-                d=sqrt((abs(float(p.src_lat)-float(c.lat)))**2 + (abs(float(p.src_lng)-float(c.lng)))**2)
-                if d<min_d:
-                    min_d = d
-                    nearest_courier =c
-            except ValueError:
-                print "ValueError for package %s" % p
+    if num_packages and num_couriers:
+        for p in packages:
+            couriers = Courier.objects.filter(state=Courier.STATE_STANDING_BY)
+            if not couriers.count():
                 continue
 
-        #dispatch the packege to the nearest_courier:
-        c.state=Courier.STATE_PENDING
-        c.save()
-        p.state=Package.STATE_PENDING
-        p.save()
-        Dispatch(courier=c,package=p).save()
+            nearest_courier = None
+            min_d=Decimal('infinity')
+            for c in couriers:
+                try:
+                    d=sqrt((abs(float(p.src_lat)-float(c.lat)))**2 + (abs(float(p.src_lng)-float(c.lng)))**2)
+                    if d<min_d:
+                        min_d = d
+                        nearest_courier =c
+                except ValueError:
+                    print "ValueError for package %s" % p
+                    continue
 
-        #send push notification to courier:
-        push(c,p.serialize())
+            #dispatch the packege to the nearest_courier:
+            c.state=Courier.STATE_PENDING
+            c.save()
+            p.state=Package.STATE_PENDING
+            p.save()
+            Dispatch(courier=c,package=p).save()
+    
+            #send push notification to courier:
+            push(c,p.serialize())
 
-        assignments.append((c,p))
+            assignments.append((c,p))
 
-    return (num_packages,num_couriers,assignments)
+    logger = logging.getLogger('dispatch_logger')
+    a="\n".join(["%s : %s" % (a[0],a[1]) for a in assignments]) or "No new assignments."
+    logger.info("Packages:%d, Couriers:%d\n%s\n%s\n" % (num_packages,num_couriers,a,datetime.now().isoformat()))

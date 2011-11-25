@@ -127,6 +127,11 @@ LOGGING = {
             'level': 'INFO',
             'class': 'logging.FileHandler',
                 'filename': 'c2dm_updates.log',
+        },
+        'file_dispatcher':{
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+                'filename': 'dispatch.log',
         }
     },
     'loggers': {
@@ -137,6 +142,11 @@ LOGGING = {
         },
         'c2dm_logger': {
             'handlers':['file_c2dm'],
+            'propagate': False,
+            'level':'INFO',
+        },
+        'dispatch_logger': {
+            'handlers':['file_dispatcher'],
             'propagate': False,
             'level':'INFO',
         },

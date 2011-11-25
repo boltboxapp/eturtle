@@ -69,6 +69,7 @@ class PackageCreateView(WebLoginRequiredMixin, CreateView):
         self.package = form.save(commit=False)
         self.package.client = Client().from_user(self.request.user)
         self.package.save()
+        run_dispatcher()
         return super(PackageCreateView, self).form_valid(form)
 
     def get_success_url(self):
@@ -154,4 +155,5 @@ class RunDispatcherView(AdminOr404Mixin, TemplateView):
     template_name = "dispatch/run.html"
 
     def get_context_data(self, **kwargs):
-        return {'data': run_dispatcher()}
+        run_dispatcher()
+        return super(RunDispatcherView,self).get_context_data(**kwargs)
