@@ -1,19 +1,40 @@
-"""
-This file demonstrates writing tests using the unittest module. These will pass
-when you run "manage.py test".
-
-Replace this with more appropriate tests for your application.
-"""
-
 from django.test import TestCase
 from django.core.urlresolvers import reverse
 from django.core.management import call_command
 from dispatch.models import *
 
 
+"""Packages
+#1     
+"name": "Arvizturotukorfurogep", 
+"destination": "Fovam Ter",
+"source": "BME E epulet",
+#2
+"name": "Sinkurkaszo piszkakompozitor", 
+"source": "Deak Ter",
+"destination": "Oktogon",
+#3
+"name": "K\u00e1poszta", 
+"destination": "Budapest, Budafoki ut 120,", 
+"source": "Kiraly utca 10",
+#4
+"name": "S\u00f3",
+"destination": "Budapest Rozsak tere",
+"source": "Budapest rakoczi ut 56",     
+
+"""
+
 TEST_LOCATIONS = {
-    'roka': {'lat':'47.480451', 'lng':'19.084947'},
-    'martos':{'lat': '47.480233','lng':'19.055851'},
+    'roka':     {'lat':'47.480451', 'lng':'19.084947'},
+    'martos':   {'lat': '47.480233','lng':'19.055851'},
+    "bme_e":    {'lat':"47.477834", "lng":"19.057693"},
+    "fovam":    {"lat":"47.487669", "lng":"19.058141"},
+    "oktogon":  {"lat":"47.505468","lng":"19.063414",},
+    "deak":     {"lat":"47.49752", "lng":"19.055104",},
+    "buda120":  {"lat":"47.450314", "lng":"19.05039",}
+    "kiraly10": {"lat":"47.498394", "lng":"19.057782",}
+    "rakoczi56":{"lat":"47.501686", "lng":"19.076048",},
+    "rozsak":   {"lat":"47.498394", "lng":"19.057782",},
 }
 
 class SimpleTest(TestCase):
@@ -59,8 +80,6 @@ class SimpleTest(TestCase):
         response = self.client.get(reverse('api_checkin'),{})
         self.assertEquals(response.status_code,200)
 
-
-        
         #run dispatcher, is a package assigned
         self.assertEquals(Package.objects.filter(state = Package.STATE_PENDING).count(),0)
         call_command('run_dispatcher', interactive=True)
@@ -70,5 +89,20 @@ class SimpleTest(TestCase):
         #is the dispatch pending?
         self.assertEquals(Dispatch.objects.get(pk=1).state, Dispatch.STATE_PENDING)
         
+    def test_dispatcher_two(self):
+        """
+        two couriers 
+        """
+        pass
 
+    def test_dispatch_timeout(self):
+        """
+        dispatch timeout
+        """
+        pass
     
+    def test_dispatch_full(self):
+        """
+        tests the whole package delivery flow
+        """
+        pass
