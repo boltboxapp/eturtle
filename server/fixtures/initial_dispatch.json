@@ -3,9 +3,12 @@
     "fields": {
       "date_created": "2011-11-14 13:39:53", 
       "date_modified": "2011-11-18 04:57:02", 
-      "groups": [], 
+      "groups": [ 2 ], 
       "state": 1, 
-      "user_permissions": []
+      "user_permissions": [
+        25, 
+        49
+      ]
     }, 
     "model": "dispatch.courier", 
     "pk": 4
