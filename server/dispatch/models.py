@@ -128,6 +128,7 @@ class Dispatch(ETModelBase):
     STATE_SHIPPING = 3
     STATE_SHIPPED = 4
     STATE_FAILED = 5
+    STATE_TIMED_OUT = 6
 
     STATE_ENUM = [
         (1, 'PENDING'),
@@ -135,6 +136,7 @@ class Dispatch(ETModelBase):
         (3, 'SHIPPING'),
         (4, 'SHIPPED'),
         (5, 'FAILED'),
+        (6, 'TIMED_OUT'),
     ]
     state = models.IntegerField(choices = STATE_ENUM, default = 1)
     courier = models.ForeignKey('Courier')

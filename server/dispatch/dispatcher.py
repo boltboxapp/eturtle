@@ -1,6 +1,6 @@
 from decimal import Decimal
 import logging
-from datetime import datetime
+from datetime import datetime, timedelta
 import urllib
 import urllib2
 from django.core.cache import cache
@@ -58,6 +58,20 @@ def push(courier, message):
     return body
 
 def run_dispatcher():
+    logger = logging.getLogger('dispatch_logger')
+
+    #check and resolve timed out Dispatches
+    tod = Dispatch.objects.filter(
+                            state=Dispatch.STATE_PENDING,
+                            date_created__lte=datetime.now()-timedelta(minutes=2))
+
+    logger.info("Timed out: %d packages" % tod.count())
+
+    Package.objects.filter(dispatch=tod).update(state=Package.STATE_NEW)
+    Courier.objects.filter(dispatch=tod).update(state=Courier.STATE_IDLE)
+    tod.update(state=Dispatch.STATE_TIMED_OUT)
+    # ---
+
     packages = Package.objects.filter(state=Package.STATE_NEW)
     couriers = Courier.objects.filter(state=Courier.STATE_STANDING_BY)
 
@@ -96,6 +110,5 @@ def run_dispatcher():
 
             assignments.append((c,p))
 
-    logger = logging.getLogger('dispatch_logger')
     a="\n".join(["%s : %s" % (a[0],a[1]) for a in assignments]) or "No new assignments."
     logger.info("Packages:%d, Couriers:%d\n%s\n%s\n" % (num_packages,num_couriers,a,datetime.now().isoformat()))
