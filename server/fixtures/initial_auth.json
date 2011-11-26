@@ -91,8 +91,11 @@
       "is_superuser": false,
       "last_login": "2011-11-18 05:49:40",
       "last_name": "Ern\u0151",
-      "password": "sha1$4b4b9$6455492fb1625102b59d40937d6c05e97ec2c82f",
-      "user_permissions": [],
+      "password": "sha1$d6b26$301dd73e86e669825422635210625c022eca6c78",
+      "user_permissions": [
+        25,
+        49
+      ],
       "username": "teki"
     },
     "model": "auth.user",

@@ -93,27 +93,22 @@ class SimpleTest(TestCase):
 
     def test_dispatcher_two(self):
         """
-        Test dispatcher with 4 packages and two couriers.
-        Expected result is that two packages get dispatched to two couriers.
+        Test dispatcher with 2 couriers and one package.
+        Expected result is that the package gets assigned to the closer courier
 
-        package 1: BME E
+
         package 2: Deak Ter
 
         courier 1: Rozsak tere
         courier 2: Budafoki 120
 
-        Expected result: p1c2, p2c1
-
-        
-        #log roka in
-        response = self.client.post(reverse('api_login'), { 'username':'roka', 'password':'roka', } )
-        self.assertEquals(response.status_code,200)
-        #update location
-        response = self.client.post(reverse('api_loc_update'),TEST_LOCATIONS['rozsak'])
-        self.assertEquals(response.status_code,200)
-        #check in
-        response = self.client.get(reverse('api_checkin'),{})
-        self.assertEquals(response.status_code,200)
+        Expected result: p2c1, 
+        """  
+        #first clear all packages
+        for p in Package.objects.all():
+            p.state = Package.STATE_PENDING
+            p.save()
+        self.assertEquals(Package.objects.filter(state = Package.STATE_PENDING).count(),4)
 
         #log roka in
         response = self.client.post(reverse('api_login'), { 'username':'teki', 'password':'teki', } )
@@ -125,16 +120,20 @@ class SimpleTest(TestCase):
         response = self.client.get(reverse('api_checkin'),{})
         self.assertEquals(response.status_code,200)
 
-        #run dispatcher, is a package assigned
-        self.assertEquals(Package.objects.filter(state = Package.STATE_PENDING).count(),0)
-        self.assertEquals(Package.objects.filter(state = Package.STATE_NEW).count(),4)
-        call_command('run_dispatcher', interactive=True)
-        self.assertEquals(Package.objects.filter(state = Package.STATE_PENDING).count(),1)
-        #is the courier pending
-        self.assertEquals(Courier.objects.get(username='roka').state, Courier.STATE_PENDING)
-        #is the dispatch pending?
-        self.assertEquals(Dispatch.objects.get(pk=1).state, Dispatch.STATE_PENDING)
-        """       
+        #log roka in
+        response = self.client.post(reverse('api_login'), { 'username':'roka', 'password':'roka', } )
+        self.assertEquals(response.status_code,200)
+        #update location
+        response = self.client.post(reverse('api_loc_update'),TEST_LOCATIONS['rozsak'])
+        self.assertEquals(response.status_code,200)
+        #check in
+        response = self.client.get(reverse('api_checkin'),{})
+        self.assertEquals(response.status_code,200)
+
+        
+
+        
+     
         
 
     def test_dispatch_timeout(self):
