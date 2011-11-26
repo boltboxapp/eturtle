@@ -46,8 +46,8 @@ class SimpleTest(TestCase):
 
     def test_dispatcher_one(self):
         """
-        Test dispatcher with one package and one courier.
-        Expected result is that the package gets dispatched to the courier.
+        Test dispatcher with 4 packages and one courier.
+        Expected result is that one package gets dispatched to the courier.
         """
         #log roka in
         response = self.client.post(reverse('api_login'), { 'username':'roka', 'password':'roka', } )
@@ -59,26 +59,16 @@ class SimpleTest(TestCase):
         response = self.client.get(reverse('api_checkin'),{})
         self.assertEquals(response.status_code,200)
 
-        #create a package
-        pkg1 = Package()
-        pkg1.state = Package.STATE_NEW
-        pkg1.client = Client.objects.get(pk=2)
-        pkg1.name = 'Zsakbamacska'
-        pkg1.src_lat = TEST_LOCATIONS['roka']['lat']
-        pkg1.src_lat = TEST_LOCATIONS['roka']['lng']
-        pkg1.dst_lat = TEST_LOCATIONS['martos']['lat']
-        pkg1.dst_lat = TEST_LOCATIONS['martos']['lng']
-        pkg1.save()
-        
-        #run dispatcher
-        call_command('run_dispatcher', interactive=True)
-        pkg1 = Package.objects.get(pk=1)
-        #has the package state changed
-        self.assertTrue(pkg1.state,Package.STATE_PENDING)
-        #does the package have dispatch, and is it dispatched to roka
-        self.assertTrue(pkg1.dispatch_set.all()[0].courier.username, 'roka')
-        #does the package have dispatch, and is it dispatched to roka
-        self.assertTrue(pkg1.dispatch_set.all()[0].courier.state,Courier.STATE_PENDING)
 
+        
+        #run dispatcher, is a package assigned
+        self.assertEquals(Package.objects.filter(state = Package.STATE_PENDING).count(),0)
+        call_command('run_dispatcher', interactive=True)
+        self.assertEquals(Package.objects.filter(state = Package.STATE_PENDING).count(),1)
+        #is the courier pending
+        self.assertEquals(Courier.objects.get(username='roka').state, Courier.STATE_PENDING)
+        #is the dispatch pending?
+        self.assertEquals(Dispatch.objects.get(pk=1).state, Dispatch.STATE_PENDING)
+        
 
     
