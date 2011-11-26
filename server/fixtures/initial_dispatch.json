@@ -1,1 +1,97 @@
-[{"pk": 4, "model": "dispatch.courier", "fields": {"user_permissions": [], "date_created": "2011-11-14 13:39:53", "state": 1, "groups": [], "date_modified": "2011-11-18 04:57:02"}}, {"pk": 6, "model": "dispatch.courier", "fields": {"user_permissions": [25, 49], "date_created": "2011-11-14 17:48:42", "state": 1, "groups": [2], "date_modified": "2011-11-18 04:59:17"}}, {"pk": 1, "model": "dispatch.package", "fields": {"name": "\u00c1rv\u00edyt\u0171r\u0151 t\u00fck\u00f6rf\u00far\u00f3g\u00e9p", "date_modified": "2011-11-18 05:50:49", "destination": "B", "source": "A", "state": 1, "client": 2, "date_created": "2011-11-18 05:50:49"}}, {"pk": 2, "model": "dispatch.package", "fields": {"name": "Sinkurk\u00e1sz\u00f3 piszkakompozitor", "date_modified": "2011-11-18 05:51:05", "destination": "B", "source": "A", "state": 1, "client": 2, "date_created": "2011-11-18 05:51:05"}}, {"pk": 3, "model": "dispatch.package", "fields": {"name": "K\u00e1poszta", "date_modified": "2011-11-18 05:51:29", "destination": "B", "source": "A", "state": 1, "client": 3, "date_created": "2011-11-18 05:51:29"}}, {"pk": 4, "model": "dispatch.package", "fields": {"name": "S\u00f3", "date_modified": "2011-11-18 05:51:39", "destination": "B", "source": "A", "state": 1, "client": 3, "date_created": "2011-11-18 05:51:39"}}]
+[
+  {
+    "fields": {
+      "date_created": "2011-11-14 13:39:53", 
+      "date_modified": "2011-11-18 04:57:02", 
+      "groups": [], 
+      "state": 1, 
+      "user_permissions": []
+    }, 
+    "model": "dispatch.courier", 
+    "pk": 4
+  }, 
+  {
+    "fields": {
+      "date_created": "2011-11-14 17:48:42", 
+      "date_modified": "2011-11-18 04:59:17", 
+      "groups": [
+        2
+      ], 
+      "state": 1, 
+      "user_permissions": [
+        25, 
+        49
+      ]
+    }, 
+    "model": "dispatch.courier", 
+    "pk": 6
+  }, 
+  {
+    "fields": {
+      "client": 2, 
+      "date_created": "2011-11-18 05:50:49", 
+      "date_modified": "2011-11-18 05:50:49", 
+      "destination": "Fovam Ter",
+      "dst_lat":"47.487669", 
+      "dst_lng":"19.058141", 
+      "name": "\u00c1rv\u00edyt\u0171r\u0151 t\u00fck\u00f6rf\u00far\u00f3g\u00e9p", 
+      "source": "BME E epulet",
+      "src_lat":"47.477834",
+      "src_lng":"19.057693", 
+      "state": 1
+    }, 
+    "model": "dispatch.package", 
+    "pk": 1
+  }, 
+  {
+    "fields": {
+      "client": 2, 
+      "date_created": "2011-11-18 05:51:05", 
+      "date_modified": "2011-11-18 05:51:05", 
+      "destination": "Oktogon",
+      "dst_lat":"47.505468",
+      "dst_lng":"19.063414",
+      "name": "Sinkurk\u00e1sz\u00f3 piszkakompozitor", 
+      "source": "Deak Ter",
+      "src_lat":"47.49752",
+      "src_lng":"19.055104",
+      "state": 1
+    }, 
+    "model": "dispatch.package", 
+    "pk": 2
+  }, 
+  {
+    "fields": {
+      "client": 3, 
+      "date_created": "2011-11-18 05:51:29", 
+      "date_modified": "2011-11-18 05:51:29", 
+      "destination": "Budapest, Budafoki ut 120,", 
+      "dst_lat":"47.450314",
+      "dst_lng":"19.05039",
+      "name": "K\u00e1poszta", 
+      "source": "Kiraly utca 10",
+      "src_lat":"47.498394",
+      "src_lng":"19.057782",
+      "state": 1
+    }, 
+    "model": "dispatch.package", 
+    "pk": 3
+  }, 
+  {
+    "fields": {
+      "client": 3, 
+      "date_created": "2011-11-18 05:51:39", 
+      "date_modified": "2011-11-18 05:51:39", 
+      "destination": "Budapest Rozsak tere",
+      "dst_lat":"47.501686",
+      "dst_lng":"19.076048", 
+      "name": "S\u00f3", 
+      "source": "Budapest rakoczi ut 56",
+      "src_lat":"47.498394",
+      "src_lng":"19.057782",
+      "state": 1
+    }, 
+    "model": "dispatch.package", 
+    "pk": 4
+  }
+]

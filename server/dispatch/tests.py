@@ -46,7 +46,8 @@ class SimpleTest(TestCase):
 
     def test_dispatcher_one(self):
         """
-        Test dispatcher with one package and one courier
+        Test dispatcher with one package and one courier.
+        Expected result is that the package gets dispatched to the courier.
         """
         #log roka in
         response = self.client.post(reverse('api_login'), { 'username':'roka', 'password':'roka', } )
@@ -71,6 +72,13 @@ class SimpleTest(TestCase):
         
         #run dispatcher
         call_command('run_dispatcher', interactive=True)
-        self.assertTrue(Package.objects.get(pk=1).state,2)
+        pkg1 = Package.objects.get(pk=1)
+        #has the package state changed
+        self.assertTrue(pkg1.state,Package.STATE_PENDING)
+        #does the package have dispatch, and is it dispatched to roka
+        self.assertTrue(pkg1.dispatch_set.all()[0].courier.username, 'roka')
+        #does the package have dispatch, and is it dispatched to roka
+        self.assertTrue(pkg1.dispatch_set.all()[0].courier.state,Courier.STATE_PENDING)
+
 
     
