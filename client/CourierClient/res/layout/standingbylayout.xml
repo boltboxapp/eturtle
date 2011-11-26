@@ -1,22 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout android:id="@+id/RelativeLayout01" 
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/RelativeLayout01" 
     android:layout_width="fill_parent" 
     android:layout_height="fill_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:padding="10px"
+  	android:background="#ffffff">
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:layout_centerInParent="true"
-    android:orientation="vertical" >
+	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:id="@+id/lin"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_centerInParent="true"
+	    android:orientation="vertical" >
 
-    <Button
-        android:id="@+id/btnCheckOut"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="check out" />
+		<LinearLayout
+		    xmlns:android="http://schemas.android.com/apk/res/android"
+		    android:id="@+id/lin"
+		    android:layout_gravity="center_horizontal"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content" >
 
+		    <ProgressBar
+		        android:id="@+id/progressBar1"
+		        style="?android:attr/progressBarStyleSmallInverse"
+		        android:layout_width="20dp"
+		        android:layout_height="20dp" 
+		        android:layout_marginRight="10px"/>
 
-</LinearLayout>
+		    <TextView
+		        style="@style/propertyKey"
+		        android:layout_gravity="center_horizontal"
+		        android:text="@string/standingby" />
+		</LinearLayout>
+
+	        <Button
+		        android:id="@+id/btnCheckOut"
+		        android:layout_width="108dp"
+		        android:layout_height="wrap_content"
+		        android:text="@string/checkout"
+		        android:layout_gravity="center_horizontal"/>
+	
+	</LinearLayout>
+	<ImageView
+		    android:layout_width="338px"
+		    android:layout_height="wrap_content"
+		    android:layout_above="@+id/lin"
+		    android:layout_centerHorizontal="true"
+		    android:src="@drawable/logo_text" />
 </RelativeLayout>
