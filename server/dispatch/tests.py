@@ -32,10 +32,12 @@ TEST_LOCATIONS = {
     "oktogon":  {"lat":"47.505468","lng":"19.063414"},
     "deak":     {"lat":"47.49752", "lng":"19.055104"},
     "buda120":  {"lat":"47.450314", "lng":"19.05039"},
-    "kiraly10": {"lat":"47.498394", "lng":"19.057782"},
+    "kiraly10": {"lat":"47.498534", "lng":"19.057449"},
     "rakoczi56":{"lat":"47.501686", "lng":"19.076048"},
-    "rozsak":   {"lat":"47.498394", "lng":"19.057782"},
+    "rozsak":   {"lat":"47.501216", "lng":"19.076804"},
 }
+
+
 
 class SimpleTest(TestCase):
     
@@ -99,22 +101,22 @@ class SimpleTest(TestCase):
 
         package 2: Deak Ter
 
-        courier 1: Rozsak tere
-        courier 2: Budafoki 120
+        courier 1: rozsak tere
+        courier 2: kiraly10
 
-        Expected result: p2c1, 
+        Expected result: p2c2, 
         """  
         #first clear all packages
         for p in Package.objects.all():
-            p.state = Package.STATE_PENDING
+            p.state = Package.STATE_SHIPPED
             p.save()
-        self.assertEquals(Package.objects.filter(state = Package.STATE_PENDING).count(),4)
-
+        self.assertEquals(Package.objects.filter(state = Package.STATE_SHIPPED).count(),4)
+        self.assertEquals(Package.objects.count(),4)
         #log roka in
         response = self.client.post(reverse('api_login'), { 'username':'teki', 'password':'teki', } )
         self.assertEquals(response.status_code,200)
         #update location
-        response = self.client.post(reverse('api_loc_update'),TEST_LOCATIONS['buda120'])
+        response = self.client.post(reverse('api_loc_update'),TEST_LOCATIONS['kiraly10'])
         self.assertEquals(response.status_code,200)
         #check in
         response = self.client.get(reverse('api_checkin'),{})
@@ -130,10 +132,40 @@ class SimpleTest(TestCase):
         response = self.client.get(reverse('api_checkin'),{})
         self.assertEquals(response.status_code,200)
 
+        roka = Courier.objects.get(username='roka')
+        teki = Courier.objects.get(username='teki')
+
+        self.assertEquals(roka.state,Courier.STATE_STANDING_BY)
+        self.assertEquals(teki.state,Courier.STATE_STANDING_BY)
+       
+        #log roka in
+        response = self.client.login(username="elek", password="elek")
+        self.assertTrue(response)
+        response = self.client.post(reverse('package_add'),
+            {"name":"Test Package",
+            "source":"Budapest Deak Ferenc ter",
+            "destination": "Kaszasdulo 1037 Budapest",
+            "src_lat":"47.497498",
+            "src_lng":"19.0547950",
+            "dst_lat":"47.556774",
+            "dst_lng":"19.0452659"})
         
 
-        
-     
+        self.assertEquals(Dispatch.objects.count(),1)
+
+
+        roka = Courier.objects.get(username='roka')
+        teki = Courier.objects.get(username='teki')
+
+        self.assertEquals(roka.state,Courier.STATE_STANDING_BY)
+        self.assertEquals(teki.state,Courier.STATE_PENDING)
+        self.assertEquals(Package.objects.count(),5)
+        self.assertEquals(Package.objects.get(pk=1).state,Package.STATE_SHIPPED)
+        self.assertEquals(Package.objects.get(pk=2).state,Package.STATE_SHIPPED)
+        self.assertEquals(Package.objects.get(pk=3).state,Package.STATE_SHIPPED)
+        self.assertEquals(Package.objects.get(pk=4).state,Package.STATE_SHIPPED)
+        self.assertEquals(Package.objects.get(pk=5).state,Package.STATE_PENDING)
+
         
 
     def test_dispatch_timeout(self):
