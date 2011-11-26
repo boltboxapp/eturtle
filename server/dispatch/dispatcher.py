@@ -89,6 +89,7 @@ def run_dispatcher():
             nearest_courier = None
             min_d=Decimal('infinity')
             for c in couriers:
+
                 try:
                     d=sqrt((abs(float(p.src_lat)-float(c.lat)))**2 + (abs(float(p.src_lng)-float(c.lng)))**2)
                     if d<min_d:
@@ -99,8 +100,9 @@ def run_dispatcher():
                     continue
 
             #dispatch the packege to the nearest_courier:
-            c.state=Courier.STATE_PENDING
-            c.save()
+            nearest_courier.state=Courier.STATE_PENDING
+            nearest_courier.save()
+
             p.state=Package.STATE_PENDING
             p.save()
             Dispatch(courier=c,package=p).save()
