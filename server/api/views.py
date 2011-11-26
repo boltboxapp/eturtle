@@ -7,6 +7,7 @@ from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import login as auth_login
 from dispatch.models import ETurtleGroup as Group
+from server.dispatch.dispatcher import run_dispatcher
 from server.dispatch.models import Courier, Dispatch, Package
 from server.utils import api_permission_required, HttpResponseUnauthorized
 import json
@@ -32,6 +33,7 @@ def check_in(request):
     courier = Courier.objects.get(id=request.user.id)
     courier.state = Courier.STATE_STANDING_BY
     courier.save()
+    run_dispatcher()
     return HttpResponse('checked in')
 
 @api_permission_required
