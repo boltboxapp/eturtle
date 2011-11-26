@@ -8,11 +8,15 @@ Replace this with more appropriate tests for your application.
 from django.test import TestCase
 from django.core.urlresolvers import reverse
 from django.core.management import call_command
+from dispatch.models import *
+TEST_LOCATIONS = {
+    'roka': {'lat':'47.480451', 'lng':'19.084947'}
+
+}
+
 class SimpleTest(TestCase):
     
     def setUp(self):
-        import os
-        os.system('pwd')
         call_command('loaddata','fixtures/initial_auth.json', interactive=True)
         call_command('loaddata','fixtures/initial_dispatch.json', interactive=True)
         call_command('loaddata','fixtures/initial_sites.json', interactive=True)
@@ -28,3 +32,11 @@ class SimpleTest(TestCase):
         response = self.client.post(reverse('api_login'), 
                                 { 'username':'roka', 'password':'roka', } )
         self.assertEquals(response.status_code,200)
+    def test_location_update(self):
+        response = self.client.post(reverse('api_login'), { 'username':'roka', 'password':'roka', } )
+        self.assertEquals(response.status_code,200)
+        response = self.client.post(reverse('api_loc_update'),TEST_LOCATIONS['roka'])
+        self.assertEquals(response.status_code,200)
+        roka = Courier.objects.get(username="roka")
+        self.assertEquals(roka.lat,TEST_LOCATIONS['roka']['lat'] )
+        self.assertEquals(roka.lng,TEST_LOCATIONS['roka']['lng'] )
