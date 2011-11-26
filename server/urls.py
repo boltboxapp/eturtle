@@ -9,10 +9,6 @@ from server.dispatch.views import ProfileView
 reverse_lazy = lazy(reverse, unicode)
 admin.autodiscover()
 
-#from dispatch.api import PackageResource
-#package_resource = PackageResource()
-   
-
 urlpatterns = patterns('',
 
     #dispacth app urls
