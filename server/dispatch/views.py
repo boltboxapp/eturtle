@@ -68,8 +68,9 @@ class PackageCreateView(WebLoginRequiredMixin, CreateView):
         self.package = form.save(commit=False)
         self.package.client = Client().from_user(self.request.user)
         self.package.save()
+        response = super(PackageCreateView, self).form_valid(form)
         run_dispatcher()
-        return super(PackageCreateView, self).form_valid(form)
+        return response
 
     def get_success_url(self):
         return reverse('package_detail', kwargs={'pk':self.object.pk})
