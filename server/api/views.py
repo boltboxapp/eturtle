@@ -55,6 +55,8 @@ def leave(request):
         dispatch.package.state=Package.STATE_NEW
         dispatch.package.save()
 
+        run_dispatcher()
+
     return HttpResponse('left')
 
 @api_permission_required
@@ -73,6 +75,8 @@ def decline(request):
     #updates the state of the Package
     dispatch.package.state=Package.STATE_NEW
     dispatch.package.save()
+
+    run_dispatcher()
 
     return HttpResponse('declined')
 
