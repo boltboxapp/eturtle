@@ -3,6 +3,7 @@
 
     <string name="hello">Hello World, CourierClientActivity!</string>
     <string name="ok">OK</string>
+    <string name="yes">Igen</string>
     <string name="cancel">Mégse</string>
     <string name="app_name">CourierClient</string>
     <string name="options">Beállítások</string>
@@ -21,5 +22,14 @@
     <string name="standingby">Csomagra vár...</string>
     <string name="standingby_title">ETurtle - Inaktív</string>
     <string name="checkout">Mégsem</string>
+    
+    <string name="notification_title">Új csomag!</string>
+    <string name="decline">Elutasít</string>
+    <string name="decline_leave">Munka felfüggesztése</string>
+    <string name="accept">Elfogad</string>
+    <string name="pending_title">ETurtle - Csomag elfogadása</string>
+    
+    <string name="wantdecline_title">Elutasítás</string>
+    <string name="wantdecline">Biztosan elutasítja az önnek kiosztott csomagot?</string>
 
 </resources>

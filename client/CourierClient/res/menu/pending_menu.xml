@@ -1,0 +1,5 @@
+
+    <menu xmlns:android="http://schemas.android.com/apk/res/android">
+        <item android:id="@+id/ment_decline" android:title="@string/decline"></item>
+        <item android:id="@+id/menu_leave" android:title="@string/decline_leave"></item>
+    </menu>

@@ -2,56 +2,50 @@
 <RelativeLayout android:id="@+id/RelativeLayout01" 
     android:layout_width="fill_parent" 
     android:layout_height="fill_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:padding="10px"
+  	android:background="#ffffff">
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:layout_centerInParent="true"
-    android:orientation="vertical" >
-
-	<TextView
-	    	android:id="@+id/pkgname"
-            android:layout_column="1"
-            android:layout_width="fill_parent"
-        	android:layout_height="wrap_content"
-            android:padding="3dip" />
-    <TextView
-        	android:id="@+id/srcaddress"
-            android:layout_width="fill_parent"
-        	android:layout_height="wrap_content"
-            android:padding="3dip" />
-    <TextView
-        	android:id="@+id/dstaddress"
-            android:layout_width="fill_parent"
-        	android:layout_height="wrap_content"
-            android:padding="3dip" />
-    <TextView
-        	android:id="@+id/datecreated"
-            android:layout_width="fill_parent"
-        	android:layout_height="wrap_content"
-            android:padding="3dip" />
-	<Button
-        android:id="@+id/btnMap"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="Map" />
+	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:id="@id/lin"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_centerInParent="true"
+	    android:orientation="vertical" >
 	
-	<Button 
-        android:id="@+id/btnAccept"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="Accept" />
-	<Button
-        android:id="@+id/btnReject"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="Reject" />
-	<Button
-        android:id="@+id/btnCheckOut"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="Checkout" />
+		<TextView
+		    	android:id="@+id/pkgname"
+	            style="@style/propertyKey"
+	            android:text="package name"
+	            android:layout_gravity="center_horizontal" />
+	    <TextView
+	        	android:id="@+id/srcaddress"
+	            style="@style/propertyKey"
+	            android:text="src address"
+	            android:layout_gravity="center_horizontal" />
+	    <TextView
+	        	android:id="@+id/dstaddress"
+	            style="@style/propertyKey"
+	            android:text="dst address"
+	            android:layout_gravity="center_horizontal" />
+	    <TextView
+	        	android:id="@+id/datecreated"
+	            style="@style/propertyKey"
+	            android:text="date created"
+	            android:layout_gravity="center_horizontal" />
 
-</LinearLayout>
+		<Button
+		    android:id="@+id/btnAccept"
+		    android:layout_width="100dp"
+		    android:layout_height="wrap_content"
+		    android:layout_gravity="center_horizontal"
+		    android:text="@string/accept" />
+
+	</LinearLayout>
+	<ImageView
+			    android:layout_width="338px"
+			    android:layout_height="wrap_content"
+			    android:layout_above="@+id/lin"
+			    android:layout_centerHorizontal="true"
+			    android:src="@drawable/logo_text" />
 </RelativeLayout>

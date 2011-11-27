@@ -10,6 +10,11 @@
     android:layout_centerInParent="true"
     android:orientation="vertical" >
 
+    <Button
+		    android:id="@+id/btnMap"
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:text="Map" />
 
 	<Button
         android:id="@+id/btnSuccess"
