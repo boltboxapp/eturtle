@@ -68,7 +68,12 @@ def run_dispatcher(timeout=120):
     logger.info("Timed out: %d packages" % tod.count())
 
     Package.objects.filter(dispatch=tod).update(state=Package.STATE_NEW)
-    Courier.objects.filter(dispatch=tod).update(state=Courier.STATE_IDLE)
+    for c in Courier.objects.filter(dispatch=tod):
+        #for every timed out courier send a c2dm and update states
+        push(c,"TIMEOUT")
+        c.state=Courier.STATE_IDLE
+        c.save()
+    
     tod.update(state=Dispatch.STATE_TIMED_OUT)
     # ---
 
