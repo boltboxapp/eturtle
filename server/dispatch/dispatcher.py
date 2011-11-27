@@ -57,13 +57,13 @@ def push(courier, message):
     logger.info("%s | %s | %s | %s" % (courier, datetime.now().isoformat(), code, body.strip()))
     return body
 
-def run_dispatcher():
+def run_dispatcher(timeout=120):
     logger = logging.getLogger('dispatch_logger')
 
     #check and resolve timed out Dispatches
     tod = Dispatch.objects.filter(
                             state=Dispatch.STATE_PENDING,
-                            date_created__lte=datetime.now()-timedelta(minutes=2))
+                            date_created__lte=datetime.now()-timedelta(seconds=timeout))
 
     logger.info("Timed out: %d packages" % tod.count())
 
@@ -89,6 +89,7 @@ def run_dispatcher():
             nearest_courier = None
             min_d=Decimal('infinity')
             for c in couriers:
+
                 try:
                     d=sqrt((abs(float(p.src_lat)-float(c.lat)))**2 + (abs(float(p.src_lng)-float(c.lng)))**2)
                     if d<min_d:
@@ -99,16 +100,16 @@ def run_dispatcher():
                     continue
 
             #dispatch the packege to the nearest_courier:
-            c.state=Courier.STATE_PENDING
-            c.save()
+            nearest_courier.state=Courier.STATE_PENDING
+            nearest_courier.save()
             p.state=Package.STATE_PENDING
             p.save()
-            Dispatch(courier=c,package=p).save()
+            Dispatch(courier=nearest_courier,package=p).save()
     
             #send push notification to courier:
-            push(c,p.serialize())
+            push(nearest_courier,p.serialize())
 
-            assignments.append((c,p))
-
+            assignments.append((nearest_courier,p))
+    
     a="\n".join(["%s : %s" % (a[0],a[1]) for a in assignments]) or "No new assignments."
     logger.info("Packages:%d, Couriers:%d\n%s\n%s\n" % (num_packages,num_couriers,a,datetime.now().isoformat()))
