@@ -102,15 +102,14 @@ def run_dispatcher(timeout=120):
             #dispatch the packege to the nearest_courier:
             nearest_courier.state=Courier.STATE_PENDING
             nearest_courier.save()
-
             p.state=Package.STATE_PENDING
             p.save()
-            Dispatch(courier=c,package=p).save()
+            Dispatch(courier=nearest_courier,package=p).save()
     
             #send push notification to courier:
-            push(c,p.serialize())
+            push(nearest_courier,p.serialize())
 
-            assignments.append((c,p))
-
+            assignments.append((nearest_courier,p))
+    
     a="\n".join(["%s : %s" % (a[0],a[1]) for a in assignments]) or "No new assignments."
     logger.info("Packages:%d, Couriers:%d\n%s\n%s\n" % (num_packages,num_couriers,a,datetime.now().isoformat()))
