@@ -14,7 +14,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
@@ -24,13 +23,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class PendingActivity extends Activity{
 	Button btnAccept;
-//	Button btnMap;
+	JSONObject messagejson = null;
 	
 	Notification notification;
 	
@@ -49,6 +47,16 @@ public class PendingActivity extends Activity{
 						boundservice.accept();
 						Toast.makeText(PendingActivity.this, "Accepting",Toast.LENGTH_LONG).show();
 				        Intent myIntent = new Intent(PendingActivity.this, ShippingActivity.class);
+				        
+				        myIntent.putExtra("name", messagejson.getString("name"));
+				        myIntent.putExtra("source", messagejson.getString("source"));
+				        myIntent.putExtra("destination", messagejson.getString("destination"));
+				        myIntent.putExtra("date_created", messagejson.getString("date_created"));
+				        myIntent.putExtra("src_lat", messagejson.getString("src_lat"));
+				        myIntent.putExtra("src_lng", messagejson.getString("src_lng"));
+				        myIntent.putExtra("dst_lat", messagejson.getString("dst_lat"));
+				        myIntent.putExtra("dst_lng", messagejson.getString("dst_lng"));
+				        
 				        PendingActivity.this.startActivity(myIntent);
 				        PendingActivity.this.finish();
 						}
@@ -92,12 +100,7 @@ public class PendingActivity extends Activity{
         try {
     	
 	    	String message= getIntent().getStringExtra("message");
-	        final String srclat;
-			final String srclong;
-			final String dstlat;
-			final String dstlong;
 	        Log.i("RegistrationService", "PENDING "+message);
-	        JSONObject messagejson = null;
 	        
 	        try {
 				messagejson = new JSONObject(message);
@@ -114,10 +117,11 @@ public class PendingActivity extends Activity{
 			srcaddress.setText(messagejson.getString("source"));
 	        dstaddress.setText(messagejson.getString("destination"));
 	        datecreated.setText(messagejson.getString("date_created"));
-	        srclat = messagejson.getString("src_lat");
-	        srclong = messagejson.getString("src_lng");
-	        dstlat = messagejson.getString("dst_lat");
-	        dstlong = messagejson.getString("dst_lng");
+	        
+//	        final String srclat = messagejson.getString("src_lat");
+//	        final String srclong = messagejson.getString("src_lng");
+//	        final String dstlat = messagejson.getString("dst_lat");
+//	        final String dstlong = messagejson.getString("dst_lng");
 	        
 	        if (notification==null)
 	        	showNotification(message, messagejson.getString("name"), messagejson.getString("source"), messagejson.getString("destination"));
@@ -130,19 +134,6 @@ public class PendingActivity extends Activity{
 				   cancelNotification();
 			   }
 			});
-	        
-//	        btnMap = (Button)this.findViewById(R.id.btnMap);
-//	        btnMap.setOnClickListener(new OnClickListener() {
-//	        	@Override
-//	        	public void onClick(View v) {
-//	        		 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://maps.google.com/maps?saddr="+srclat+","+srclong+"&daddr="+srclat+","+srclong));
-//	        		 startActivity(browserIntent);
-//	        		 
-//	        		 //This is not finished because we want to go back
-//	  		         //PendingActivity.this.finish();
-//	  		   }
-//	  		});
-	        
         
 		}catch (JSONException e) {
 			e.printStackTrace();

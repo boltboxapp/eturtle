@@ -31,5 +31,15 @@
     
     <string name="wantdecline_title">Elutasítás</string>
     <string name="wantdecline">Biztosan elutasítja az önnek kiosztott csomagot?</string>
+    
+    <string name="shipping_title">ETurtle - Szállítás</string>
+    
+    <string name="shipping_completed">Sikeres szállítás</string>
+    <string name="shipping_failed">A kézbesítés nem sikerült</string>
+    
+    <string name="wantcomplete_title">Kézbesítés</string>
+    <string name="wantcomplete">Biztosan kézbesítettnek jelöli a csomagot?</string>
+    <string name="wantfail">Biztosan sikertelennek jelöli a szállítást?</string>
+    
 
 </resources>

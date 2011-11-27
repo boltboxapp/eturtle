@@ -2,31 +2,72 @@
 <RelativeLayout android:id="@+id/RelativeLayout01" 
     android:layout_width="fill_parent" 
     android:layout_height="fill_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:padding="10px"
+  	android:background="#ffffff">
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:layout_centerInParent="true"
-    android:orientation="vertical" >
-
-    <Button
-		    android:id="@+id/btnMap"
-		    android:layout_width="fill_parent"
-		    android:layout_height="wrap_content"
-		    android:text="Map" />
-
-	<Button
-        android:id="@+id/btnSuccess"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="Success" />
+	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:id="@id/lin"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_centerInParent="true"
+	    android:orientation="vertical" >
 	
-	<Button 
-        android:id="@+id/btnFail"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="Failed" />
+	    <TextView
+		    	android:id="@+id/pkgname"
+	            style="@style/propertyKey"
+	            android:text="package name"
+	            android:layout_gravity="center_horizontal" />
+	    <TextView
+	        	android:id="@+id/srcaddress"
+	            style="@style/propertyKey"
+	            android:text="src address"
+	            android:layout_gravity="center_horizontal" />
+	    <TextView
+	        	android:id="@+id/dstaddress"
+	            style="@style/propertyKey"
+	            android:text="dst address"
+	            android:layout_gravity="center_horizontal" />
+	    <TextView
+	        	android:id="@+id/datecreated"
+	            style="@style/propertyKey"
+	            android:text="date created"
+	            android:layout_gravity="center_horizontal" />
 
-</LinearLayout>
+	    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_centerInParent="true">
+		    <ImageButton
+		        android:id="@+id/btnMap"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:src="@drawable/maps" />
+		    
+		    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			    android:layout_width="fill_parent"
+			    android:layout_height="wrap_content"
+			    android:orientation="vertical">
+		
+			    <Button
+			        android:id="@+id/btnSuccess"
+			        android:layout_width="match_parent"
+			        android:layout_height="wrap_content"
+			        android:text="@string/shipping_completed" />				
+				<Button 
+			        android:id="@+id/btnFail"
+			        android:layout_width="fill_parent"
+			        android:layout_height="wrap_content"
+			        android:text="@string/shipping_failed" />
+			    </LinearLayout>
+			
+		</LinearLayout>
+	
+	</LinearLayout>
+	<ImageView
+		    android:layout_width="338px"
+		    android:layout_height="wrap_content"
+		    android:layout_above="@+id/lin"
+		    android:layout_centerHorizontal="true"
+		    android:src="@drawable/logo_text" />
 </RelativeLayout>
