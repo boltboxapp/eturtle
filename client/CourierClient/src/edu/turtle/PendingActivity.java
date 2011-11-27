@@ -100,6 +100,8 @@ public class PendingActivity extends Activity{
         try {
     	
 	    	String message= getIntent().getStringExtra("message");
+	    	if (message.equals("TIMEOUT"))
+	        	PendingActivity.this.finish();
 	        Log.i("RegistrationService", "PENDING "+message);
 	        
 	        try {
@@ -262,6 +264,21 @@ public class PendingActivity extends Activity{
 		NotificationManager mNotificationManager = (NotificationManager) getSystemService(ns);
 		mNotificationManager.cancel(666);
 	}
+	
+	@Override
+    protected void onNewIntent(Intent intent) {
+		String message= intent.getStringExtra("message");
+		
+		if (message.equals("TIMEOUT")){
+			Intent myIntent = new Intent(PendingActivity.this,IdleActivity.class);
+			myIntent.putExtra("timed_out", true);
+			myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+	        PendingActivity.this.startActivity(myIntent);
+	        PendingActivity.this.finish();
+		}
+		
+	    super.onNewIntent(intent);
+	} // End of onNewIntent(Intent intent)
 	
 }
 
