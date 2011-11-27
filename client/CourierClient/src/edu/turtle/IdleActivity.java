@@ -33,9 +33,9 @@ public class IdleActivity extends Activity{
 				try {
 					boundservice.checkin();
 					Toast.makeText(IdleActivity.this, "Checking in...",Toast.LENGTH_SHORT).show();
-					Intent myIntent = new Intent(IdleActivity.this, StandingByActivity.class);
+					Intent myIntent = new Intent(IdleActivity.this, StandingByActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			        IdleActivity.this.startActivity(myIntent);
-			        IdleActivity.this.finish();
+			        //IdleActivity.this.finish();
 				} catch (HttpResponseException e) {
 					if(e.getStatusCode()==500)
 						Toast.makeText(IdleActivity.this, "Server Error!",Toast.LENGTH_LONG).show();
@@ -59,18 +59,14 @@ public class IdleActivity extends Activity{
         setContentView(R.layout.idlelayout);
         btnCheckIn = (Button)this.findViewById(R.id.btnCheckIn);
         btnCheckIn.setOnClickListener(new OnClickListener() {
-   
-    
         	
-   @Override
-   public void onClick(View v) {
-           checkin();
-   }
-   
-
-   }); 
-        
-        
+		   @Override
+		   public void onClick(View v) {
+		           checkin();
+		   }
+		   
+		
+	   });
     }
 	
 	@Override
@@ -79,5 +75,8 @@ public class IdleActivity extends Activity{
 			unbindService(sc);}
 		super.onDestroy();
 	}
+	
+	@Override
+	public void onBackPressed() {}
 
 }

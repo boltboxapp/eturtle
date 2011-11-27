@@ -53,7 +53,7 @@ public class ShippingActivity extends Activity{
 						boundservice.fail();
 						Toast.makeText(ShippingActivity.this, "Fail",Toast.LENGTH_LONG).show();
 					} 
-					Intent myIntent = new Intent(ShippingActivity.this, IdleActivity.class);
+					Intent myIntent = new Intent(ShippingActivity.this, IdleActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			        ShippingActivity.this.startActivity(myIntent);
 			        ShippingActivity.this.finish();
 				}
@@ -164,7 +164,5 @@ public class ShippingActivity extends Activity{
 	}
 	
 	@Override
-	public void onBackPressed() {
-		
-	}
+	public void onBackPressed() {}
 }

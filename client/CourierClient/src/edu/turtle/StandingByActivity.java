@@ -34,8 +34,8 @@ public class StandingByActivity extends Activity{
 				try {
 					boundservice.checkout();
 					Toast.makeText(StandingByActivity.this, "Checking out",Toast.LENGTH_LONG).show();  
-					Intent myIntent = new Intent(StandingByActivity.this,IdleActivity.class);
-			        StandingByActivity.this.startActivity(myIntent);
+					//Intent myIntent = new Intent(StandingByActivity.this,IdleActivity.class);
+			        //StandingByActivity.this.startActivity(myIntent);
 			        StandingByActivity.this.finish();
 					
 				} catch (HttpResponseException e) {
@@ -74,5 +74,10 @@ public class StandingByActivity extends Activity{
 		if (sc != null){
 			unbindService(sc);}
 		super.onDestroy();
+	}
+	
+	@Override
+	public void onBackPressed() {
+		checkout();
 	}
 }

@@ -49,11 +49,13 @@
         </activity>
         <activity
             android:label="@string/idle_title"
-            android:name=".IdleActivity" >           
+            android:name=".IdleActivity"
+            android:launchMode="singleTop" >           
         </activity>
         <activity
             android:label="@string/standingby_title"
-            android:name=".StandingByActivity" >
+            android:name=".StandingByActivity"
+            android:launchMode="singleTop" >
             
         </activity>
         <activity
