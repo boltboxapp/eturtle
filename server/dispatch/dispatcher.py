@@ -82,22 +82,46 @@ def run_dispatcher(timeout=120):
 
     if num_packages and num_couriers:
         for p in packages:
-            couriers = Courier.objects.filter(state=Courier.STATE_STANDING_BY)
-            if not couriers.count():
-                continue
+            """
+            Second chance algorithm:
+            If a courier rejects he will not be dispatched the same package again.
+            If all couriers reject the package, the initial courier will recieve it again.
+            """
 
+            #Querying standing by couriers who have never recieved a dispatch for this package
+            #The only way they can have one in this scenario is if they rejected it
+            couriers = Courier.objects.filter(state=Courier.STATE_STANDING_BY).exclude(dispatch__package=p)
             nearest_courier = None
             min_d=Decimal('infinity')
-            for c in couriers:
+            if couriers.count():
+                for c in couriers:
 
-                try:
-                    d=sqrt((abs(float(p.src_lat)-float(c.lat)))**2 + (abs(float(p.src_lng)-float(c.lng)))**2)
-                    if d<min_d:
-                        min_d = d
-                        nearest_courier =c
-                except ValueError:
-                    print "ValueError for package %s" % p
+                    try:
+                        d=sqrt((abs(float(p.src_lat)-float(c.lat)))**2 + (abs(float(p.src_lng)-float(c.lng)))**2)
+                        if d<min_d:
+                            min_d = d
+                            nearest_courier =c
+                    except ValueError:
+                        print "ValueError for package %s" % p
+                        continue
+
+                
+            
+            else:
+                couriers = Courier.objects.filter(state=Courier.STATE_STANDING_BY)
+                if not couriers.count():
                     continue
+                #there were no couriers who have never rejected, now we retry with all couriers
+                for c in couriers:
+
+                    try:
+                        d=sqrt((abs(float(p.src_lat)-float(c.lat)))**2 + (abs(float(p.src_lng)-float(c.lng)))**2)
+                        if d<min_d:
+                            min_d = d
+                            nearest_courier =c
+                    except ValueError:
+                        print "ValueError for package %s" % p
+                        continue
 
             #dispatch the packege to the nearest_courier:
             nearest_courier.state=Courier.STATE_PENDING
