@@ -57,13 +57,13 @@ def push(courier, message):
     logger.info("%s | %s | %s | %s" % (courier, datetime.now().isoformat(), code, body.strip()))
     return body
 
-def run_dispatcher():
+def run_dispatcher(timeout=120):
     logger = logging.getLogger('dispatch_logger')
 
     #check and resolve timed out Dispatches
     tod = Dispatch.objects.filter(
                             state=Dispatch.STATE_PENDING,
-                            date_created__lte=datetime.now()-timedelta(minutes=2))
+                            date_created__lte=datetime.now()-timedelta(seconds=timeout))
 
     logger.info("Timed out: %d packages" % tod.count())
 
