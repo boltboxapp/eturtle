@@ -170,11 +170,41 @@ class SimpleTest(TestCase):
 
     def test_dispatch_timeout(self):
         """
-        dispatch timeout
+        Test dispatcher with 4 packages and one courier.
+        Expected result is that one package gets dispatched to the courier.
+
+        """
+        #log roka in
+        response = self.client.post(reverse('api_login'), { 'username':'roka', 'password':'roka', } )
+        self.assertEquals(response.status_code,200)
+        #update location
+        response = self.client.post(reverse('api_loc_update'),TEST_LOCATIONS['rozsak'])
+        self.assertEquals(response.status_code,200)
+        
+        #no packages should be assigned yet
+        self.assertEquals(Package.objects.filter(state = Package.STATE_PENDING).count(),0)
+        self.assertEquals(Package.objects.filter(state = Package.STATE_NEW).count(),4)
+        #check in, this should make the dispatcher run
+        response = self.client.get(reverse('api_checkin'),{})
+        self.assertEquals(response.status_code,200)
+        #a package should have been set to pending now
+        self.assertEquals(Package.objects.filter(state = Package.STATE_PENDING).count(),1)
+        #is the courier pending
+        self.assertEquals(Courier.objects.get(username='roka').state, Courier.STATE_PENDING)
+        #is the dispatch pending?
+        self.assertEquals(Dispatch.objects.get(pk=1).state, Dispatch.STATE_PENDING)
+        import time
+        time.sleep(2)
+        call_command('run_dispatcher','2')
+        self.assertEquals(Dispatch.objects.get(pk=1).state, Dispatch.STATE_TIMED_OUT)
+    
+    def test_backoff(self):
+        """
+        tests the whole package delivery flow
         """
         pass
-    
-    def test_dispatch_full(self):
+
+     def test_dispatch_full(self):
         """
         tests the whole package delivery flow
         """
