@@ -93,7 +93,7 @@ class SimpleTest(TestCase):
         #is the dispatch pending?
         self.assertEquals(Dispatch.objects.get(pk=1).state, Dispatch.STATE_PENDING)
 
-    def test_dispatcher_two(self):
+    def test_dispatcher_backoff(self):
         """
         Test dispatcher with 2 couriers and one package.
         Expected result is that the package gets assigned to the closer courier
@@ -105,6 +105,11 @@ class SimpleTest(TestCase):
         courier 2: kiraly10
 
         Expected result: p2c2, 
+
+        c2 rejects, the next time dispatcher runs it should be dispatched to c1
+        c1 rejects, then it is redispatched to c1, and only c1 no matter how many times he rejects
+        c1 leaves, c2 gets the package
+
         """  
         #first clear all packages
         for p in Package.objects.all():
@@ -112,21 +117,22 @@ class SimpleTest(TestCase):
             p.save()
         self.assertEquals(Package.objects.filter(state = Package.STATE_SHIPPED).count(),4)
         self.assertEquals(Package.objects.count(),4)
-        #log roka in
-        response = self.client.post(reverse('api_login'), { 'username':'teki', 'password':'teki', } )
-        self.assertEquals(response.status_code,200)
-        #update location
-        response = self.client.post(reverse('api_loc_update'),TEST_LOCATIONS['kiraly10'])
-        self.assertEquals(response.status_code,200)
-        #check in
-        response = self.client.get(reverse('api_checkin'),{})
-        self.assertEquals(response.status_code,200)
 
         #log roka in
         response = self.client.post(reverse('api_login'), { 'username':'roka', 'password':'roka', } )
         self.assertEquals(response.status_code,200)
         #update location
         response = self.client.post(reverse('api_loc_update'),TEST_LOCATIONS['rozsak'])
+        self.assertEquals(response.status_code,200)
+        #check in
+        response = self.client.get(reverse('api_checkin'),{})
+        self.assertEquals(response.status_code,200)
+
+        #log teki in
+        response = self.client.post(reverse('api_login'), { 'username':'teki', 'password':'teki', } )
+        self.assertEquals(response.status_code,200)
+        #update location
+        response = self.client.post(reverse('api_loc_update'),TEST_LOCATIONS['kiraly10'])
         self.assertEquals(response.status_code,200)
         #check in
         response = self.client.get(reverse('api_checkin'),{})
@@ -154,11 +160,8 @@ class SimpleTest(TestCase):
         self.assertEquals(Dispatch.objects.count(),1)
 
 
-        roka = Courier.objects.get(username='roka')
-        teki = Courier.objects.get(username='teki')
-
-        self.assertEquals(roka.state,Courier.STATE_STANDING_BY)
-        self.assertEquals(teki.state,Courier.STATE_PENDING)
+        self.assertEquals(Courier.objects.get(username='roka').state,Courier.STATE_STANDING_BY)
+        self.assertEquals(Courier.objects.get(username='teki').state,Courier.STATE_PENDING)
         self.assertEquals(Package.objects.count(),5)
         self.assertEquals(Package.objects.get(pk=1).state,Package.STATE_SHIPPED)
         self.assertEquals(Package.objects.get(pk=2).state,Package.STATE_SHIPPED)
@@ -166,12 +169,62 @@ class SimpleTest(TestCase):
         self.assertEquals(Package.objects.get(pk=4).state,Package.STATE_SHIPPED)
         self.assertEquals(Package.objects.get(pk=5).state,Package.STATE_PENDING)
 
+        self.client.logout()
+        #teki rejects
+        #log teki in
+        response = self.client.post(reverse('api_login'), { 'username':'teki', 'password':'teki', } )
+        self.assertEquals(response.status_code,200)
+        #reject
+        response = self.client.get(reverse('api_decline'),{})
+        self.assertEquals(response.status_code,200)
+        #this will run the dispatcher again
+
+        self.assertEquals(Courier.objects.get(username='roka').state,Courier.STATE_PENDING)
+        self.assertEquals(Courier.objects.get(username='teki').state,Courier.STATE_STANDING_BY)
         
+
+        self.client.logout()
+        #roka rejects
+        #log roka in
+        response = self.client.post(reverse('api_login'), { 'username':'roka', 'password':'roka', } )
+        self.assertEquals(response.status_code,200)
+        #reject
+        response = self.client.get(reverse('api_decline'),{})
+        self.assertEquals(response.status_code,200)
+        #this will run the dispatcher again
+
+        self.assertEquals(Courier.objects.get(username='roka').state,Courier.STATE_STANDING_BY)
+        self.assertEquals(Courier.objects.get(username='teki').state,Courier.STATE_PENDING)
+
+        #retry a few more times, teki still gets the package
+        for i in range(1,5):
+            self.client.logout()
+            #teki rejects
+            #log teki in
+            response = self.client.post(reverse('api_login'), { 'username':'teki', 'password':'teki', } )
+            self.assertEquals(response.status_code,200)
+            #reject
+            response = self.client.get(reverse('api_decline'),{})
+            self.assertEquals(response.status_code,200)
+            #this will run the dispatcher again
+
+            self.assertEquals(Courier.objects.get(username='roka').state,Courier.STATE_STANDING_BY)
+            self.assertEquals(Courier.objects.get(username='teki').state,Courier.STATE_PENDING)
+        
+        response = self.client.get(reverse('api_leave'),{})
+        self.assertEquals(response.status_code,200)
+        #this will run the dispatcher again
+
+        self.assertEquals(Courier.objects.get(username='roka').state,Courier.STATE_PENDING)
+        self.assertEquals(Courier.objects.get(username='teki').state,Courier.STATE_IDLE)
+
 
     def test_dispatch_timeout(self):
         """
-        Test dispatcher with 4 packages and one courier.
-        Expected result is that one package gets dispatched to the courier.
+        Test dispatcher timeout. After x seconds 
+            the package state should be new
+            the courier state should be idle
+            the dispatch state should be rejected
 
         """
         #log roka in
@@ -194,17 +247,15 @@ class SimpleTest(TestCase):
         #is the dispatch pending?
         self.assertEquals(Dispatch.objects.get(pk=1).state, Dispatch.STATE_PENDING)
         import time
-        time.sleep(2)
-        call_command('run_dispatcher','2')
+        time.sleep(1)
+        call_command('run_dispatcher','1')
         self.assertEquals(Dispatch.objects.get(pk=1).state, Dispatch.STATE_TIMED_OUT)
+        self.assertEquals(Dispatch.objects.get(pk=1).courier.state, Courier.STATE_IDLE)
+        self.assertEquals(Dispatch.objects.get(pk=1).package.state, Package.STATE_NEW)
     
-    def test_backoff(self):
-        """
-        tests the whole package delivery flow
-        """
-        pass
 
-     def test_dispatch_full(self):
+
+    def test_dispatch_full(self):
         """
         tests the whole package delivery flow
         """
