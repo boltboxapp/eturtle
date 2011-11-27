@@ -77,6 +77,8 @@ public class IdleActivity extends Activity{
 	}
 	
 	@Override
-	public void onBackPressed() {}
+	public void onBackPressed() {
+		moveTaskToBack(true);
+	}
 
 }
