@@ -45,6 +45,7 @@ class CourierForm(forms.ModelForm):
         if User.objects.filter(username=username).count():
             raise forms.ValidationError(u"Már van ilyen nevű felhasználó!")
 
+        return username
 
     class Meta:
         model = Courier
