@@ -28,8 +28,8 @@ function initialize(){
 
 function initial_data(){
     $('.courier_row:not(.inactive)').each(function(index, el){
-        var lat = $(el).find('.position').html().split(',')[0]
-        var lng = $(el).find('.position').html().split(',')[1]
+        var lat = $(el).find('.position').html().split('<br>')[0]
+        var lng = $(el).find('.position').html().split('<br>')[1]
         var username = $(el).find('.username').html()
         if (lat && lng){
             markers[username] = new google.maps.Marker({
